@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+}
+
+model User {
+  id    String  @id @default(uuid())
+  email String  @unique
+  name  String?
+  role  Role    @default(STUDENT)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courses  Course[]
+  progress progress[]
+}
+
+model Course {
+  id          String  @id @default(uuid())
+  title       String
+  category    String?
+  description String?
+  thumbnail   String?
+  price       Float?
+  isPublished Boolean @default(false)
+  isFree      Boolean @default(false)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  chapters  Chapter[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Chapter {
+  id          String  @id @default(uuid())
+  title       String
+  content     String?
+  order       Int?
+  isFree      Boolean @default(false)
+  videoUrl    String?
+  isPublished Boolean @default(false)
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  attachments attachment[]
+  progress    progress[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model attachment {
+  id   String @id @default(uuid())
+  name String
+  url  String
+  type String
+
+  chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model progress {
+  id     String @id @default(uuid())
+  status Status @default(IN_PROGRESS)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+}
+
+enum Status {
+  COMPLETED
+  IN_PROGRESS
+}
