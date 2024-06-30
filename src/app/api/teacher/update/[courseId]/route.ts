@@ -117,3 +117,48 @@ export async function PUT(
     );
   }
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { courseId: string } }
+) {
+  try {
+    if (!params.courseId) {
+      return NextResponse.json(
+        { message: "CourseId is required" },
+        { status: 400 }
+      );
+    }
+
+    const { userId } = auth();
+    if (!userId) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const course = await prisma.course.findFirst({
+      where: {
+        id: params.courseId,
+        userId,
+      },
+    });
+    if (!course) {
+      return NextResponse.json(
+        { message: "Course with this id not found" },
+        { status: 400 }
+      );
+    }
+
+    await prisma.course.delete({
+      where: {
+        id: params.courseId,
+      },
+    });
+
+    return NextResponse.json({ mesage: "course deleted..." }, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

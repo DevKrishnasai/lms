@@ -74,5 +74,13 @@
     @apply bg-background text-foreground;
   }
 }
+.ql-editor {
+  @apply sm:text-base md:text-lg;
+  a {
+    @apply text-blue-900 !important;
+    @apply hover:cursor-pointer;
+    @apply hover:text-blue-300 !important;
+  }
+}
 
 @import "@uploadthing/react/styles.css";

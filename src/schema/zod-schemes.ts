@@ -33,3 +33,19 @@ export const isFreeSchema = z.object({
   isFree: z.boolean(),
   price: z.number(),
 });
+
+export const contentSchema = z.object({
+  content: z.string().min(50, {
+    message: "content is too short",
+  }),
+});
+
+export const isChapterFreeSchema = z.object({
+  isFree: z.boolean(),
+});
+
+export const videoSchema = z.object({
+  videoUrl: z.string({
+    message: "video is required",
+  }),
+});

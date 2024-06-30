@@ -8,6 +8,8 @@ import ThumbnailField from "./_components/ThumbnailField";
 import CategoryField from "./_components/CategoryField";
 import CourseFreeField from "./_components/CourseFreeField";
 import ChaptersField from "./_components/ChaptersField";
+import Banner from "@/components/Banner";
+import PublishField from "./_components/PublishField";
 
 const page = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
@@ -47,40 +49,56 @@ const page = async ({ params }: { params: { courseId: string } }) => {
 
   // console.log(courseDetails);
 
+  const isAllFieldsFilled = totalFields === filledFields;
   return (
-    <div className="p-3 w-full h-full ">
-      <div className="space-y-2 mb-4">
-        <h1 className="text-3xl font-bold">Course setup</h1>
-        <p className="font-medium">
-          complete all the fields ({`${filledFields}/${totalFields}`})
-        </p>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        <div className="space-y-4">
-          <TitleField title={courseDetails.title} courseId={params.courseId} />
-          <DescriptionField
-            description={courseDetails.description || ""}
-            courseId={params.courseId}
-          />
-          <ThumbnailField
-            thumbnail={courseDetails.thumbnail || ""}
-            courseId={params.courseId}
-          />
-          <CategoryField
-            category={courseDetails.category || ""}
+    <div className="w-full ">
+      {!courseDetails.isPublished && <Banner isCourse={true} />}
+      {/* <BackField courseId={params.courseId} /> */}
+
+      <div className="p-3 w-full h-full ">
+        <div className="mb-4 flex justify-between items-center">
+          <div className="space-y-2 ">
+            <h1 className="text-3xl font-bold">Course setup</h1>
+            <p className="font-medium">
+              complete all the fields ({`${filledFields}/${totalFields}`})
+            </p>
+          </div>
+          <PublishField
+            courseDeatils={courseDetails}
+            isCompleted={isAllFieldsFilled}
             courseId={params.courseId}
           />
         </div>
-        <div className="space-y-4">
-          <ChaptersField
-            chapters={courseDetails.chapters}
-            courseId={params.courseId}
-          />
-          <CourseFreeField
-            isFree={courseDetails.isFree}
-            price={courseDetails.price || 0}
-            courseId={params.courseId}
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div className="space-y-4">
+            <TitleField
+              title={courseDetails.title}
+              courseId={params.courseId}
+            />
+            <DescriptionField
+              description={courseDetails.description || ""}
+              courseId={params.courseId}
+            />
+            <ThumbnailField
+              thumbnail={courseDetails.thumbnail || ""}
+              courseId={params.courseId}
+            />
+            <CategoryField
+              category={courseDetails.category || ""}
+              courseId={params.courseId}
+            />
+          </div>
+          <div className="space-y-4">
+            <ChaptersField
+              chapters={courseDetails.chapters}
+              courseId={params.courseId}
+            />
+            <CourseFreeField
+              isFree={courseDetails.isFree}
+              price={courseDetails.price || 0}
+              courseId={params.courseId}
+            />
+          </div>
         </div>
       </div>
     </div>

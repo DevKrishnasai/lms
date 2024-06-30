@@ -36,7 +36,7 @@ model Course {
   isFree      Boolean @default(false)
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   chapters  Chapter[]
   createdAt DateTime  @default(now())
@@ -53,10 +53,11 @@ model Chapter {
   isPublished Boolean @default(false)
 
   courseId String
-  course   Course @relation(fields: [courseId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   attachments attachment[]
   progress    progress[]
+  muxVideo    muxVideo?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -69,7 +70,7 @@ model attachment {
   type String
 
   chapterId String
-  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -86,7 +87,19 @@ model progress {
   user   User   @relation(fields: [userId], references: [id])
 
   chapterId String
-  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+}
+
+model muxVideo {
+  id         String  @id @default(uuid())
+  chapterId  String  @unique
+  chapter    Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  assertId   String
+  videoUrl   String
+  playbackId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Status {

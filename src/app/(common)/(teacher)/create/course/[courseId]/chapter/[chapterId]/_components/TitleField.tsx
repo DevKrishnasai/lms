@@ -3,75 +3,55 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
 import { titleSchema } from "@/schema/zod-schemes";
-import { Button } from "@/components/ui/button";
+import { updateTheField } from "@/lib/utils";
 import {
   Form,
   FormControl,
   FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { updateTheField } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { Chapter } from "@prisma/client";
-import ChaptersArea from "./ChaptersArea";
 
-interface ChaptersFieldProps {
-  chapters: Chapter[];
+interface TitleFieldProps {
+  title: string;
   courseId: string;
+  chapterId: string;
 }
 
-const ChaptersField = ({ courseId, chapters }: ChaptersFieldProps) => {
+const TitleField = ({ courseId, title, chapterId }: TitleFieldProps) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof titleSchema>>({
     resolver: zodResolver(titleSchema),
     defaultValues: {
-      title: "",
+      title,
     },
   });
   const {
     formState: { isSubmitting },
-    reset,
   } = form;
 
   async function onSubmit(values: z.infer<typeof titleSchema>) {
     await updateTheField(
       values,
-      `/api/teacher/update/${courseId}/chapter`,
-      "POST"
+      `/api/teacher/update/${courseId}/chapter/${chapterId}`,
+      "PATCH",
+      true
     );
     setEdit((prev) => !prev);
-    reset({
-      title: "",
-    });
     router.refresh();
   }
   const [edit, setEdit] = React.useState(false);
-
-  const onReorder = async (partialData: { id: string; order: number }[]) => {
-    await updateTheField(
-      partialData,
-      `/api/teacher/update/${courseId}/chapter`,
-      "PUT",
-      true
-    );
-    router.refresh();
-  };
-
-  const onEdit = (id: string) => {
-    router.push(`/create/course/${courseId}/chapter/${id}`);
-  };
-
   return (
     <div className=" shadow-md border p-4 space-y-3">
       <div className="flex justify-between">
-        <p className="font-bold text-xl">Chapters</p>
+        <p className="font-bold text-xl">Title</p>
         <button onClick={() => setEdit(!edit)} className="hover:underline">
-          {edit ? "Cancel" : "Add"}
+          {edit ? "Cancel" : "Edit"}
         </button>
       </div>
 
@@ -85,13 +65,14 @@ const ChaptersField = ({ courseId, chapters }: ChaptersFieldProps) => {
                 <FormItem className="space-y-2">
                   <FormControl>
                     <Input
-                      placeholder="e.g. Chapter 1: Introduction..."
+                      placeholder="e.g. Full Stack Development..."
                       {...field}
+                      value={field.value}
                     />
                   </FormControl>
                   <FormDescription>
-                    Add a chapter to your course. You can add as many chapters
-                    as you want.
+                    This is the title of your course. It should be descriptive
+                    and concise.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -105,21 +86,10 @@ const ChaptersField = ({ courseId, chapters }: ChaptersFieldProps) => {
           </form>
         </Form>
       ) : (
-        <div>
-          {chapters.length > 0 ? (
-            <ChaptersArea
-              courseId={courseId}
-              chapters={chapters}
-              onReorder={onReorder}
-              onEdit={onEdit}
-            />
-          ) : (
-            <p>No chapters designed yet</p>
-          )}
-        </div>
+        <p className="">{title}</p>
       )}
     </div>
   );
 };
 
-export default ChaptersField;
+export default TitleField;
