@@ -26,6 +26,7 @@ export const getCourses = async (word: string) => {
         },
       ],
     },
+
     include: {
       _count: {
         select: {
@@ -33,15 +34,28 @@ export const getCourses = async (word: string) => {
             where: {
               isPublished: true,
             },
+
           },
         },
       },
+      chapters:{
+        select:{
+          id:true
+        },
+        where:{
+          isPublished:true,
+        },
+        orderBy:{
+          order:"asc"
+        }
+      }
     },
   });
   const finalCourses = courses.map((course) => {
     return {
       ...course,
       chapters: course._count.chapters,
+      chapterId: course.chapters[0].id,
     };
   });
 

@@ -61,7 +61,7 @@ const VideoField = ({
           <p className="text-gray-500">No Video uploaded</p>
         </div>
       ) : (
-        <div className="w-full">
+        <div className="overflow-x-hidden">
           <MuxPlayer
             streamType="on-demand"
             playbackId={playbackId}

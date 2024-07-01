@@ -16,7 +16,6 @@ const Navbar = () => {
   const router = useRouter();
   const { theme, systemTheme } = useTheme();
   const system = systemTheme === "dark" ? dark : undefined;
-  console.log(path);
 
   const form = useForm<z.infer<typeof searchSchema>>({
     resolver: zodResolver(searchSchema),
@@ -34,7 +33,7 @@ const Navbar = () => {
         router.push(`/courses`);
       }
     };
-    setSearchCourse();
+    if (path === "/courses") setSearchCourse();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.watch("search")]);
   return (

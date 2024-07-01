@@ -3,9 +3,10 @@
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { UploadButton, UploadDropzone } from "@/lib/uploadthing";
 import { toast } from "sonner";
+import { ClientUploadedFileData } from "uploadthing/types";
 interface FileuploadProps {
   endpoint: keyof typeof ourFileRouter;
-  onChange: (url: string) => void;
+  onChange: (url: string, res?: ClientUploadedFileData<null>[]) => void;
 }
 export default function Fileupload({ endpoint, onChange }: FileuploadProps) {
   return (
@@ -17,7 +18,7 @@ export default function Fileupload({ endpoint, onChange }: FileuploadProps) {
       }}
       endpoint={endpoint}
       onClientUploadComplete={(res) => {
-        onChange(res[0].url);
+        onChange(res[0].url, res);
         toast.success("uploaded successfully", {
           id: "uploading",
         });

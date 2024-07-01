@@ -6,11 +6,12 @@ import Link from "next/link";
 import React from "react";
 interface CourseCardProps {
   course: Course & { chapters: number };
+  chapterId: string;
 }
-const CourseCard = ({ course }: CourseCardProps) => {
+const CourseCard = ({ course, chapterId }: CourseCardProps) => {
   return (
     <Link
-      href={`/course/${course.id}`}
+      href={`/course/${course.id}?chapter=${chapterId}`}
       className="shadow-md rounded-md border flex flex-col cursor-pointer"
     >
       <Image

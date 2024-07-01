@@ -99,6 +99,11 @@ const ChaptersArea = ({
                                 </p>
                               </div>
                               <div className="flex items-center gap-3">
+                                {chapter.isFree && (
+                                  <Badge className="bg-white dark:bg-black text-black dark:text-white ">
+                                    Free
+                                  </Badge>
+                                )}
                                 {chapter.isPublished ? (
                                   <Badge className="bg-green-700">
                                     Published

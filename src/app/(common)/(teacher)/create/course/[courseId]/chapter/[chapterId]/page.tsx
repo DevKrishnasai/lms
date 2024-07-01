@@ -10,6 +10,7 @@ import Banner from "@/components/Banner";
 
 import PublishField from "./_components/PublishField";
 import BackField from "./_components/BackField";
+import AttachmentsField from "./_components/AttachmentsField";
 
 const page = async ({
   params,
@@ -93,6 +94,11 @@ const page = async ({
               videoUrl={chapterDeatils.videoUrl || ""}
               playbackId={chapterDeatils.muxVideo?.playbackId || ""}
               title={chapterDeatils.title}
+            />
+            <AttachmentsField
+              attachments={chapterDeatils.attachments || []}
+              courseId={params.courseId}
+              chapterId={params.chapterId}
             />
           </div>
         </div>

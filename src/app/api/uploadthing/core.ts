@@ -19,7 +19,12 @@ export const ourFileRouter = {
   uploadChapterVideo: f({ video: { maxFileCount: 1, maxFileSize: "8GB" } })
     .middleware(() => funAuth())
     .onUploadComplete(() => {}),
-  uploadChapterAttachement: f(["video", "text", "pdf", "image/png"])
+  uploadChapterAttachement: f({
+    image: { maxFileCount: 5 },
+    text: { maxFileCount: 5 },
+    pdf: { maxFileCount: 5 },
+    "application/docbook+xml": { maxFileCount: 3 },
+  })
     .middleware(() => funAuth())
     .onUploadComplete(() => {}),
 } satisfies FileRouter;
