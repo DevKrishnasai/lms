@@ -1,28 +1,26 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { ModifiedCourseType, getCourses } from "../actions";
 import CourseCard from "./CourseCard";
-import { MyContext } from "@/providers/context-provider";
 import { cn } from "@/lib/utils";
 
 const Courses = () => {
-  const router = useRouter();
-  const { search } = useContext(MyContext);
   const [courses, setCourses] = useState<ModifiedCourseType[]>();
-  const getResults = async () => {
-    const courses = await getCourses(search);
-    setCourses(courses);
-  };
+  const search = useSearchParams().get("search");
+
   useEffect(() => {
-    if (!search) router.push("/courses");
     const timer = setTimeout(() => {
-      if (search) router.push(`/courses?search=${search}`);
+      const getResults = async () => {
+        const results = await getCourses(search || "");
+        setCourses(results);
+      };
       getResults();
-    }, 500);
-    () => clearTimeout(timer);
-  }, [search]);
+    }, 1000);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [useSearchParams().get("search")]);
   return (
     <div
       className={cn(

@@ -49,3 +49,14 @@ export const videoSchema = z.object({
     message: "video is required",
   }),
 });
+
+export const searchSchema = z.object({
+  search: z
+    .string()
+    .min(3, {
+      message: "type more to get best courses",
+    })
+    .max(50, {
+      message: "too long search query",
+    }),
+});

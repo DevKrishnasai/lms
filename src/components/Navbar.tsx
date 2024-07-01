@@ -1,12 +1,15 @@
 "use client";
 import { UserButton } from "@clerk/nextjs";
-import React, { useContext } from "react";
 import { ThemeSwitch } from "./ThemeSwitch";
 import { useTheme } from "next-themes";
 import { dark } from "@clerk/themes";
 import { usePathname, useRouter } from "next/navigation";
 import { Input } from "./ui/input";
-import { MyContext } from "@/providers/context-provider";
+import { useForm } from "react-hook-form";
+import { searchSchema } from "@/schema/zod-schemes";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useEffect } from "react";
 
 const Navbar = () => {
   const path = usePathname();
@@ -14,24 +17,40 @@ const Navbar = () => {
   const { theme, systemTheme } = useTheme();
   const system = systemTheme === "dark" ? dark : undefined;
   console.log(path);
-  const { search, setSearch } = useContext(MyContext);
 
+  const form = useForm<z.infer<typeof searchSchema>>({
+    resolver: zodResolver(searchSchema),
+    defaultValues: {
+      search: "",
+    },
+  });
+
+  useEffect(() => {
+    const setSearchCourse = () => {
+      const search = form.watch("search");
+      if (search) {
+        router.push(`/courses?search=${search}`);
+      } else {
+        router.push(`/courses`);
+      }
+    };
+    setSearchCourse();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.watch("search")]);
   return (
-    <div className="w-full flex justify-between items-center shadow-lg px-3 py-2">
+    <>
       <div className="flex items-center">
-        <h1 className="text-3xl font-bold ml-2 ">Logo</h1>
         {path === "/courses" ? (
           <Input
             type="text"
-            className="p-2 rounded-md ml-44"
+            className="p-2 rounded-md"
             placeholder="Search"
-            value={search}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                router.push(`/courses?search=${search}`);
+                router.push(`/courses?search=${form.watch("search")}`);
               }
             }}
-            onChange={(e) => setSearch(e.target.value)}
+            {...form.register("search")}
           />
         ) : null}
       </div>
@@ -45,7 +64,7 @@ const Navbar = () => {
         />
         <ThemeSwitch />
       </div>
-    </div>
+    </>
   );
 };
 

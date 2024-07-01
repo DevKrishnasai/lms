@@ -39,11 +39,7 @@ const Sidebar = async () => {
       label: "Courses",
       link: "/courses", //-----> course/:id
     },
-    {
-      icon: <BookCheck className="group-hover:animate-in" />,
-      label: "Create Course",
-      link: "/create",
-    },
+
     {
       icon: <Settings className="group-hover:animate-spin" />,
       label: "Settings",
@@ -70,8 +66,9 @@ const Sidebar = async () => {
   }
 
   return (
-    <div className="w-1/5 shadow-md h-[calc(100vh-54px)] p-3">
-      <div className="flex flex-col">
+    <div className="min-w-64 min-h-screen lg:p-3 lg:border-r">
+      <h1 className="text-3xl font-bold ml-2 ">Logo</h1>
+      <div className="flex flex-col mt-5">
         {!isTeacher
           ? studentRoutes.map((item) => {
               return <SidebarItem key={item.label} item={item} />;

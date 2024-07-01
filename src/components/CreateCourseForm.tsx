@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,8 +18,10 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { titleSchema } from "@/schema/zod-schemes";
+import { useEffect } from "react";
+import { DialogClose } from "./ui/dialog";
 
-const page = () => {
+const CreateCourseForm = () => {
   const router = useRouter();
   const form = useForm<z.infer<typeof titleSchema>>({
     resolver: zodResolver(titleSchema),
@@ -61,19 +62,32 @@ const page = () => {
     }
   }
 
+  useEffect(() => {
+    const setCreateCourse = () => {
+      const title = form.watch("title");
+      if (title) {
+        router.push(`/dashboard?create=${title}`);
+      } else {
+        router.push(`/dashboard`);
+      }
+    };
+    setCreateCourse();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.watch("title")]);
+
   return (
-    <div className="w-full mt-[20%] flex justify-center items-center ">
+    <div className="w-full  flex justify-center items-center ">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 h-full   "
+          className="space-y-5 h-full"
         >
           <FormField
             control={form.control}
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-2xl">Title</FormLabel>
+                <FormLabel className="">Title</FormLabel>
                 <FormControl>
                   <Input
                     className="w-full"
@@ -94,9 +108,11 @@ const page = () => {
               Submit
             </Button>
             <Link href="/dashboard">
-              <Button type="button" variant={"outline"}>
-                Cancel
-              </Button>
+              <DialogClose>
+                <Button type="button" variant={"outline"}>
+                  Cancel
+                </Button>
+              </DialogClose>
             </Link>
           </div>
         </form>
@@ -105,4 +121,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default CreateCourseForm;
