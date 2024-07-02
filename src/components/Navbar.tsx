@@ -10,6 +10,8 @@ import { searchSchema } from "@/schema/zod-schemes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useEffect } from "react";
+import Link from "next/link";
+import { ArrowLeftSquare } from "lucide-react";
 
 const Navbar = () => {
   const path = usePathname();
@@ -36,10 +38,11 @@ const Navbar = () => {
     if (path === "/courses") setSearchCourse();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.watch("search")]);
+  console.log("@@@@@@@", path);
   return (
     <>
       <div className="flex items-center">
-        {path === "/courses" ? (
+        {path.includes("courses") ? (
           <Input
             type="text"
             className="p-2 rounded-md"
@@ -51,8 +54,13 @@ const Navbar = () => {
             }}
             {...form.register("search")}
           />
+        ) : path.includes("course") ? (
+          <Link href="/courses" className="flex gap-2 items-center">
+            <ArrowLeftSquare /> <span>back</span>
+          </Link>
         ) : null}
       </div>
+
       <div className="flex gap-2 items-center">
         <UserButton
           afterSignOutUrl="/"
