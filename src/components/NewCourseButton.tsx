@@ -6,7 +6,7 @@ export function NewCourseButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit Profile</Button>
+        <Button variant="outline">Add Course</Button>
       </DialogTrigger>
       <DialogContent>
         <CreateCourseForm />

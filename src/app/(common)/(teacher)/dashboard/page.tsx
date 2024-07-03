@@ -15,7 +15,7 @@ const page = async () => {
   const data = await getTeacherPublichedCourses();
   console.log(data);
   return (
-    <div className="w-full h-full p-3 space-y-3">
+    <div className="w-full h-full p-4 space-y-3">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Dashboard</h1>

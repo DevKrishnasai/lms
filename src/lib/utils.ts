@@ -54,3 +54,45 @@ export async function updateTheField<T>(
     }
   }
 }
+
+export async function generatePasswordsAndSendMails<T>(
+  values: T,
+  path: string,
+  type: "PATCH" | "PUT" | "POST" | "DELETE"
+) {
+  const id = "passwords";
+  toast.loading(`generating ${id} for given mails...`, {
+    id: "update",
+  });
+  try {
+    let res;
+    if (type === "PATCH") {
+      res = await axios.patch(path, values);
+    } else if (type === "PUT") {
+      res = await axios.put(path, values);
+    } else if (type === "POST") {
+      res = await axios.post(path, values);
+    } else {
+      res = await axios.delete(path);
+    }
+    if (res.status === 201 || res.status === 200) {
+      toast.success(`mails with username and ${id} sent`, {
+        id: "update",
+      });
+    } else {
+      toast.error(`Failed to send emails and ${id} `, {
+        id: "update",
+      });
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response && error.response.data) {
+      toast.error(error.response.data.message || "something went wrong", {
+        id: "update",
+      });
+    } else {
+      toast.error("An unexpected error occurred", {
+        id: "update",
+      });
+    }
+  }
+}

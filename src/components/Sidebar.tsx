@@ -1,6 +1,7 @@
 import {
   BookCheck,
   LayoutDashboard,
+  PenTool,
   SearchSlash,
   Settings,
 } from "lucide-react";
@@ -13,8 +14,8 @@ const Sidebar = async () => {
   const studentRoutes: SideBarItemType[] = [
     {
       icon: <LayoutDashboard className="group-hover:animate-ping" />,
-      label: "Dashboard", //current cources                                 -----> course/:id
-      link: "/dashboard",
+      label: "Home", //current cources                                 -----> course/:id
+      link: "/home",
     },
     {
       icon: <SearchSlash className="group-hover:animate-pulse" />,
@@ -35,11 +36,15 @@ const Sidebar = async () => {
       link: "/dashboard",
     },
     {
-      icon: <BookCheck className="group-hover:animate-in" />,
+      icon: <BookCheck className="group-hover:animate-bounce" />,
       label: "Courses",
       link: "/courses", //-----> course/:id
     },
-
+    {
+      icon: <PenTool className="group-hover:animate-pulse" />,
+      label: "Access",
+      link: "/access",
+    },
     {
       icon: <Settings className="group-hover:animate-spin" />,
       label: "Settings",

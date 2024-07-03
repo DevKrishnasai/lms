@@ -11,7 +11,7 @@ const page = async () => {
   }
 
   return (
-    <div className="px-2 pt-3 w-full h-full">
+    <div className="p-4 w-full h-full">
       <h1 className="text-2xl font-semibold ">Courses</h1>
       <p className="mb-4 text-sm text-gray-600">
         Choose your course and dive into career

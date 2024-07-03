@@ -60,3 +60,16 @@ export const searchSchema = z.object({
       message: "too long search query",
     }),
 });
+
+export const addUsersToDBSchema = z.object({
+  email: z.string().email({
+    message: "Invalid email",
+  }),
+});
+
+export const enrollUsersToACourseSchema = z.object({
+  email: z.string().email({
+    message: "Invalid email",
+  }),
+  courseId: z.string(),
+});
