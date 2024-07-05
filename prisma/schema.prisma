@@ -17,7 +17,6 @@ model User {
   email     String   @unique
   name      String?
   role      Role     @default(STUDENT)
-  password  String   @default("")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -53,6 +52,8 @@ model Access {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([courseId, userId])
 }
 
 model Chapter {
@@ -69,7 +70,6 @@ model Chapter {
 
   attachments attachment[]
   progress    progress[]
-  muxVideo    muxVideo?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -100,18 +100,6 @@ model progress {
 
   chapterId String
   chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-}
-
-model muxVideo {
-  id         String  @id @default(uuid())
-  chapterId  String  @unique
-  chapter    Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  assertId   String
-  videoUrl   String
-  playbackId String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 enum Status {

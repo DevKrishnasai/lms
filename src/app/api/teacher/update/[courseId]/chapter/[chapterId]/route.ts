@@ -1,13 +1,7 @@
 import { prisma } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
-import Mux from "@mux/mux-node";
 import { ClientUploadedFileData } from "uploadthing/types";
-
-const { video } = new Mux({
-  tokenId: process.env["MUX_TOKEN_ID"],
-  tokenSecret: process.env["MUX_TOKEN_SECRET"],
-});
 
 export async function DELETE(
   req: NextRequest,
@@ -78,44 +72,12 @@ export async function PATCH(
       },
     });
 
-    if (value.videoUrl) {
-      const existingMuxData = await prisma.muxVideo.findFirst({
-        where: {
-          chapterId: params.chapterId,
-        },
-      });
-
-      // delete existing video
-      if (existingMuxData) {
-        await video.assets.delete(existingMuxData.assertId);
-        await prisma.muxVideo.delete({
-          where: {
-            id: existingMuxData.id,
-          },
-        });
-      }
-
-      // create new video
-      const asset = await video.assets.create({
-        input: value.videoUrl,
-        playback_policy: ["public"],
-        test: false,
-      });
-      await prisma.muxVideo.create({
-        data: {
-          assertId: asset.id,
-          chapterId: params.chapterId,
-          videoUrl: value.videoUrl,
-          playbackId: asset.playback_ids?.[0].id || "",
-        },
-      });
-    }
-
     return NextResponse.json(
-      { meage: "chapter updated...", ...res },
+      { message: "chapter updated...", ...res },
       { status: 201 }
     );
   } catch (error) {
+    console.error("General error:", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

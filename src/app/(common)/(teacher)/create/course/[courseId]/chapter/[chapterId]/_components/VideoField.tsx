@@ -7,14 +7,24 @@ import { videoSchema } from "@/schema/zod-schemes";
 import { updateTheField } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import Fileupload from "@/components/Fileupload";
-import { ImageIcon, VideoIcon } from "lucide-react";
-import MuxPlayer from "@mux/mux-player-react";
+import { VideoIcon } from "lucide-react";
+import Video from "next-video";
+import {
+  Player,
+  ControlBar,
+  ReplayControl,
+  ForwardControl,
+  CurrentTimeDisplay,
+  TimeDivider,
+  PlaybackRateMenuButton,
+  VolumeMenuButton,
+} from "video-react";
 
 interface VideoFieldProps {
   videoUrl: string;
   courseId: string;
   chapterId: string;
-  playbackId: string;
+
   title: string;
 }
 
@@ -22,7 +32,6 @@ const VideoField = ({
   courseId,
   chapterId,
   videoUrl,
-  playbackId,
   title,
 }: VideoFieldProps) => {
   const router = useRouter();
@@ -62,11 +71,8 @@ const VideoField = ({
         </div>
       ) : (
         <div className="overflow-x-hidden">
-          <MuxPlayer
-            streamType="on-demand"
-            playbackId={playbackId}
-            metadataVideoTitle={title}
-          />
+          {/* <Video src={videoUrl} /> */}
+          <Player autoPlay src={videoUrl} videoId={videoUrl} />
           <p className="text-center">
             The video cant be played after immediate upload (refresh once to see
             video)

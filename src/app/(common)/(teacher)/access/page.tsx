@@ -11,6 +11,16 @@ const page = async () => {
     redirect("/");
   }
 
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (user?.role !== "TEACHER") {
+    redirect("/courses");
+  }
+
   const courses = await prisma.course.findMany({
     where: {
       userId,

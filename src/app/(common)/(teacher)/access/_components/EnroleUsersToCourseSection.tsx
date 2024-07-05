@@ -7,7 +7,7 @@ import { enrollUsersToACourseSchema } from "@/schema/zod-schemes";
 import React, { useEffect } from "react";
 import { CourseSelector } from "./CourseSelector";
 import { Course } from "@prisma/client";
-import { cn } from "@/lib/utils";
+import { cn, enrollTheUsersAndSendMail } from "@/lib/utils";
 import { toast } from "sonner";
 
 interface EnroleUsersToCourseSectionProps {
@@ -22,7 +22,7 @@ const EnroleUsersToCourseSection = ({
   const [perfectEmails, setPerfectEmails] = React.useState<string[]>([]); // emails that are valid and can be added to db
   const [id, setId] = React.useState<string>("");
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (
       emails.length !== perfectEmails.length ||
       !id ||
@@ -32,7 +32,11 @@ const EnroleUsersToCourseSection = ({
       return;
     }
     console.log(perfectEmails, id);
-    //TODO: add users to that course
+    await enrollTheUsersAndSendMail(
+      { values: perfectEmails, courseId: id },
+      "/api/teacher/add-to-course",
+      "POST"
+    );
   };
 
   useEffect(() => {
@@ -50,10 +54,10 @@ const EnroleUsersToCourseSection = ({
   return (
     <div className="space-y-3 border p-3 rounded-sm">
       <div>
-        <h3 className="text-lg font-bold">Add Users</h3>
+        <h3 className="text-lg font-bold">Add Users to a course</h3>
         <span className="text-sm text-gray-400">
-          Enrolling users to a new course (the students who have creditails only
-          gets enrollment email)
+          Enrolling users to a new course (if users not exist, they will be
+          created and enrolled to the course automatically)
         </span>
       </div>
       <CourseSelector courses={courses} id={id} setId={setId} />
@@ -91,7 +95,6 @@ const EnroleUsersToCourseSection = ({
             email: updatedEmail,
             courseId: "",
           });
-
           if (!isValid.success) {
             return (
               <Badge key={email} className="bg-red-700 p-1">

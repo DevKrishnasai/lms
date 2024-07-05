@@ -1,5 +1,6 @@
 "use client";
 import { UserButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { ThemeSwitch } from "./ThemeSwitch";
 import { useTheme } from "next-themes";
 import { dark } from "@clerk/themes";
@@ -11,7 +12,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeftSquare } from "lucide-react";
+import { ArrowLeftSquare, LogIn } from "lucide-react";
+import { Button } from "./ui/button";
 
 const Navbar = () => {
   const path = usePathname();
@@ -38,7 +40,15 @@ const Navbar = () => {
     if (path === "/courses") setSearchCourse();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.watch("search")]);
-  console.log("@@@@@@@", path);
+
+  const { user } = useUser();
+  let visitedUser = true;
+
+  if (user?.id) {
+    visitedUser = false;
+    console.log(user.id);
+  }
+
   return (
     <>
       <div className="flex items-center">
@@ -62,13 +72,26 @@ const Navbar = () => {
       </div>
 
       <div className="flex gap-2 items-center">
-        <UserButton
-          afterSignOutUrl="/"
-          appearance={{
-            baseTheme:
-              theme === "dark" ? dark : theme === "system" ? system : undefined,
-          }}
-        />
+        {visitedUser ? (
+          <Link href="/auth/sign-in">
+            <Button className="flex gap-2 items-center" variant={"outline"}>
+              <LogIn /> Login
+            </Button>
+          </Link>
+        ) : (
+          <UserButton
+            afterSignOutUrl="/"
+            appearance={{
+              baseTheme:
+                theme === "dark"
+                  ? dark
+                  : theme === "system"
+                  ? system
+                  : undefined,
+            }}
+          />
+        )}
+
         <ThemeSwitch />
       </div>
     </>

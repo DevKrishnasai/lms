@@ -5,11 +5,6 @@ import CourseCard from "./_components/CourseCard";
 import Courses from "./_components/Courses";
 
 const page = async () => {
-  const { userId } = auth();
-  if (!userId) {
-    redirect("/");
-  }
-
   return (
     <div className="p-4 w-full h-full">
       <h1 className="text-2xl font-semibold ">Courses</h1>

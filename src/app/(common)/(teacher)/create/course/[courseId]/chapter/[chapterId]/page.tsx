@@ -30,7 +30,6 @@ const page = async ({
     },
     include: {
       attachments: true,
-      muxVideo: true,
     },
   });
 
@@ -49,7 +48,6 @@ const page = async ({
 
   const isAllFieldsFilled = totalFields === filledFields;
 
-  console.log(chapterDeatils);
   return (
     <div className="w-full ">
       {!chapterDeatils.isPublished && <Banner isCourse={false} />}
@@ -92,7 +90,6 @@ const page = async ({
               chapterId={params.chapterId}
               courseId={params.courseId}
               videoUrl={chapterDeatils.videoUrl || ""}
-              playbackId={chapterDeatils.muxVideo?.playbackId || ""}
               title={chapterDeatils.title}
             />
             <AttachmentsField

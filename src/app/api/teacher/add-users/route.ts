@@ -1,12 +1,11 @@
 import { prisma } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import generator from "generate-password-ts";
 import { Resend } from "resend";
 
 import { render } from "@react-email/render";
 import nodemailer from "nodemailer";
-import StudentPortalAccessEmailAndPassword from "@/templates/StudentPortalAccessEmailAndPassword";
+import { WelcomeToLMS } from "@/templates/WelcomeToLMS";
 
 const emailProvider = new Resend(process.env.RESEND_API_KEY);
 
@@ -28,14 +27,9 @@ export async function POST(req: Request) {
 
     const users = await prisma.user.createManyAndReturn({
       data: values.map((email) => {
-        const password = generator.generate({
-          length: 8,
-          numbers: true,
-        });
         return {
           role: "STUDENT",
           email,
-          password,
           name: email.split("@")[0],
         };
       }),
@@ -74,11 +68,10 @@ export async function POST(req: Request) {
       return transport.sendMail({
         from: process.env.MAIL_USER,
         to: email,
-        subject: "Credentials for student portal",
+        subject: "Welcome To LMS",
         html: render(
-          StudentPortalAccessEmailAndPassword({
+          WelcomeToLMS({
             email,
-            password: user?.password,
             studentFirstName: user?.name || "student",
           })
         ),

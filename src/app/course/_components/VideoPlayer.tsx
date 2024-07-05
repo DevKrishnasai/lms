@@ -1,18 +1,31 @@
 "use client";
-import { Chapter, muxVideo } from "@prisma/client";
-import ReactPlayer from "@mux/mux-player-react";
+
+import {
+  Player,
+  ControlBar,
+  ReplayControl,
+  ForwardControl,
+  CurrentTimeDisplay,
+  TimeDivider,
+  PlaybackRateMenuButton,
+  VolumeMenuButton,
+} from "video-react";
+import Video from "next-video";
 interface VideoPlayerProps {
-  muxData: muxVideo;
+  videoUrl: string;
   courseId: string;
 }
-const VideoPlayer = ({ muxData, courseId }: VideoPlayerProps) => {
+const VideoPlayer = ({ videoUrl, courseId }: VideoPlayerProps) => {
   return (
-    <ReactPlayer
-      playbackId={muxData.playbackId}
-      onEnded={(e) => {
-        alert("Video ended");
-      }}
-    />
+    <Video src={videoUrl} />
+    // <ReactPlayer
+    //   playbackId={muxData.playbackId}
+
+    //   onEnded={(e) => {
+    //     alert("Video ended");
+    //   }}
+    // />
+    // <Player poster="/assets/poster.png" videoId={muxData.videoUrl} />
   );
 };
 

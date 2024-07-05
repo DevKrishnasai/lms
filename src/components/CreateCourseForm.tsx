@@ -35,7 +35,9 @@ const CreateCourseForm = () => {
       id: "course-creation",
     });
     try {
+      console.log("values------@############ ", values);
       const res = await axios.post("/api/teacher/create", values);
+
       if (res.status === 201) {
         toast.success("Course created successfully", {
           id: "course-creation",

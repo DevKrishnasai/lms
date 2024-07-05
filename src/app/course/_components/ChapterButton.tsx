@@ -1,14 +1,23 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Minus, PlusCircle, TicketX } from "lucide-react";
+import { Circle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
+import {
+  IoMdCheckmarkCircleOutline,
+  IoIosAddCircleOutline,
+} from "react-icons/io";
+import { FaLock } from "react-icons/fa";
+import { FaLockOpen } from "react-icons/fa";
+
 interface ChapterButtonProps {
   isCompleted: boolean;
   title: string;
   courseId: string;
   chapterId: string;
   isFree: boolean;
+  isAccessable: boolean;
+  visitedUser: boolean;
 }
 const ChapterButton = ({
   courseId,
@@ -16,6 +25,8 @@ const ChapterButton = ({
   title,
   chapterId,
   isFree,
+  isAccessable,
+  visitedUser,
 }: ChapterButtonProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -24,6 +35,8 @@ const ChapterButton = ({
   const openChapter = () => {
     router.push(`/course/${courseId}?chapter=${chapterId}`);
   };
+
+  const isLocked = visitedUser || !isAccessable;
 
   return (
     <div
@@ -36,7 +49,15 @@ const ChapterButton = ({
       )}
       onClick={openChapter}
     >
-      {isCompleted ? <Minus /> : <PlusCircle />}
+      {isCompleted ? (
+        <IoMdCheckmarkCircleOutline size={25} />
+      ) : isFree ? (
+        <FaLockOpen />
+      ) : isLocked ? (
+        <FaLock />
+      ) : (
+        <Circle size={20} />
+      )}
       <p className="text-lg font-semibold">{title}</p>
     </div>
   );

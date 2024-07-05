@@ -2,12 +2,12 @@
 import { prisma } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 
-export const getProgress = async (courseId: string) => {
+export const getProgressWithIds = async (courseId: string) => {
   const { userId } = auth();
   if (!userId) {
-    return [[], false];
+    return [];
   }
-  const chaptersCompleted = await prisma.course.findUnique({
+  const allChapters = await prisma.course.findUnique({
     where: {
       id: courseId,
       isPublished: true,
@@ -24,18 +24,23 @@ export const getProgress = async (courseId: string) => {
     },
   });
 
-  const chapterIds =
-    chaptersCompleted?.chapters.map((chapter) => chapter.id) || [];
+  const allChapterIds =
+    allChapters?.chapters.map((chapter) => chapter.id) || [];
   const chapterProgressIds = await prisma.progress.findMany({
     where: {
       userId,
       chapterId: {
-        in: chapterIds,
+        in: allChapterIds,
       },
+    },
+    select: {
+      id: true,
     },
   });
 
-  return chapterProgressIds;
+  const ids = chapterProgressIds.map((id) => id.id);
+
+  return ids;
 };
 
 export const getChapterProgress = async (chapterId: string) => {
@@ -53,20 +58,16 @@ export const getChapterProgress = async (chapterId: string) => {
 };
 
 export const getFullChapter = async (chapterId: string) => {
-  const { userId } = auth();
-  if (!userId) {
-    return null;
-  }
   const fullDetails = await prisma.chapter.findUnique({
     where: {
       id: chapterId,
     },
     include: {
-      muxVideo: true,
       attachments: true,
     },
   });
   return fullDetails;
 };
-export type progressType = Awaited<ReturnType<typeof getProgress>>;
+
+export type progressType = Awaited<ReturnType<typeof getProgressWithIds>>;
 export type fullChapterType = Awaited<ReturnType<typeof getFullChapter>>;

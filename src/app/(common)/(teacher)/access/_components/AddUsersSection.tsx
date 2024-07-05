@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { addUsersToDBSchema } from "@/schema/zod-schemes";
 import React, { useEffect } from "react";
-import { CourseSelector } from "./CourseSelector";
 import { Course } from "@prisma/client";
 import { cn, generatePasswordsAndSendMails } from "@/lib/utils";
 import { toast } from "sonner";
@@ -46,7 +45,7 @@ const AddUsersSection = ({ courses }: AddUsersSectionProps) => {
   return (
     <div className="space-y-3 border p-3 rounded-sm">
       <div>
-        <h3 className="text-lg font-bold">New Users Enrollment</h3>
+        <h3 className="text-lg font-bold">New Users</h3>
         <span className="text-sm text-gray-400">
           (email and password will be sent to students for portal access)
         </span>

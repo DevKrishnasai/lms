@@ -8,7 +8,6 @@ import {
 import { auth, currentUser } from "@clerk/nextjs/server";
 import SidebarItem from "./SidebarItem";
 import { prisma } from "@/lib/db";
-import { redirect } from "next/navigation";
 
 const Sidebar = async () => {
   const studentRoutes: SideBarItemType[] = [
@@ -52,22 +51,27 @@ const Sidebar = async () => {
     },
   ];
 
-  const user = await currentUser();
+  const { userId } = auth();
   let isTeacher = false;
-  if (user && user.id && user.primaryEmailAddress) {
-    const data = await prisma.user.upsert({
-      where: { id: user.id },
-      update: {},
+  let visitedUser = false;
+  if (!userId) {
+    visitedUser = true;
+  } else {
+    const authUser = await currentUser();
+    if (!authUser?.emailAddresses[0]?.emailAddress) return <div>loading</div>;
+    const user = await prisma.user.upsert({
+      where: { email: authUser.emailAddresses[0].emailAddress },
+      update: { id: authUser.id },
       create: {
-        id: user.id,
-        name: user.fullName,
-        role: "STUDENT",
-        email: user.primaryEmailAddress.emailAddress,
+        id: authUser.id,
+        email: authUser.emailAddresses[0].emailAddress || "",
+        name: authUser.fullName,
       },
     });
-    if (data.role === "TEACHER") isTeacher = true;
-  } else {
-    redirect("/");
+    console.log("new user---> ", user);
+    if (user) {
+      isTeacher = user.role === "TEACHER";
+    }
   }
 
   return (
