@@ -41,8 +41,6 @@ export default function Home() {
   const links = [
     { name: "Home", link: "/" },
     { name: "Features", link: "#features" },
-    { name: "About", link: "#about" },
-    { name: "Contact", link: "#contact" },
   ];
 
   const router = useRouter();
