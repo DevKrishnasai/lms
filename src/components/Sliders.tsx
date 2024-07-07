@@ -80,7 +80,7 @@ const ReviewCard = ({
 
 export function Sliders() {
   return (
-    <div className="relative flex h-[500px] w-[65%] mx-auto flex-col items-center justify-center overflow-hidden rounded-lg  md:shadow-xl">
+    <div className="relative flex h-[500px] w-[100%]  lg:w-[65%] mx-auto flex-col items-center justify-center overflow-hidden rounded-lg  md:shadow-xl">
       <Marquee pauseOnHover className="[--duration:20s]">
         {firstRow.map((review) => (
           <ReviewCard key={review.username} {...review} />
