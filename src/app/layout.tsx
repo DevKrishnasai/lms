@@ -6,6 +6,7 @@ import ToastProvider from "@/providers/toast-provider";
 import { ContextProvider } from "@/providers/context-provider";
 import Loading from "@/components/Loading";
 import "./globals.css";
+import "@uploadthing/react/styles.css";
 
 const inter = Inter({ subsets: ["latin"] });
 <link

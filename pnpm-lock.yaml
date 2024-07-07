@@ -141,6 +141,9 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
+      '@types/canvas-confetti':
+        specifier: ^1.6.4
+        version: 1.6.4
       '@types/node':
         specifier: ^20
         version: 20.14.9
@@ -1577,6 +1580,9 @@ packages:
   '@tanstack/table-core@8.19.2':
     resolution: {integrity: sha512-KpRjhgehIhbfH78ARm/GJDXGnpdw4bCg3qas6yjWSi7czJhI/J6pWln7NHtmBkGE9ZbohiiNtLqwGzKmBfixig==}
     engines: {node: '>=12'}
+
+  '@types/canvas-confetti@1.6.4':
+    resolution: {integrity: sha512-fNyZ/Fdw/Y92X0vv7B+BD6ysHL4xVU5dJcgzgxLdGbn8O3PezZNIJpml44lKM0nsGur+o/6+NZbZeNTt00U1uA==}
 
   '@types/hoist-non-react-statics@3.3.5':
     resolution: {integrity: sha512-SbcrWzkKBw2cdwRTwQAswfpB9g9LJWfjtUeW/jvNwbhC8cpmmNYVePa+ncbUe0rGTQ7G3Ff6mYUN2VMfLVr+Sg==}
@@ -5627,6 +5633,8 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
 
   '@tanstack/table-core@8.19.2': {}
+
+  '@types/canvas-confetti@1.6.4': {}
 
   '@types/hoist-non-react-statics@3.3.5':
     dependencies:

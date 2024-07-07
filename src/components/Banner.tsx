@@ -11,7 +11,7 @@ const Banner = ({ isCourse }: BannerProps) => {
   return (
     <div className="w-full">
       <div
-        className="bg-yellow-300 border border-red-400 text-red-700 px-4 py-3"
+        className="bg-yellow-300 border border-red-400 text-red-700 px-4 py-3 flex items-center"
         role="banner"
       >
         <MessageSquareWarning className="w-5 h-5 inline-block mr-1" />
