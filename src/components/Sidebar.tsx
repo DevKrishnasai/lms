@@ -1,25 +1,39 @@
 import {
   BookCheck,
+  Contact,
   LayoutDashboard,
+  LucideShieldQuestion,
   PenTool,
+  Phone,
   SearchSlash,
   Settings,
 } from "lucide-react";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import SidebarItem from "./SidebarItem";
 import { prisma } from "@/lib/db";
+import SidebarItem from "./SidebarItem";
+import { ThemeSwitch } from "./ThemeSwitch";
+import { Button } from "./ui/button";
+import Link from "next/link";
+import { IoLogoWindows } from "react-icons/io";
+import { cn } from "@/lib/utils";
+
+interface SideBarItemType {
+  icon: React.ReactNode;
+  label: string;
+  link: string;
+}
 
 const Sidebar = async () => {
   const studentRoutes: SideBarItemType[] = [
     {
       icon: <LayoutDashboard className="group-hover:animate-ping" />,
-      label: "Home", //current cources                                 -----> course/:id
+      label: "Home",
       link: "/home",
     },
     {
       icon: <SearchSlash className="group-hover:animate-pulse" />,
       label: "Courses",
-      link: "/courses", //search for a course                              -----> course/:id
+      link: "/courses",
     },
     {
       icon: <Settings className="group-hover:animate-spin" />,
@@ -37,12 +51,18 @@ const Sidebar = async () => {
     {
       icon: <BookCheck className="group-hover:animate-bounce" />,
       label: "Courses",
-      link: "/courses", //-----> course/:id
+      link: "/courses",
     },
     {
       icon: <PenTool className="group-hover:animate-pulse" />,
       label: "Access",
       link: "/access",
+    },
+
+    {
+      icon: <LucideShieldQuestion className="group-hover:animate-pulse" />,
+      label: "Queries",
+      link: "/queries",
     },
     {
       icon: <Settings className="group-hover:animate-spin" />,
@@ -54,37 +74,71 @@ const Sidebar = async () => {
   const { userId } = auth();
   let isTeacher = false;
   let visitedUser = false;
+
   if (!userId) {
     visitedUser = true;
   } else {
-    const authUser = await currentUser();
-    if (!authUser?.emailAddresses[0]?.emailAddress) return <div>loading</div>;
-    const user = await prisma.user.upsert({
-      where: { email: authUser.emailAddresses[0].emailAddress },
-      update: { id: authUser.id },
-      create: {
-        id: authUser.id,
-        email: authUser.emailAddresses[0].emailAddress || "",
-        name: authUser.fullName,
-      },
-    });
-    console.log("new user---> ", user);
-    if (user) {
-      isTeacher = user.role === "TEACHER";
+    const currentuser = await currentUser();
+    if (!currentuser) {
+      visitedUser = true;
+    } else {
+      if (!currentuser.primaryEmailAddress) {
+        return null;
+      }
+      const user = await prisma.user.upsert({
+        where: {
+          email: currentuser.primaryEmailAddress.emailAddress,
+        },
+        update: {
+          authId: userId,
+        },
+        create: {
+          authId: userId,
+          email: currentuser.primaryEmailAddress.emailAddress,
+          name: currentuser.fullName,
+        },
+      });
+      if (user.role === "TEACHER") {
+        isTeacher = true;
+      }
     }
   }
 
   return (
-    <div className="min-w-64 min-h-screen lg:p-3 lg:border-r">
-      <h1 className="text-3xl font-bold ml-2 ">Logo</h1>
-      <div className="flex flex-col mt-5">
-        {!isTeacher
-          ? studentRoutes.map((item) => {
-              return <SidebarItem key={item.label} item={item} />;
-            })
-          : teacherRoutes.map((item) => {
-              return <SidebarItem key={item.label} item={item} />;
-            })}
+    <div className="sidebar fixed top-0 left-0 h-full w-16 bg-primary-foreground  transition-all duration-300 hover:w-64 overflow-hidden z-50 lg:border-r flex flex-col justify-between ">
+      <div className="p-3">
+        <Link href="/">
+          <div
+            className={cn(
+              "flex items-center p-2 rounded-lg cursor-pointer group"
+            )}
+          >
+            <div className="mr-5 min-w-[24px]">
+              <IoLogoWindows size={30} />
+            </div>
+            <span className="sidebar-label whitespace-nowrap opacity-0 transition-opacity duration-300 text-3xl font-bold">
+              LMS
+            </span>
+          </div>
+        </Link>
+
+        <div className="flex flex-col mt-5">
+          {!isTeacher
+            ? studentRoutes.map((item) => (
+                <SidebarItem key={item.label} item={item} />
+              ))
+            : teacherRoutes.map((item) => (
+                <SidebarItem key={item.label} item={item} />
+              ))}
+        </div>
+      </div>
+      <div className="sidebar-logo flex items-center justify-between p-3">
+        <ThemeSwitch />
+        <Link href="/contact">
+          <Button size="icon" variant="outline">
+            <Phone size={20} />
+          </Button>
+        </Link>
       </div>
     </div>
   );

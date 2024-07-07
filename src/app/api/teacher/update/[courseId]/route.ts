@@ -28,12 +28,23 @@ export async function PATCH(
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
+    const user = await prisma.user.findUnique({
+      where: {
+        authId: userId,
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const course = await prisma.course.findFirst({
       where: {
         id: params.courseId,
-        userId,
+        userId: user.id,
       },
     });
+
     if (!course) {
       return NextResponse.json(
         { message: "Course with this id not found" },
@@ -44,7 +55,7 @@ export async function PATCH(
     const res = await prisma.course.update({
       where: {
         id: params.courseId,
-        userId,
+        userId: user.id,
       },
       data: {
         ...value,
@@ -86,10 +97,20 @@ export async function PUT(
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
+    const user = await prisma.user.findUnique({
+      where: {
+        authId: userId,
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const course = await prisma.course.findFirst({
       where: {
         id: params.courseId,
-        userId,
+        userId: user.id,
       },
     });
     if (!course) {
@@ -102,7 +123,7 @@ export async function PUT(
     const res = await prisma.course.update({
       where: {
         id: params.courseId,
-        userId,
+        userId: user.id,
       },
       data: {
         ...value,
@@ -135,10 +156,20 @@ export async function DELETE(
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
+    const user = await prisma.user.findUnique({
+      where: {
+        authId: userId,
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const course = await prisma.course.findFirst({
       where: {
         id: params.courseId,
-        userId,
+        userId: user.id,
       },
     });
     if (!course) {

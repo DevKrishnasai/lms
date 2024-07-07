@@ -1,5 +1,10 @@
-import { SignIn } from "@clerk/nextjs";
+import { SignIn, ClerkLoading } from "@clerk/nextjs";
 
 export default function Page() {
-  return <SignIn />;
+  return (
+    <>
+      <ClerkLoading>loading...</ClerkLoading>
+      <SignIn />
+    </>
+  );
 }

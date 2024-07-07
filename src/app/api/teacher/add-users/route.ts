@@ -25,12 +25,27 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
+    const user = await prisma.user.findUnique({
+      where: {
+        authId: userId,
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    if (user?.role !== "TEACHER") {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const users = await prisma.user.createManyAndReturn({
       data: values.map((email) => {
         return {
           role: "STUDENT",
           email,
           name: email.split("@")[0],
+          authId: email,
         };
       }),
       skipDuplicates: true,

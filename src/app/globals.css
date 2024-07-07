@@ -2,6 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+body,
+html,
+:root {
+  height: 100%;
+}
+
+.sidebar {
+  overflow: hidden;
+}
+
+.sidebar-logo {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.sidebar:hover .sidebar-logo {
+  opacity: 1;
+}
+
+.sidebar-label {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  white-space: nowrap;
+}
+
+.sidebar:hover .sidebar-label {
+  opacity: 1;
+}
+
+.sidebar:hover .sidebar-logo,
+.sidebar:hover .sidebar-label {
+  opacity: 1;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -74,16 +108,6 @@
     @apply bg-background text-foreground;
   }
 }
-.ql-editor {
-  @apply sm:text-base md:text-lg;
-  a {
-    @apply text-blue-900 !important;
-    @apply hover:cursor-pointer;
-    @apply hover:text-blue-300 !important;
-  }
-}
-
-@import "@uploadthing/react/styles.css";
 
 @charset "UTF-8";
 .video-react .video-react-control:before,

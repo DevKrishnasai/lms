@@ -9,9 +9,19 @@ export const getTeacherPublichedCourses = async () => {
   if (!userId) {
     redirect("/");
   }
+  const user = await prisma.user.findUnique({
+    where: {
+      authId: userId,
+    },
+  });
+
+  if (!user) {
+    redirect("/");
+  }
+
   const courses = await prisma.course.findMany({
     where: {
-      userId,
+      userId: user.id,
     },
     select: {
       _count: {

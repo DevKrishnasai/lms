@@ -29,9 +29,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const course = await prisma.course.findFirst({
+    const user = await prisma.user.findUnique({
+      where: {
+        authId: userId,
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const course = await prisma.course.findUnique({
       where: {
         id: courseId,
+        userId: user.id,
       },
     });
 
@@ -45,9 +56,9 @@ export async function POST(req: Request) {
     const newUsers = await prisma.user.createManyAndReturn({
       data: values.map((email) => {
         return {
-          role: "STUDENT",
           email,
           name: email.split("@")[0],
+          authId: email,
         };
       }),
       skipDuplicates: true,

@@ -19,15 +19,26 @@ export async function POST(
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
+    const user = await prisma.user.findUnique({
+      where: {
+        authId: userId,
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
     const course = await prisma.course.findUnique({
       where: {
         id: params.courseId,
-        userId,
+        userId: user.id,
       },
       include: {
         chapters: true,
       },
     });
+
     if (!course) {
       return NextResponse.json(
         { message: "Course with this id not found" },

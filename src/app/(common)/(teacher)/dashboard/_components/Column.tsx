@@ -20,10 +20,16 @@ export const columns: ColumnDef<TeachersPublishedCoursesType>[] = [
   {
     accessorKey: "isPublished",
     header: "Published",
+    cell: ({ row: { original } }) => {
+      return original.isPublished ? "Published" : "UnPublished";
+    },
   },
   {
     accessorKey: "isFree",
     header: "Free",
+    cell: ({ row: { original } }) => {
+      return original.isFree ? "Free" : "Paid";
+    },
   },
   {
     accessorKey: "users",

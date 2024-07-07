@@ -1,23 +1,31 @@
 "use client";
 
-import {
-  Player,
-  ControlBar,
-  ReplayControl,
-  ForwardControl,
-  CurrentTimeDisplay,
-  TimeDivider,
-  PlaybackRateMenuButton,
-  VolumeMenuButton,
-} from "video-react";
-import Video from "next-video";
+import { Course } from "@prisma/client";
+import { useEffect, useState } from "react";
+import { Player } from "video-react";
+import { getCourse } from "../action";
+
 interface VideoPlayerProps {
   videoUrl: string;
   courseId: string;
 }
 const VideoPlayer = ({ videoUrl, courseId }: VideoPlayerProps) => {
+  const [courseDetails, setCourseDetails] = useState<Course | null>(null);
+  useEffect(() => {
+    const getCourseDeatils = async () => {
+      const course = await getCourse(courseId);
+      setCourseDetails(course);
+    };
+    getCourseDeatils();
+  }, [videoUrl]);
+  const nextVideo = async () => {};
   return (
-    <Video src={videoUrl} />
+    <Player
+      autoPlay={false}
+      src={videoUrl}
+      videoId={videoUrl}
+      poster={courseDetails?.thumbnail || ""}
+    />
     // <ReactPlayer
     //   playbackId={muxData.playbackId}
 

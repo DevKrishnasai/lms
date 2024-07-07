@@ -51,12 +51,12 @@ const ChapterButton = ({
     >
       {isCompleted ? (
         <IoMdCheckmarkCircleOutline size={25} />
+      ) : isAccessable ? (
+        <Circle size={25} />
       ) : isFree ? (
-        <FaLockOpen />
-      ) : isLocked ? (
-        <FaLock />
+        <FaLockOpen size={25} />
       ) : (
-        <Circle size={20} />
+        <FaLock size={25} />
       )}
       <p className="text-lg font-semibold">{title}</p>
     </div>

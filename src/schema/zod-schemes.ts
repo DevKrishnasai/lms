@@ -73,3 +73,19 @@ export const enrollUsersToACourseSchema = z.object({
   }),
   courseId: z.string(),
 });
+
+export const requestFormSchema = z.object({
+  request: z.string().min(10, {
+    message: "request is too short, please provide more details",
+  }),
+  email: z.string().email({
+    message: "Invalid email",
+  }),
+  phone: z
+    .string({
+      coerce: true,
+    })
+    .regex(/^\d{10}$/, {
+      message: "Invalid phone number",
+    }),
+});

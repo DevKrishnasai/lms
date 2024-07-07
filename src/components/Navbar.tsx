@@ -1,5 +1,5 @@
 "use client";
-import { UserButton } from "@clerk/nextjs";
+import { SignInButton, UserButton } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
 import { ThemeSwitch } from "./ThemeSwitch";
 import { useTheme } from "next-themes";
@@ -46,7 +46,6 @@ const Navbar = () => {
 
   if (user?.id) {
     visitedUser = false;
-    console.log(user.id);
   }
 
   return (
@@ -65,22 +64,25 @@ const Navbar = () => {
             {...form.register("search")}
           />
         ) : path.includes("course") ? (
-          <Link href="/courses" className="flex gap-2 items-center">
-            <ArrowLeftSquare /> <span>back</span>
-          </Link>
+          !path.includes("chapter") ? (
+            <Link href="/courses" className="flex gap-2 items-center">
+              <ArrowLeftSquare /> <span>back</span>
+            </Link>
+          ) : null
         ) : null}
       </div>
 
       <div className="flex gap-2 items-center">
         {visitedUser ? (
-          <Link href="/auth/sign-in">
-            <Button className="flex gap-2 items-center" variant={"outline"}>
-              <LogIn /> Login
-            </Button>
-          </Link>
+          // <Link href="/auth/sign-in">
+          <Button className="flex gap-2 items-center" variant={"outline"}>
+            <LogIn />
+            <SignInButton mode="modal" fallbackRedirectUrl={path} />
+          </Button>
         ) : (
+          // </Link>
           <UserButton
-            afterSignOutUrl="/"
+            afterSignOutUrl="/the-thank-you-page"
             appearance={{
               baseTheme:
                 theme === "dark"

@@ -13,16 +13,17 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String     @id @default(uuid())
+  email     String     @unique
   name      String?
-  role      Role     @default(STUDENT)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  courses  Course[]
-  progress progress[]
-  accesses Access[]
+  role      Role       @default(STUDENT)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  authId    String     @unique
+  courses   Course[]
+  progress  progress[]
+  accesses  Access[]
+  requests  requests[]
 }
 
 model Course {
@@ -96,13 +97,27 @@ model progress {
   updatedAt DateTime @updatedAt
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   chapterId String
-  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([userId, chapterId])
 }
 
 enum Status {
   COMPLETED
   IN_PROGRESS
+}
+
+model requests {
+  id        String   @id @default(uuid())
+  phone     String
+  email     String
+  message   String
+  userId    String
+  status    Status   @default(IN_PROGRESS)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -14,12 +14,26 @@ import PublishField from "./_components/PublishField";
 const page = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
   if (!userId) {
-    redirect("/");
+    redirect("/not-authorized");
   }
+  const user = await prisma.user.findUnique({
+    where: {
+      authId: userId,
+    },
+  });
+
+  if (!user) {
+    redirect("/not-authorized");
+  }
+
+  if (user?.role !== "TEACHER") {
+    redirect("/courses");
+  }
+
   const courseDetails = await prisma.course.findUnique({
     where: {
       id: params.courseId,
-      userId,
+      userId: user.id,
     },
     include: {
       user: true,
@@ -31,8 +45,8 @@ const page = async ({ params }: { params: { courseId: string } }) => {
     },
   });
 
-  if (!courseDetails || courseDetails.userId !== userId) {
-    redirect("/");
+  if (!courseDetails) {
+    redirect("/no-course-found");
   }
 
   const requiredFileds = [
