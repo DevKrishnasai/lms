@@ -1,18 +1,39 @@
 "use client";
-import { Chapter, muxVideo } from "@prisma/client";
-import ReactPlayer from "@mux/mux-player-react";
+
+import { Course } from "@prisma/client";
+import { useEffect, useState } from "react";
+import { Player } from "video-react";
+import { getCourse } from "../action";
+
 interface VideoPlayerProps {
-  muxData: muxVideo;
+  videoUrl: string;
   courseId: string;
 }
-const VideoPlayer = ({ muxData, courseId }: VideoPlayerProps) => {
+const VideoPlayer = ({ videoUrl, courseId }: VideoPlayerProps) => {
+  const [courseDetails, setCourseDetails] = useState<Course | null>(null);
+  useEffect(() => {
+    const getCourseDeatils = async () => {
+      const course = await getCourse(courseId);
+      setCourseDetails(course);
+    };
+    getCourseDeatils();
+  }, [videoUrl]);
+  const nextVideo = async () => {};
   return (
-    <ReactPlayer
-      playbackId={muxData.playbackId}
-      onEnded={(e) => {
-        alert("Video ended");
-      }}
+    <Player
+      autoPlay={false}
+      src={videoUrl}
+      videoId={videoUrl}
+      poster={courseDetails?.thumbnail || ""}
     />
+    // <ReactPlayer
+    //   playbackId={muxData.playbackId}
+
+    //   onEnded={(e) => {
+    //     alert("Video ended");
+    //   }}
+    // />
+    // <Player poster="/assets/poster.png" videoId={muxData.videoUrl} />
   );
 };
 

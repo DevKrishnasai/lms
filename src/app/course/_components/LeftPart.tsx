@@ -1,53 +1,62 @@
 import { Progress } from "@/components/ui/progress";
-import { Chapter } from "@prisma/client";
-import { getProgress, progressType } from "../action";
 import ChapterButton from "./ChapterButton";
+import { getTotalCourseProgress } from "@/app/(common)/courses/actions";
+import { getProgressWithIds } from "../action";
 import { prisma } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
+import Loading from "@/components/Loading";
+
 interface LeftPartProps {
   courseId: string;
-  title: string;
-  chapters: Chapter[];
+  isAccessable: boolean;
+  visitedUser: boolean;
 }
-const LeftPart = async ({ chapters, title, courseId }: LeftPartProps) => {
-  // const ids = await getProgress(courseId);
-  const { userId } = auth();
 
-  if (!userId) {
-    return [[], false];
-  }
-
-  const chapterIds = chapters.map((chapter) => chapter.id) || [];
-  const chapterProgressIds = await prisma.progress.findMany({
-    where: {
-      userId,
-      chapterId: {
-        in: chapterIds,
+const LeftPart = async ({
+  courseId,
+  isAccessable,
+  visitedUser,
+}: LeftPartProps) => {
+  const course = await prisma.course.findUnique({
+    where: { id: courseId },
+    include: {
+      chapters: {
+        where: { isPublished: true },
+        orderBy: { order: "asc" },
       },
     },
   });
+  const progress = await getTotalCourseProgress(courseId);
+  const progressWithIds = await getProgressWithIds(courseId);
+
+  if (!course) return;
+  <div className="w-full h-screen flex justify-center items-center">
+    <Loading />
+  </div>;
 
   return (
     <div className="w-72 min-h-screen border-r">
       <div className="p-3 border-b-2 flex gap-3 flex-col justify-center items-center">
-        <h2 className="font-bold">{title}</h2>
-        <Progress value={chapterProgressIds.length} />
+        <h2 className="font-bold">{course?.title}</h2>
+        {!visitedUser && isAccessable && <Progress value={progress} />}
       </div>
       <ul>
-        {chapters.map((chapter) => {
-          const isCompleted = chapterProgressIds.find(
-            (id) => id.chapterId === chapter.id
-          )
-            ? true
-            : false;
+        {course?.chapters.map((chapter) => {
+          console.log(progressWithIds.findIndex((p) => p === chapter.id));
+          const isCompleted =
+            progressWithIds.findIndex((p) => p === chapter.id) >= 0
+              ? true
+              : false;
+          console.log("isCompleted", isCompleted);
           return (
             <ChapterButton
               key={chapter.id}
               courseId={courseId}
               chapterId={chapter.id}
-              isCompleted={false}
+              isCompleted={isCompleted}
               title={chapter.title}
               isFree={chapter.isFree}
+              visitedUser={visitedUser}
+              isAccessable={isAccessable}
             />
           );
         })}

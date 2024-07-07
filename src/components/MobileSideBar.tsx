@@ -3,6 +3,10 @@ import { MenuIcon } from "lucide-react";
 import Sidebar from "./Sidebar";
 
 const MobileSideBar = () => {
+  // useEffect(() => {
+  //   setOpen(false);
+  // }, [path]);
+
   return (
     <Sheet modal>
       <SheetTrigger className="lg:hidden">

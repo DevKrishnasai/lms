@@ -1,5 +1,6 @@
 "use client";
-import { UserButton } from "@clerk/nextjs";
+import { SignInButton, UserButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { ThemeSwitch } from "./ThemeSwitch";
 import { useTheme } from "next-themes";
 import { dark } from "@clerk/themes";
@@ -11,7 +12,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeftSquare } from "lucide-react";
+import { ArrowLeftSquare, LogIn } from "lucide-react";
+import { Button } from "./ui/button";
 
 const Navbar = () => {
   const path = usePathname();
@@ -38,7 +40,14 @@ const Navbar = () => {
     if (path === "/courses") setSearchCourse();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.watch("search")]);
-  console.log("@@@@@@@", path);
+
+  const { user } = useUser();
+  let visitedUser = true;
+
+  if (user?.id) {
+    visitedUser = false;
+  }
+
   return (
     <>
       <div className="flex items-center">
@@ -55,20 +64,36 @@ const Navbar = () => {
             {...form.register("search")}
           />
         ) : path.includes("course") ? (
-          <Link href="/courses" className="flex gap-2 items-center">
-            <ArrowLeftSquare /> <span>back</span>
-          </Link>
+          !path.includes("chapter") ? (
+            <Link href="/courses" className="flex gap-2 items-center">
+              <ArrowLeftSquare /> <span>back</span>
+            </Link>
+          ) : null
         ) : null}
       </div>
 
       <div className="flex gap-2 items-center">
-        <UserButton
-          afterSignOutUrl="/"
-          appearance={{
-            baseTheme:
-              theme === "dark" ? dark : theme === "system" ? system : undefined,
-          }}
-        />
+        {visitedUser ? (
+          // <Link href="/auth/sign-in">
+          <Button className="flex gap-2 items-center" variant={"outline"}>
+            <LogIn />
+            <SignInButton mode="modal" fallbackRedirectUrl={path} />
+          </Button>
+        ) : (
+          // </Link>
+          <UserButton
+            afterSignOutUrl="/the-thank-you-page"
+            appearance={{
+              baseTheme:
+                theme === "dark"
+                  ? dark
+                  : theme === "system"
+                  ? system
+                  : undefined,
+            }}
+          />
+        )}
+
         <ThemeSwitch />
       </div>
     </>

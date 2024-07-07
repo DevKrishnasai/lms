@@ -2,12 +2,22 @@
 import { prisma } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 
-export const getProgress = async (courseId: string) => {
+export const getProgressWithIds = async (courseId: string) => {
   const { userId } = auth();
   if (!userId) {
-    return [[], false];
+    return [];
   }
-  const chaptersCompleted = await prisma.course.findUnique({
+  const user = await prisma.user.findUnique({
+    where: {
+      authId: userId,
+    },
+  });
+
+  if (!user) {
+    return [];
+  }
+
+  const allChapters = await prisma.course.findUnique({
     where: {
       id: courseId,
       isPublished: true,
@@ -24,18 +34,24 @@ export const getProgress = async (courseId: string) => {
     },
   });
 
-  const chapterIds =
-    chaptersCompleted?.chapters.map((chapter) => chapter.id) || [];
+  const allChapterIds =
+    allChapters?.chapters.map((chapter) => chapter.id) || [];
   const chapterProgressIds = await prisma.progress.findMany({
     where: {
-      userId,
+      status: "COMPLETED",
+      userId: user.id,
       chapterId: {
-        in: chapterIds,
+        in: allChapterIds,
       },
+    },
+    select: {
+      chapterId: true,
     },
   });
 
-  return chapterProgressIds;
+  const ids = chapterProgressIds.map((id) => id.chapterId);
+
+  return ids;
 };
 
 export const getChapterProgress = async (chapterId: string) => {
@@ -43,30 +59,51 @@ export const getChapterProgress = async (chapterId: string) => {
   if (!userId) {
     return false;
   }
-  const chapterProgress = await prisma.progress.findFirst({
+  const user = await prisma.user.findUnique({
     where: {
-      userId,
-      chapterId,
+      authId: userId,
     },
   });
-  return chapterProgress ? true : false;
+  if (!user) {
+    return false;
+  }
+  const chapterProgress = await prisma.progress.findUnique({
+    where: {
+      userId_chapterId: {
+        chapterId: chapterId,
+        userId: user.id,
+      },
+    },
+  });
+  console.log(chapterProgress, "--->>chapterProgress");
+  return chapterProgress?.status === "COMPLETED" ? true : false;
 };
 
 export const getFullChapter = async (chapterId: string) => {
-  const { userId } = auth();
-  if (!userId) {
-    return null;
-  }
   const fullDetails = await prisma.chapter.findUnique({
     where: {
       id: chapterId,
     },
     include: {
-      muxVideo: true,
       attachments: true,
+    },
+  });
+  const course = await prisma.course.findUnique({
+    where: {
+      id: fullDetails?.courseId || "",
     },
   });
   return fullDetails;
 };
-export type progressType = Awaited<ReturnType<typeof getProgress>>;
+
+export const getCourse = async (courseId: string) => {
+  const course = await prisma.course.findUnique({
+    where: {
+      id: courseId,
+    },
+  });
+  return course;
+};
+
+export type progressType = Awaited<ReturnType<typeof getProgressWithIds>>;
 export type fullChapterType = Awaited<ReturnType<typeof getFullChapter>>;

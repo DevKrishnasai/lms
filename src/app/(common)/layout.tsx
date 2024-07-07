@@ -7,12 +7,9 @@ import React from "react";
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex w-full">
-      <div className="hidden lg:flex">
-        <Sidebar />
-      </div>
-      <div className="w-full h-full">
-        <div className="w-full flex justify-between items-center border-b px-3 py-2">
-          <MobileSideBar />
+      <Sidebar />
+      <div className="w-full h-full ml-16">
+        <div className=" flex justify-between items-center border-b px-3 py-2">
           <Navbar />
         </div>
         {children}

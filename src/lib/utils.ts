@@ -60,8 +60,7 @@ export async function generatePasswordsAndSendMails<T>(
   path: string,
   type: "PATCH" | "PUT" | "POST" | "DELETE"
 ) {
-  const id = "passwords";
-  toast.loading(`generating ${id} for given mails...`, {
+  toast.loading(`creating lms access for given mails...`, {
     id: "update",
   });
   try {
@@ -76,11 +75,11 @@ export async function generatePasswordsAndSendMails<T>(
       res = await axios.delete(path);
     }
     if (res.status === 201 || res.status === 200) {
-      toast.success(`mails with username and ${id} sent`, {
+      toast.success(`mails sent`, {
         id: "update",
       });
     } else {
-      toast.error(`Failed to send emails and ${id} `, {
+      toast.error(`Failed to send emails  `, {
         id: "update",
       });
     }
@@ -92,6 +91,48 @@ export async function generatePasswordsAndSendMails<T>(
     } else {
       toast.error("An unexpected error occurred", {
         id: "update",
+      });
+    }
+  }
+}
+
+export async function enrollTheUsersAndSendMail<T>(
+  values: T,
+  path: string,
+  type: "PATCH" | "PUT" | "POST" | "DELETE"
+) {
+  const id = "enrollment";
+  toast.loading(`enrolling users for given course...`, {
+    id: "enrollment",
+  });
+  try {
+    let res;
+    if (type === "PATCH") {
+      res = await axios.patch(path, values);
+    } else if (type === "PUT") {
+      res = await axios.put(path, values);
+    } else if (type === "POST") {
+      res = await axios.post(path, values);
+    } else {
+      res = await axios.delete(path);
+    }
+    if (res.status === 201 || res.status === 200) {
+      toast.success(`enrollement mails sent to users`, {
+        id: "enrollment",
+      });
+    } else {
+      toast.error(`Failed to send emails `, {
+        id: "enrollment",
+      });
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response && error.response.data) {
+      toast.error(error.response.data.message || "something went wrong", {
+        id: "enrollment",
+      });
+    } else {
+      toast.error("An unexpected error occurred", {
+        id: "enrollment",
       });
     }
   }

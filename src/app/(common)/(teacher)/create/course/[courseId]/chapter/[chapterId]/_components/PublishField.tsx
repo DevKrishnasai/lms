@@ -22,7 +22,7 @@ const PublishField = ({
   const onDelete = async () => {
     await updateTheField(
       {},
-      `/api/teacher/update/${courseId}/chapter/${chapterId}`,
+      `/api/teacher/update/${courseId}/chapter/${chapterId}/checking`,
       "DELETE",
       true
     );
@@ -37,8 +37,8 @@ const PublishField = ({
 
     await updateTheField(
       { isPublished: !chapterDeatils.isPublished },
-      `/api/teacher/update/${courseId}/chapter/${chapterId}`,
-      "PATCH",
+      `/api/teacher/update/${courseId}/chapter/${chapterId}/checking`,
+      "PUT",
       true
     );
     if (chapterDeatils.isPublished) {

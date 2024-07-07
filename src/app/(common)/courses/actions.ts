@@ -1,6 +1,34 @@
 "use server";
 
 import { prisma } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
+
+export const courseAccess = async (courseId: string) => {
+  const { userId } = auth();
+  let visitedUser = false;
+  if (!userId) visitedUser = true;
+  let isCourseAccessableByTheUser = false;
+  if (userId) {
+    const user = await prisma.user.findUnique({
+      where: {
+        authId: userId,
+      },
+    });
+    if (user) {
+      const courseAccess = await prisma.access.findUnique({
+        where: {
+          courseId_userId: {
+            courseId: courseId,
+            userId: user.id,
+          },
+        },
+      });
+      console.log("$$$$$$$$$$$ access -->", courseAccess);
+      if (courseAccess) isCourseAccessableByTheUser = true;
+    }
+  }
+  return { visitedUser, isCourseAccessableByTheUser };
+};
 
 export const getCourses = async (word: string) => {
   const courses = await prisma.course.findMany({
@@ -32,21 +60,20 @@ export const getCourses = async (word: string) => {
             where: {
               isPublished: true,
             },
-
           },
         },
       },
-      chapters:{
-        select:{
-          id:true
+      chapters: {
+        select: {
+          id: true,
         },
-        where:{
-          isPublished:true,
+        where: {
+          isPublished: true,
         },
-        orderBy:{
-          order:"asc"
-        }
-      }
+        orderBy: {
+          order: "asc",
+        },
+      },
     },
   });
   const finalCourses = courses.map((course) => {
@@ -58,6 +85,59 @@ export const getCourses = async (word: string) => {
   });
 
   return finalCourses;
+};
+
+export const getTotalCourseProgress = async (courseId: string) => {
+  const { userId } = auth();
+  if (!userId) {
+    return 0;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      authId: userId,
+    },
+  });
+
+  if (!user) {
+    return 0;
+  }
+
+  const chaptersCompleted = await prisma.course.findUnique({
+    where: {
+      id: courseId,
+      isPublished: true,
+    },
+    include: {
+      chapters: {
+        where: {
+          isPublished: true,
+        },
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+
+  const chapterIds =
+    chaptersCompleted?.chapters.map((chapter) => chapter.id) || [];
+  const chapterProgressIds = await prisma.progress.findMany({
+    where: {
+      status: "COMPLETED",
+      userId: user.id,
+      chapterId: {
+        in: chapterIds,
+      },
+    },
+  });
+
+  //calculate the progress
+  const totalChapters = chapterIds.length;
+  const completedChapters = chapterProgressIds.length;
+  const progress = (completedChapters / totalChapters) * 100;
+
+  return progress;
 };
 
 export type ModifiedCourseType = Omit<

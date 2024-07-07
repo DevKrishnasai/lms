@@ -73,7 +73,7 @@ const CourseFreeField = ({ courseId, isFree, price }: CourseFreeFieldProps) => {
           </div>
           <div>
             <p className="text-red-500">
-              Note: You can't change this option once you make the course
+              Note: You can&apos;t change this option once you make the course
               published
             </p>
           </div>

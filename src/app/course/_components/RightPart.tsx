@@ -1,98 +1,106 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+
+import { usePathname, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import ChapterBanner from "./ChapterBanner";
 import { fullChapterType, getChapterProgress, getFullChapter } from "../action";
-import VideoPlayer from "./VideoPlayer";
-import Preview from "@/components/Preview";
+import { GiSpinningBlades } from "react-icons/gi";
+import PreviewForChapter from "./PreviewForChapter";
+import Loading from "@/components/Loading";
+import { SignInButton } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
 interface RightPartProps {
   courseId: string;
+  isAccessable: boolean;
+  visitedUser: boolean;
 }
-const RightPart = ({ courseId }: RightPartProps) => {
+
+const RightPart = ({ courseId, isAccessable, visitedUser }: RightPartProps) => {
+  const path = usePathname();
   const chapterId = useSearchParams().get("chapter") || "";
-
   const [isCompleted, setIsCompleted] = useState(false);
-  const [fullChapter, setFullChapter] = useState<fullChapterType>({
-    id: "",
-    title: "",
-    content: "",
-    muxVideo: null,
-    attachments: [],
-    courseId: "",
-    createdAt: new Date(),
-    isFree: false,
-    isPublished: false,
-    order: 0,
-    updatedAt: new Date(),
-    videoUrl: "",
-  });
+  const [fullChapter, setFullChapter] = useState<fullChapterType | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const getCompletionStatus = async () => {
-      const status = await getChapterProgress(chapterId);
-      setIsCompleted(status);
-    };
-    getCompletionStatus();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chapterId]);
-
-  useEffect(() => {
+    setLoading(true);
     const getFullChapterFun = async () => {
       const full = await getFullChapter(chapterId);
       setFullChapter(full);
+      setLoading(false);
     };
     getFullChapterFun();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chapterId]);
+  }, [chapterId, courseId]);
 
-  console.log(chapterId, isCompleted, fullChapter);
+  useEffect(() => {
+    setLoading(true);
+    const getCompletionStatus = async () => {
+      const status = await getChapterProgress(chapterId);
+      setIsCompleted(status);
+      setLoading(false);
+    };
+    getCompletionStatus();
+  }, [chapterId, courseId]);
+
   return (
-    <div className="h-full w-full">
-      {!chapterId ? (
-        <div className="w-full h-full flex justify-center items-center">
-          Select a chapter
-        </div>
-      ) : fullChapter?.courseId ? (
-        <div className="h-full w-full">
-          {isCompleted && <ChapterBanner isCompleted={isCompleted} />}
-          <div className="max-w-5xl mx-auto space-y-5 mt-1">
-            <VideoPlayer muxData={fullChapter.muxVideo!} courseId={courseId} />
-            <div className="flex justify-between items-center ">
-              <p className="font-bold text-xl">{fullChapter.title}</p>
-              <button className="bg-blue-500 text-white px-3 py-1 rounded">
-                Mark as {isCompleted ? "Incomplete" : "Complete"}
-              </button>
-            </div>
-            <div className="border border-black dark:border-white/35 rounded-sm">
-              <Preview content={fullChapter.content || ""} />
-            </div>
-            <div>
-              <p className="font-bold text-xl">Attachments</p>
-              {fullChapter.attachments.map((attachment) => (
-                <div
-                  key={attachment.id}
-                  className="flex items-center border-b p-2 gap-2"
-                >
-                  <p>-</p>
-                  <a
-                    href={attachment.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-blue-500 underline hover:no-underline"
-                  >
-                    {attachment.name}
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
+    <>
+      {loading ? (
+        <div className="w-full h-[calc(100vh-90px)] flex justify-center items-center">
+          <Loading />
         </div>
       ) : (
-        <div className="w-full h-full bg-red-800 flex justify-center items-center">
-          <p>Loading...</p>
+        <div className="h-full w-full mb-10">
+          {!chapterId ? (
+            <div className="w-full h-[calc(100vh-90px)] flex justify-center items-center font-bold text-xl">
+              Select a chapter
+            </div>
+          ) : !fullChapter ? (
+            <div className="w-full h-[calc(100vh-90px)] flex justify-center items-center animate-spin">
+              <Loading />
+            </div>
+          ) : fullChapter ? (
+            fullChapter.isFree ? (
+              <PreviewForChapter
+                courseId={courseId}
+                isAccessable={isAccessable}
+                visitedUser={visitedUser}
+                chapterId={chapterId}
+                fullChapter={fullChapter}
+                isCompleted={isCompleted}
+                setIsCompleted={setIsCompleted}
+              />
+            ) : isAccessable ? (
+              <PreviewForChapter
+                courseId={courseId}
+                isAccessable={isAccessable}
+                visitedUser={visitedUser}
+                chapterId={chapterId}
+                fullChapter={fullChapter}
+                isCompleted={isCompleted}
+                setIsCompleted={setIsCompleted}
+              />
+            ) : !visitedUser ? (
+              <div className="w-full h-[calc(100vh-90px)] flex flex-col gap-3 justify-center items-center font-bold text-xl">
+                You need to buy this course to access this chapter
+                <Link href={`/contact?request=${courseId}`}>
+                  <Button>Buy Course</Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="w-full h-[calc(100vh-90px)] flex flex-col gap-3 justify-center items-center font-bold text-xl">
+                You need to sign in to access this chapter
+                <Button>
+                  <SignInButton mode="modal" forceRedirectUrl={path}>
+                    Sign In
+                  </SignInButton>
+                </Button>
+              </div>
+            )
+          ) : null}
         </div>
       )}
-    </div>
+    </>
   );
 };
 

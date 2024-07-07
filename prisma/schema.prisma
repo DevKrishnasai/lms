@@ -13,17 +13,17 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String     @id @default(uuid())
+  email     String     @unique
   name      String?
-  role      Role     @default(STUDENT)
-  password  String   @default("")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  courses  Course[]
-  progress progress[]
-  accesses Access[]
+  role      Role       @default(STUDENT)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  authId    String     @unique
+  courses   Course[]
+  progress  progress[]
+  accesses  Access[]
+  requests  requests[]
 }
 
 model Course {
@@ -53,6 +53,8 @@ model Access {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([courseId, userId])
 }
 
 model Chapter {
@@ -69,7 +71,6 @@ model Chapter {
 
   attachments attachment[]
   progress    progress[]
-  muxVideo    muxVideo?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -96,25 +97,27 @@ model progress {
   updatedAt DateTime @updatedAt
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   chapterId String
-  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-}
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-model muxVideo {
-  id         String  @id @default(uuid())
-  chapterId  String  @unique
-  chapter    Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  assertId   String
-  videoUrl   String
-  playbackId String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@unique([userId, chapterId])
 }
 
 enum Status {
   COMPLETED
   IN_PROGRESS
+}
+
+model requests {
+  id        String   @id @default(uuid())
+  phone     String
+  email     String
+  message   String
+  userId    String
+  status    Status   @default(IN_PROGRESS)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

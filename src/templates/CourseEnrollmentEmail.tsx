@@ -14,38 +14,39 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-interface StudentPortalAccessEmailProps {
-  studentFirstName?: string;
+interface CourseEnrollmentEmailProps {
+  studentName?: string;
   email?: string;
-  password?: string;
+  courseName?: string;
+  dashboardLink?: string;
 }
 
 const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "";
 
-export const StudentPortalAccessEmailAndPassword = ({
-  studentFirstName,
+export const CourseEnrollmentEmail = ({
+  studentName,
   email,
-  password,
-}: StudentPortalAccessEmailProps) => {
+  courseName,
+  dashboardLink,
+}: CourseEnrollmentEmailProps) => {
   return (
     <Html>
       <Head />
-      <Preview>Student Portal Access Information</Preview>
+      <Preview>Course Enrollment Confirmation</Preview>
       <Body style={main}>
         <Container>
-          {/* <Section style={logo}>
-            <Img src={`${baseUrl}/banner.png`} />
-          </Section> */}
+          <Section style={logo}>
+            <Img src={`${baseUrl}/static/your-logo.png`} />
+          </Section>
 
           <Section style={content}>
             <Row>
               <Img
                 style={image}
                 width={620}
-                // src={`${baseUrl}/banner.png`}
-                src="https://static.vecteezy.com/system/resources/previews/009/671/503/original/lms-banner-web-illustration-concept-for-learning-management-system-with-icon-vector.jpg"
+                src={`${baseUrl}/static/course-enrollment-header.png`}
               />
             </Row>
 
@@ -58,28 +59,35 @@ export const StudentPortalAccessEmailAndPassword = ({
                     textAlign: "center",
                   }}
                 >
-                  Hi {studentFirstName},
+                  Hi {studentName},
                 </Heading>
                 <Text style={paragraph}>
-                  Here are your credentials to access the student portal:
+                  You have successfully enrolled in the course{" "}
+                  <b>{courseName}</b>. Here are your enrollment details:
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
                   <b>Email: </b>
                   {email}
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
-                  <b>Password: </b>
-                  {password}
+                  <b>Course Name: </b>
+                  {courseName}
                 </Text>
-                <Text style={paragraph}>
-                  Please use the provided credentials to log in and access your
-                  portal.
+                <Text style={{ ...paragraph, marginTop: -5 }}>
+                  You can access the course dashboard using the following link:
+                </Text>
+                <Text style={{ ...paragraph, marginTop: -5 }}>
+                  <a href={dashboardLink} style={{ color: "#007bff" }}>
+                    {dashboardLink}
+                  </a>
                 </Text>
               </Column>
             </Row>
-            <Row style={{ ...boxInfos, paddingTop: "0" }}>
+            <Row style={{ ...boxInfos, paddingTop: "0", textAlign: "center" }}>
               <Column style={containerButton} colSpan={2}>
-                <Button style={button}>Log In to Portal</Button>
+                <a href={dashboardLink} style={button}>
+                  Go to Dashboard
+                </a>
               </Column>
             </Row>
           </Section>
@@ -88,8 +96,7 @@ export const StudentPortalAccessEmailAndPassword = ({
             <Img
               style={image}
               width={620}
-              src="https://react-email-demo-7c9zprjny-resend.vercel.app/static/yelp-footer.png"
-              // src={`${baseUrl}/footer.png`}
+              src={`${baseUrl}/static/course-enrollment-footer.png`}
             />
           </Section>
 
@@ -100,7 +107,8 @@ export const StudentPortalAccessEmailAndPassword = ({
               color: "rgb(0,0,0, 0.7)",
             }}
           >
-            © {new Date().getFullYear()} | LMS | Remote | www.localhost.com
+            © {new Date().getFullYear()} | Your Company Name | Your Address |
+            www.yourwebsite.com
           </Text>
         </Container>
       </Body>
@@ -108,7 +116,7 @@ export const StudentPortalAccessEmailAndPassword = ({
   );
 };
 
-export default StudentPortalAccessEmailAndPassword;
+export default CourseEnrollmentEmail;
 
 const main = {
   backgroundColor: "#fff",
@@ -138,6 +146,8 @@ const button = {
   border: "1px solid rgb(0,0,0, 0.1)",
   cursor: "pointer",
   padding: "12px 30px",
+  textDecoration: "none",
+  display: "inline-block",
 };
 
 const content = {
