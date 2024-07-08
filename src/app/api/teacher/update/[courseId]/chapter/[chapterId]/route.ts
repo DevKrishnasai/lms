@@ -103,6 +103,8 @@ export async function POST(
 
     const values = await req.json();
 
+    console.log("values", values);
+
     if (!values) {
       return NextResponse.json(
         { message: "field is required to update" },
