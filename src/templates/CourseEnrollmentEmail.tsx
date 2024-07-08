@@ -21,10 +21,7 @@ interface CourseEnrollmentEmailProps {
   dashboardLink?: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
-
+const baseUrl = process.env.BASE_URL ? process.env.BASE_URL : "";
 export const CourseEnrollmentEmail = ({
   studentName,
   email,
@@ -37,17 +34,13 @@ export const CourseEnrollmentEmail = ({
       <Preview>Course Enrollment Confirmation</Preview>
       <Body style={main}>
         <Container>
-          <Section style={logo}>
-            <Img src={`${baseUrl}/static/your-logo.png`} />
-          </Section>
+          {/* <Section style={logo}>
+            <Img src={`${baseUrl}/your-logo.png`} />
+          </Section> */}
 
           <Section style={content}>
             <Row>
-              <Img
-                style={image}
-                width={620}
-                src={`${baseUrl}/static/course-enrollment-header.png`}
-              />
+              <Img style={image} width={620} src={`${baseUrl}/banner.png`} />
             </Row>
 
             <Row style={{ ...boxInfos, paddingBottom: "0" }}>
@@ -93,11 +86,7 @@ export const CourseEnrollmentEmail = ({
           </Section>
 
           <Section style={containerImageFooter}>
-            <Img
-              style={image}
-              width={620}
-              src={`${baseUrl}/static/course-enrollment-footer.png`}
-            />
+            <Img style={image} width={620} src={`${baseUrl}/footer.png`} />
           </Section>
 
           <Text
@@ -107,8 +96,7 @@ export const CourseEnrollmentEmail = ({
               color: "rgb(0,0,0, 0.7)",
             }}
           >
-            © {new Date().getFullYear()} | Your Company Name | Your Address |
-            www.yourwebsite.com
+            © {new Date().getFullYear()} | LMS | All Rights Reserved
           </Text>
         </Container>
       </Body>
