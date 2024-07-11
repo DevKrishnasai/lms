@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Learning Management System (LMS)
 
-## Getting Started
+Welcome to the LMS project! This repository contains the code for a comprehensive Learning Management System built with Next.js, Tailwind CSS, Shadcn UI, Magic UI, React Video, Prisma ORM, PostgreSQL, and Clerk.
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- [Introduction](#introduction)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Introduction
+
+This LMS project is designed to facilitate a seamless learning experience for both teachers and students. The platform is divided into two main sections: Teachers Portal and Students Portal.
+
+## Features
+
+### Teachers Portal
+- Access and manage courses created by the teacher
+- Add, edit, and delete chapters, videos, attachments, PDFs, and video thumbnails
+- Manage course content efficiently
+
+### Students Portal
+- Request access to courses
+- Coordinators handle student requests and contact students
+- Enrollment handled by coordinators, including sending welcome and enrollment emails
+- Access to a free chapter for course outcomes/introduction before requesting enrollment
+
+### User Dashboard
+- View all enrolled courses and progress
+- Click on a course to see detailed course content
+- Course page includes video attachments, resources, and markdown format descriptions on the right side
+- Chapters, chapter completion status, and progress shown on the left side
+
+### Coordinator
+- Full access to all course-related actions
+- Modify and delete users
+- Add users and send emails
+- Contact users and manage their enrollment
+
+## Tech Stack
+
+- **Next.js** ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=nextdotjs&logoColor=white)
+- **Tailwind CSS** ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+- **Shadcn UI** ![Shadcn UI](https://img.shields.io/badge/Shadcn%20UI-00a0e4?style=flat)
+- **Magic UI** ![Magic UI](https://img.shields.io/badge/Magic%20UI-FF6F61?style=flat)
+- **React Video** ![React Video](https://img.shields.io/badge/React_Video-61DAFB?style=flat&logo=react&logoColor=white)
+- **Prisma ORM** ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat&logo=prisma&logoColor=white)
+- **PostgreSQL** ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white)
+- **Clerk** ![Clerk](https://img.shields.io/badge/Clerk-3E70F7?style=flat)
+
+## Installation
+
+To get a local copy up and running, follow these simple steps.
+
+### Prerequisites
+
+- Node.js
+- PostgreSQL
+
+### Clone the Repository
+
+```sh
+git clone https://github.com/DevKrishnasai/lms.git
+cd lms
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Install Dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Setup Environment Variables
 
-## Learn More
+Create a `.env` file in the root directory and add the following:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+DATABASE_URL=your_postgresql_database_url
+NEXT_PUBLIC_API_URL=your_api_url
+CLERK_API_KEY=your_clerk_api_key
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Run Database Migrations
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```sh
+pnpm prisma migrate dev
+```
 
-## Deploy on Vercel
+### Start the Application
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```sh
+pnpm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Usage
+
+To start using the application, navigate to `http://localhost:3000` in your browser.
+
+## Project Structure
+
+```
+lms/
+├── prisma/              # Prisma schema and migrations
+├── public/              # Public assets
+├── src/
+│   ├── components/      # Reusable components
+│   ├── app/             # pages 
+│   ├── utils/           # Utility functions
+│   └── ...              # Other directories and files
+└── README.md            # Project documentation
+```
