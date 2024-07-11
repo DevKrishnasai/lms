@@ -80,9 +80,24 @@ pnpm install
 Create a `.env` file in the root directory and add the following:
 
 ```env
-DATABASE_URL=your_postgresql_database_url
-NEXT_PUBLIC_API_URL=your_api_url
-CLERK_API_KEY=your_clerk_api_key
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/auth/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/auth/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/courses
+PRIVATE_ID=
+
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/lms?schema=public
+
+
+UPLOADTHING_SECRET=
+UPLOADTHING_APP_ID=
+
+MAIL_USER=
+MAIL_PASS=
+
+BASE_URL=http://localhost:3000
 ```
 
 ### Run Database Migrations
