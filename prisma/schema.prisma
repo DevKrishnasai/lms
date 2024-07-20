@@ -13,36 +13,109 @@ enum Role {
 }
 
 model User {
+  id         String         @id @default(uuid())
+  email      String         @unique
+  name       String?
+  role       Role           @default(STUDENT)
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  authId     String         @unique
+  onBoarded  Boolean        @default(false)
+  profilePic String?
+  bio        String?
+  courses    Course[]
+  progress   progress[]
+  accesses   Access[]
+  requests   requests[]
+  categories UserCategory[]
+  goals      UserGoal[]
+  purchases  purchases[]
+
+  @@unique([id, authId])
+}
+
+model Goal {
   id        String     @id @default(uuid())
-  email     String     @unique
-  name      String?
-  role      Role       @default(STUDENT)
+  title     String     @unique
+  users     UserGoal[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  authId    String     @unique
+
+  @@unique([id, title])
+}
+
+model Category {
+  id        String         @id @default(uuid())
+  title     String         @unique
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  users     UserCategory[]
   courses   Course[]
-  progress  progress[]
-  accesses  Access[]
-  requests  requests[]
+
+  @@unique([id, title])
+}
+
+model UserCategory {
+  userId     String
+  categoryId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([userId, categoryId])
+}
+
+model UserGoal {
+  userId String
+  goalId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal   Goal   @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@id([userId, goalId])
 }
 
 model Course {
-  id          String  @id @default(uuid())
+  id          String    @id @default(uuid())
   title       String
-  category    String?
   description String?
   thumbnail   String?
   price       Float?
-  isPublished Boolean @default(false)
-  isFree      Boolean @default(false)
+  isPublished Boolean   @default(false)
+  isFree      Boolean   @default(false)
+  categoryid  String?
+  category    Category? @relation(fields: [categoryid], references: [id])
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   chapters  Chapter[]
   accesses  Access[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  purchases purchases[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+enum PurchaseStatusEnum {
+  COMPLETED
+  IN_PROGRESS
+  FAILED
+}
+
+model purchases {
+  id        String             @id @default(uuid())
+  status    PurchaseStatusEnum @default(IN_PROGRESS)
+  price     Float
+  orderId   String?
+  paymentId String?
+  receiptId String?
+  address   String?
+  name      String?
+  isFree    Boolean            @default(false)
+  courseId  String
+  course    Course             @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
 }
 
 model Access {

@@ -2,13 +2,11 @@
 import { cn } from "@/lib/utils";
 import { Circle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
-import {
-  IoMdCheckmarkCircleOutline,
-  IoIosAddCircleOutline,
-} from "react-icons/io";
+import React from "react";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
 import { FaLockOpen } from "react-icons/fa";
+import * as SheetPrimitive from "@radix-ui/react-dialog";
 
 interface ChapterButtonProps {
   isCompleted: boolean;
@@ -18,7 +16,9 @@ interface ChapterButtonProps {
   isFree: boolean;
   isAccessable: boolean;
   visitedUser: boolean;
+  isSidebar: boolean;
 }
+
 const ChapterButton = ({
   courseId,
   isCompleted,
@@ -27,6 +27,7 @@ const ChapterButton = ({
   isFree,
   isAccessable,
   visitedUser,
+  isSidebar,
 }: ChapterButtonProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -36,12 +37,34 @@ const ChapterButton = ({
     router.push(`/course/${courseId}?chapter=${chapterId}`);
   };
 
-  const isLocked = visitedUser || !isAccessable;
-
-  return (
+  return isSidebar ? (
+    <SheetPrimitive.Close asChild>
+      <div
+        className={cn(
+          "w-full px-2 py-5 flex gap-2 items-center cursor-pointer transition-colors duration-300",
+          chapter === chapterId &&
+            "bg-black text-white font-bold dark:bg-white dark:text-black dark:font-bold",
+          chapter !== chapterId &&
+            "hover:bg-gray-100 dark:hover:bg-gray-800/30 dark:hover:text-white dark:hover:bg-opacity-50"
+        )}
+        onClick={openChapter}
+      >
+        {isCompleted ? (
+          <IoMdCheckmarkCircleOutline className="text-lg sm:text-xl md:text-2xl" />
+        ) : isAccessable ? (
+          <Circle className="text-lg sm:text-xl md:text-2xl" />
+        ) : isFree ? (
+          <FaLockOpen className="text-lg sm:text-xl md:text-2xl" />
+        ) : (
+          <FaLock className="text-lg sm:text-xl md:text-2xl" />
+        )}
+        <p className="text-sm sm:text-base md:text-lg font-semibold">{title}</p>
+      </div>
+    </SheetPrimitive.Close>
+  ) : (
     <div
       className={cn(
-        "w-full px-2 py-5 flex gap-2 items-center ",
+        "w-full px-2 py-5 flex gap-2 items-center cursor-pointer transition-colors duration-300",
         chapter === chapterId &&
           "bg-black text-white font-bold dark:bg-white dark:text-black dark:font-bold",
         chapter !== chapterId &&
@@ -50,15 +73,15 @@ const ChapterButton = ({
       onClick={openChapter}
     >
       {isCompleted ? (
-        <IoMdCheckmarkCircleOutline size={25} />
+        <IoMdCheckmarkCircleOutline className="text-lg sm:text-xl md:text-2xl" />
       ) : isAccessable ? (
-        <Circle size={25} />
+        <Circle className="text-lg sm:text-xl md:text-2xl" />
       ) : isFree ? (
-        <FaLockOpen size={25} />
+        <FaLockOpen className="text-lg sm:text-xl md:text-2xl" />
       ) : (
-        <FaLock size={25} />
+        <FaLock className="text-lg sm:text-xl md:text-2xl" />
       )}
-      <p className="text-lg font-semibold">{title}</p>
+      <p className="text-sm sm:text-base md:text-lg font-semibold">{title}</p>
     </div>
   );
 };

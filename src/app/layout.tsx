@@ -7,6 +7,7 @@ import { ContextProvider } from "@/providers/context-provider";
 import Loading from "@/components/Loading";
 import "./globals.css";
 import "@uploadthing/react/styles.css";
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({ subsets: ["latin"] });
 <link
@@ -27,10 +28,11 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
+          <NextTopLoader />
           <ContextProvider>
             <ThemeProvider
               attribute="class"
-              defaultTheme="system"
+              defaultTheme="dark"
               enableSystem
               disableTransitionOnChange
             >

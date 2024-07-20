@@ -35,7 +35,6 @@ const CreateCourseForm = () => {
       id: "course-creation",
     });
     try {
-      console.log("values------@############ ", values);
       const res = await axios.post("/api/teacher/create", values);
 
       if (res.status === 201) {
@@ -68,9 +67,9 @@ const CreateCourseForm = () => {
     const setCreateCourse = () => {
       const title = form.watch("title");
       if (title) {
-        router.push(`/dashboard?create=${title}`);
+        router.push(`/course-studio?create=${title}`);
       } else {
-        router.push(`/dashboard`);
+        router.push(`/course-studio`);
       }
     };
     setCreateCourse();
@@ -109,7 +108,7 @@ const CreateCourseForm = () => {
             <Button type="submit" variant={"default"}>
               Submit
             </Button>
-            <Link href="/dashboard">
+            <Link href="/course-studio">
               <DialogClose>
                 <Button type="button" variant={"outline"}>
                   Cancel

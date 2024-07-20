@@ -19,7 +19,6 @@ const CourseFreeField = ({ courseId, isFree, price }: CourseFreeFieldProps) => {
   const router = useRouter();
 
   async function onSubmit() {
-    console.log("@@@@@@@@@@@@@", selected, cost);
     if ((!selected && cost > 0) || selected) {
       await updateTheField(
         { isFree: selected, price: cost },
@@ -40,7 +39,9 @@ const CourseFreeField = ({ courseId, isFree, price }: CourseFreeFieldProps) => {
   return (
     <div className=" shadow-md border p-4 space-y-3">
       <div className="flex justify-between">
-        <p className="font-bold text-xl">Course price</p>
+        <p className="font-bold text-xl">
+          Course price <span className="text-red-600">*</span>
+        </p>
         <button onClick={() => setEdit(!edit)} className="hover:underline">
           {edit ? "Cancel" : "Edit"}
         </button>
@@ -56,7 +57,7 @@ const CourseFreeField = ({ courseId, isFree, price }: CourseFreeFieldProps) => {
               checked={selected}
               onCheckedChange={() => setSelected((d) => !d)}
             />
-            <span>is free</span>
+            <span>free</span>
           </div>
           {!selected && (
             <Input
@@ -71,17 +72,19 @@ const CourseFreeField = ({ courseId, isFree, price }: CourseFreeFieldProps) => {
               save
             </Button>
           </div>
-          <div>
+          {/* <div>
             <p className="text-red-500">
               Note: You can&apos;t change this option once you make the course
               published
             </p>
-          </div>
+          </div> */}
         </div>
       ) : (
         <p className="">
           {selected
             ? "Course is free for all"
+            : cost <= 0
+            ? "Please set the price for the course"
             : `This course costs  Rs. ${currencyFormater(cost)}`}
         </p>
       )}

@@ -18,7 +18,7 @@ const PublishField = ({
   const router = useRouter();
   const onDelete = async () => {
     await updateTheField({}, `/api/teacher/update/${courseId}`, "DELETE");
-    router.push(`/dashboard`);
+    router.push(`/course-studio`);
   };
   const onPublish = async () => {
     if (!isCompleted) {
@@ -40,7 +40,7 @@ const PublishField = ({
       router.refresh();
       return;
     }
-    router.push(`/dashboard`);
+    router.push(`/course-studio`);
   };
   return (
     <div className="flex items-center">

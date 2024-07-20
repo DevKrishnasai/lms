@@ -6,7 +6,7 @@ import React from "react";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex w-full">
+    <div className="flex h-full w-full">
       <Sidebar />
       <div className="w-full h-full ml-16">
         <div className=" flex justify-between items-center border-b px-3 py-2">

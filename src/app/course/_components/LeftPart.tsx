@@ -4,17 +4,20 @@ import { getTotalCourseProgress } from "@/app/(common)/courses/actions";
 import { getProgressWithIds } from "../action";
 import { prisma } from "@/lib/db";
 import Loading from "@/components/Loading";
+import { cn } from "@/lib/utils";
 
 interface LeftPartProps {
   courseId: string;
   isAccessable: boolean;
   visitedUser: boolean;
+  isSidebar?: boolean;
 }
 
 const LeftPart = async ({
   courseId,
   isAccessable,
   visitedUser,
+  isSidebar = false,
 }: LeftPartProps) => {
   const course = await prisma.course.findUnique({
     where: { id: courseId },
@@ -28,25 +31,29 @@ const LeftPart = async ({
   const progress = await getTotalCourseProgress(courseId);
   const progressWithIds = await getProgressWithIds(courseId);
 
-  if (!course) return;
-  <div className="w-full h-screen flex justify-center items-center">
-    <Loading />
-  </div>;
+  if (!course) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
-    <div className="w-72 min-h-screen border-r">
+    <div className={cn("min-h-screen", !isSidebar && "border-r")}>
       <div className="p-3 border-b-2 flex gap-3 flex-col justify-center items-center">
         <h2 className="font-bold">{course?.title}</h2>
-        {!visitedUser && isAccessable && <Progress value={progress} />}
+        <Progress
+          className={cn(
+            "opacity-0",
+            !visitedUser && isAccessable && "opacity-100"
+          )}
+          value={progress}
+        />
       </div>
       <ul>
         {course?.chapters.map((chapter) => {
-          console.log(progressWithIds.findIndex((p) => p === chapter.id));
-          const isCompleted =
-            progressWithIds.findIndex((p) => p === chapter.id) >= 0
-              ? true
-              : false;
-          console.log("isCompleted", isCompleted);
+          const isCompleted = progressWithIds.includes(chapter.id);
           return (
             <ChapterButton
               key={chapter.id}
@@ -57,6 +64,7 @@ const LeftPart = async ({
               isFree={chapter.isFree}
               visitedUser={visitedUser}
               isAccessable={isAccessable}
+              isSidebar={isSidebar}
             />
           );
         })}

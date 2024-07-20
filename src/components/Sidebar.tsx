@@ -16,6 +16,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { IoLogoWindows } from "react-icons/io";
 import { cn } from "@/lib/utils";
+import { FaCreativeCommonsShare } from "react-icons/fa";
 
 interface SideBarItemType {
   icon: React.ReactNode;
@@ -27,8 +28,8 @@ const Sidebar = async () => {
   const studentRoutes: SideBarItemType[] = [
     {
       icon: <LayoutDashboard className="group-hover:animate-ping" />,
-      label: "Home",
-      link: "/home",
+      label: "Dashboard",
+      link: "/dashboard",
     },
     {
       icon: <SearchSlash className="group-hover:animate-pulse" />,
@@ -54,11 +55,15 @@ const Sidebar = async () => {
       link: "/courses",
     },
     {
+      icon: <FaCreativeCommonsShare className="group-hover:animate-spin" />,
+      label: "Course Studio",
+      link: "/course-studio",
+    },
+    {
       icon: <PenTool className="group-hover:animate-pulse" />,
       label: "Access",
       link: "/access",
     },
-
     {
       icon: <LucideShieldQuestion className="group-hover:animate-pulse" />,
       label: "Queries",

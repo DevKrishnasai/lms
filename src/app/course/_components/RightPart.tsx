@@ -83,7 +83,7 @@ const RightPart = ({ courseId, isAccessable, visitedUser }: RightPartProps) => {
             ) : !visitedUser ? (
               <div className="w-full h-[calc(100vh-90px)] flex flex-col gap-3 justify-center items-center font-bold text-xl">
                 You need to buy this course to access this chapter
-                <Link href={`/contact?request=${courseId}`}>
+                <Link href={`/checkout?courseId=${courseId}`}>
                   <Button>Buy Course</Button>
                 </Link>
               </div>

@@ -7,7 +7,6 @@ export async function PATCH(
   { params }: { params: { courseId: string } }
 ) {
   try {
-    // console.log(params.courseId, "params", params, req.body);
     if (!params.courseId) {
       return NextResponse.json(
         { message: "CourseId is required" },
@@ -22,7 +21,6 @@ export async function PATCH(
         { status: 400 }
       );
     }
-    console.log(value, "@@@@@@@@@@@@value");
     const { userId } = auth();
     if (!userId) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -52,15 +50,41 @@ export async function PATCH(
       );
     }
 
-    const res = await prisma.course.update({
-      where: {
-        id: params.courseId,
-        userId: user.id,
-      },
-      data: {
-        ...value,
-      },
-    });
+    if (value?.category) {
+      console.log(value.category, "@@@@@@@category");
+      const category = await prisma.category.findFirst({
+        where: {
+          title: value.category,
+        },
+      });
+
+      if (!category) {
+        return NextResponse.json(
+          { message: "Category not found" },
+          { status: 400 }
+        );
+      }
+
+      await prisma.course.update({
+        where: {
+          id: params.courseId,
+          userId: user.id,
+        },
+        data: {
+          categoryid: category.id,
+        },
+      });
+    } else {
+      await prisma.course.update({
+        where: {
+          id: params.courseId,
+          userId: user.id,
+        },
+        data: {
+          ...value,
+        },
+      });
+    }
 
     return NextResponse.json({ mesage: "course updated..." }, { status: 201 });
   } catch (error) {

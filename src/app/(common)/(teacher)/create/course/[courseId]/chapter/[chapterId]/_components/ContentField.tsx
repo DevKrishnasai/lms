@@ -32,6 +32,7 @@ const ContentField = ({ courseId, content, chapterId }: ContentFieldProps) => {
       content,
     },
   });
+
   const {
     formState: { isSubmitting },
   } = form;
@@ -46,16 +47,19 @@ const ContentField = ({ courseId, content, chapterId }: ContentFieldProps) => {
     setEdit((prev) => !prev);
     router.refresh();
   }
+
   const [edit, setEdit] = React.useState(false);
+
   return (
-    <div className=" shadow-md border p-4 space-y-3">
+    <div className="shadow-md border p-4 space-y-3">
       <div className="flex justify-between">
-        <p className="font-bold text-xl">Chapter Content</p>
+        <p className="font-bold text-xl">
+          Chapter Content <span className="text-red-600">*</span>
+        </p>
         <button onClick={() => setEdit(!edit)} className="hover:underline">
           {edit ? "Cancel" : "Edit"}
         </button>
       </div>
-
       {edit ? (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
@@ -65,10 +69,13 @@ const ContentField = ({ courseId, content, chapterId }: ContentFieldProps) => {
               render={({ field }) => (
                 <FormItem className="space-y-2">
                   <FormControl>
-                    <Editor content={field.value} {...field} />
+                    <Editor
+                      content={field.value}
+                      onChange={(newContent) => field.onChange(newContent)}
+                    />
                   </FormControl>
                   <FormDescription>
-                    write a detailed content for the chapter
+                    Write a detailed content for the chapter
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -76,7 +83,7 @@ const ContentField = ({ courseId, content, chapterId }: ContentFieldProps) => {
             />
             <div className="flex justify-end items-center">
               <Button type="submit" disabled={isSubmitting}>
-                save
+                Save
               </Button>
             </div>
           </form>

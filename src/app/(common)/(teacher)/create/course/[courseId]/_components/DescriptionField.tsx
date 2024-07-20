@@ -44,7 +44,9 @@ const DescriptionField = ({ courseId, description }: DescriptionFieldProps) => {
   return (
     <div className=" shadow-md border p-4 space-y-3">
       <div className="flex justify-between">
-        <p className="font-bold text-xl">Description</p>
+        <p className="font-bold text-xl">
+          Description <span className="text-red-600">*</span>
+        </p>
         <button onClick={() => setEdit(!edit)} className="hover:underline">
           {edit ? "Cancel" : "Edit"}
         </button>

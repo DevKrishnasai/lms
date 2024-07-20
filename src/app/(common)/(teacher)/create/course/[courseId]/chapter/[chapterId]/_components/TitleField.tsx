@@ -49,7 +49,9 @@ const TitleField = ({ courseId, title, chapterId }: TitleFieldProps) => {
   return (
     <div className=" shadow-md border p-4 space-y-3">
       <div className="flex justify-between">
-        <p className="font-bold text-xl">Title</p>
+        <p className="font-bold text-xl">
+          Title <span className="text-red-600">*</span>
+        </p>
         <button onClick={() => setEdit(!edit)} className="hover:underline">
           {edit ? "Cancel" : "Edit"}
         </button>

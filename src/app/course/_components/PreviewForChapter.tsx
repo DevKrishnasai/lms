@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { SignInButton } from "@clerk/nextjs";
 import Link from "next/link";
 import Preview from "@/components/Preview";
-import { updateTheField } from "@/lib/utils";
+import { cn, updateTheField } from "@/lib/utils";
 interface RightPartProps {
   courseId: string;
   isAccessable: boolean;
@@ -43,14 +43,23 @@ const PreviewChapter = ({
 
   if (!fullChapter) return null;
   return (
-    <div className="h-full w-full space-y-3">
+    <div className="h-full w-full space-y-3 py-3 px-3">
       {isCompleted && <ChapterBanner isCompleted={isCompleted} />}
       <div className="max-w-5xl mx-auto space-y-5 mt-1">
-        <VideoPlayer
-          videoUrl={fullChapter?.videoUrl || ""}
-          courseId={courseId}
-        />
-        <div className="flex justify-between items-center">
+        {fullChapter.videoUrl !== "" && fullChapter.videoUrl !== null && (
+          <VideoPlayer
+            videoUrl={fullChapter?.videoUrl || ""}
+            courseId={courseId}
+          />
+        )}
+
+        <div
+          className={cn(
+            "flex justify-between items-center"
+            // (fullChapter.videoUrl === null || fullChapter.videoUrl === "") &&
+            //   "mt-4"
+          )}
+        >
           <p className="font-bold text-xl">{fullChapter?.title}</p>
           {!visitedUser && isAccessable ? (
             <Button
@@ -64,7 +73,7 @@ const PreviewChapter = ({
               <SignInButton forceRedirectUrl={path} mode="modal" />
             </Button>
           ) : (
-            <Link href={`/contact?request=${courseId}`}>
+            <Link href={`/checkout?courseId=${courseId}`}>
               <Button>Buy Course</Button>
             </Link>
           )}

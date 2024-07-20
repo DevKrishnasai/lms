@@ -42,6 +42,11 @@ const page = async ({ params }: { params: { courseId: string } }) => {
           order: "asc",
         },
       },
+      category: {
+        select: {
+          title: true,
+        },
+      },
     },
   });
 
@@ -49,11 +54,13 @@ const page = async ({ params }: { params: { courseId: string } }) => {
     redirect("/no-course-found");
   }
 
+  const allCategories = await prisma.category.findMany({});
+
   const requiredFileds = [
     courseDetails.title,
     courseDetails.description,
     courseDetails.thumbnail,
-    courseDetails.category,
+    courseDetails.category?.title,
     courseDetails.isFree || courseDetails?.price,
     courseDetails.chapters.some((chapter) => chapter.isPublished),
   ];
@@ -73,7 +80,7 @@ const page = async ({ params }: { params: { courseId: string } }) => {
         <div className="mb-4 flex justify-between items-center">
           <div className="space-y-2 ">
             <h1 className="text-3xl font-bold">Course setup</h1>
-            <p className="font-medium">
+            <p className="font-sm text-sm ">
               complete all the fields ({`${filledFields}/${totalFields}`})
             </p>
           </div>
@@ -98,8 +105,9 @@ const page = async ({ params }: { params: { courseId: string } }) => {
               courseId={params.courseId}
             />
             <CategoryField
-              category={courseDetails.category || ""}
+              category={courseDetails.category?.title || ""}
               courseId={params.courseId}
+              availableCategories={allCategories}
             />
           </div>
           <div className="space-y-4">

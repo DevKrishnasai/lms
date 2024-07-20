@@ -69,7 +69,9 @@ const ChaptersField = ({ courseId, chapters }: ChaptersFieldProps) => {
   return (
     <div className=" shadow-md border p-4 space-y-3">
       <div className="flex justify-between">
-        <p className="font-bold text-xl">Chapters</p>
+        <p className="font-bold text-xl">
+          Chapters <span className="text-red-600">*</span>
+        </p>
         <button onClick={() => setEdit(!edit)} className="hover:underline">
           {edit ? "Cancel" : "Add"}
         </button>

@@ -37,11 +37,7 @@ const page = async ({
     redirect("/");
   }
 
-  const requiredFileds = [
-    chapterDeatils.title,
-    chapterDeatils.content,
-    chapterDeatils.videoUrl,
-  ];
+  const requiredFileds = [chapterDeatils.title, chapterDeatils.content];
 
   const totalFields = requiredFileds.length;
   const filledFields = requiredFileds.filter((field) => field).length;
@@ -52,11 +48,11 @@ const page = async ({
     <div className="w-full ">
       {!chapterDeatils.isPublished && <Banner isCourse={false} />}
       <BackField courseId={params.courseId} />
-      <div className="p-3 w-full h-full ">
+      <div className="p-3 w-full h-full space-y-4">
         <div className="mb-4 flex justify-between items-center">
           <div className="space-y-2 ">
             <h1 className="text-3xl font-bold">Chapter setup</h1>
-            <p className="font-medium">
+            <p className="font-medium text-sm">
               complete all the fields ({`${filledFields}/${totalFields}`})
             </p>
           </div>
@@ -74,23 +70,19 @@ const page = async ({
               courseId={params.courseId}
               chapterId={params.chapterId}
             />
-            <ContentField
-              content={chapterDeatils.content || ""}
-              courseId={params.courseId}
-              chapterId={params.chapterId}
-            />
-            <ChapterAccessField
-              isFree={chapterDeatils.isFree || false}
-              courseId={params.courseId}
-              chapterId={params.chapterId}
-            />
-          </div>
-          <div className="space-y-4 w-full">
+
             <VideoField
               chapterId={params.chapterId}
               courseId={params.courseId}
               videoUrl={chapterDeatils.videoUrl || ""}
               title={chapterDeatils.title}
+            />
+          </div>
+          <div className="space-y-4 w-full">
+            <ChapterAccessField
+              isFree={chapterDeatils.isFree || false}
+              courseId={params.courseId}
+              chapterId={params.chapterId}
             />
             <AttachmentsField
               attachments={chapterDeatils.attachments || []}
@@ -99,6 +91,11 @@ const page = async ({
             />
           </div>
         </div>
+        <ContentField
+          content={chapterDeatils.content || ""}
+          courseId={params.courseId}
+          chapterId={params.chapterId}
+        />
       </div>
     </div>
   );

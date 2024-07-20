@@ -73,7 +73,7 @@ const VideoField = ({
         <div className="overflow-x-hidden">
           {/* <Video src={videoUrl} /> */}
           <Player src={videoUrl} videoId={videoUrl} />
-          <p className="text-center">
+          <p className="text-center mt-4">
             The video cant be played after immediate upload (refresh once to see
             video)
           </p>

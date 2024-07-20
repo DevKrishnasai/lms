@@ -47,7 +47,9 @@ export const getCourses = async (word: string) => {
         },
         {
           category: {
-            contains: word,
+            title: {
+              contains: word,
+            },
           },
         },
       ],

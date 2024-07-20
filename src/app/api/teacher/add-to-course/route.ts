@@ -124,7 +124,7 @@ export async function POST(req: Request) {
           CourseEnrollmentEmail({
             email,
             courseName: course.title,
-            dashboardLink: `${process.env.BASE_URL}/home`,
+            dashboardLink: `${process.env.BASE_URL}/dashboard`,
             studentName: user?.name || "student",
           })
         ),

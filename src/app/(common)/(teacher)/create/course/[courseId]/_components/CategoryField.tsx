@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
-import { categorySchema, titleSchema } from "@/schema/zod-schemes";
+import { categorySchema } from "@/schema/zod-schemes";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,16 +13,28 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { updateTheField } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { Category } from "@prisma/client";
 
 interface CategoryFieldProps {
   category: string;
   courseId: string;
+  availableCategories: Category[];
 }
 
-const CategoryField = ({ courseId, category }: CategoryFieldProps) => {
+const CategoryField = ({
+  courseId,
+  category,
+  availableCategories,
+}: CategoryFieldProps) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
@@ -30,6 +42,7 @@ const CategoryField = ({ courseId, category }: CategoryFieldProps) => {
       category: category ? category : "",
     },
   });
+
   const {
     formState: { isSubmitting, isValid },
   } = form;
@@ -39,34 +52,46 @@ const CategoryField = ({ courseId, category }: CategoryFieldProps) => {
     setEdit((prev) => !prev);
     router.refresh();
   }
+
   const [edit, setEdit] = React.useState(false);
+
   return (
-    <div className=" shadow-md border p-4 space-y-3">
+    <div className="shadow-md border p-4 space-y-3">
       <div className="flex justify-between">
-        <p className="font-bold text-xl">Category</p>
+        <p className="font-bold text-xl">
+          Category <span className="text-red-600">*</span>
+        </p>
         <button onClick={() => setEdit(!edit)} className="hover:underline">
           {edit ? "Cancel" : "Edit"}
         </button>
       </div>
-
       {edit ? (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-            <FormField
-              control={form.control}
+            <Controller
               name="category"
+              control={form.control}
               render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormControl>
-                    <Input
-                      placeholder="e.g. Technology..."
-                      {...field}
-                      value={field.value}
-                    />
-                  </FormControl>
+                <FormItem>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {availableCategories.map((cat) => (
+                        <SelectItem key={cat.id} value={cat.title}>
+                          {cat.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormDescription>
-                    Create a category to showup the course when a student
-                    searches with this category.
+                    Select a category for your course.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -74,7 +99,7 @@ const CategoryField = ({ courseId, category }: CategoryFieldProps) => {
             />
             <div className="flex justify-end items-center">
               <Button type="submit" disabled={isSubmitting}>
-                save
+                Save
               </Button>
             </div>
           </form>
@@ -82,7 +107,7 @@ const CategoryField = ({ courseId, category }: CategoryFieldProps) => {
       ) : category ? (
         <p className="">{category}</p>
       ) : (
-        <p className="text-gray-500">No Category </p>
+        <p className="text-gray-500">No Category</p>
       )}
     </div>
   );

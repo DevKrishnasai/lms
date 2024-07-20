@@ -6,14 +6,14 @@ import CourseCard from "./_components/CourseCard";
 import { SignIn, SignInButton, useSignUp } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 
-const page = async () => {
+const page = async ({ params }: { params: string }) => {
   const { userId } = auth();
   if (!userId)
     return (
       <div className="h-[calc(100vh-100px)] w-full flex flex-col justify-center items-center gap-3">
         Sign in to view your courses
         <Button>
-          <SignInButton mode="modal" />
+          <SignInButton mode="redirect" forceRedirectUrl="/dashboard" />
         </Button>
       </div>
     );
@@ -44,8 +44,15 @@ const page = async () => {
   });
   if (!user) redirect("/not-authorized");
   return (
-    <div className="w-full h-full p-4 space-y-4">
-      <h2>Courses Registered</h2>
+    <div className="w-full h-full p-4 space-y-3">
+      <div className="flex justify-between items-center flex-wrap gap-3">
+        <div>
+          <h1 className="text-3xl font-bold">Courses </h1>
+          <p className="mb-4 text-sm text-gray-600">
+            (View your registered courses)
+          </p>
+        </div>
+      </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {user.accesses.map((access) => (
           <CourseCard

@@ -1,21 +1,23 @@
-import { LucideMessageSquareWarning, MessageSquareWarning } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import React from "react";
+
 interface BannerProps {
   isCourse: boolean;
 }
 
 const Banner = ({ isCourse }: BannerProps) => {
   const content = isCourse
-    ? "This Course is not published. So students can't see this course"
-    : "This Chapter is not published. So students can't see this chapter";
+    ? "This Course is not published. Students can't see this course."
+    : "This Chapter is not published. Students can't see this chapter.";
+
   return (
-    <div className="w-full">
+    <div className="w-full p-4">
       <div
-        className="bg-yellow-300 border border-red-400 text-red-700 px-4 py-3 flex items-center"
-        role="banner"
+        className="bg-gray-100  border-yellow-400   dark:bg-transparent dark:border-y-[1px] dark:border-y-white dark:border-r-white dark:border-r-[1px] border-l-4 px-6 py-4 rounded-r flex items-center shadow-sm"
+        role="alert"
       >
-        <MessageSquareWarning className="w-5 h-5 inline-block mr-1" />
-        <span className="block sm:inline">{content}</span>
+        <AlertTriangle className="w-7 h-7 mr-3 text-yellow-400 flex-shrink-0" />
+        <span className="flex-1 text-sm sm:text-base">{content}</span>
       </div>
     </div>
   );

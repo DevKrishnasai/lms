@@ -26,7 +26,9 @@ const ThumbnailField = ({ courseId, thumbnail }: ThumbnailFieldProps) => {
   return (
     <div className=" shadow-md border p-4 space-y-3">
       <div className="flex justify-between">
-        <p className="font-bold text-xl">Thumbnail</p>
+        <p className="font-bold text-xl">
+          Thumbnail <span className="text-red-600">*</span>
+        </p>
         <button onClick={() => setEdit(!edit)} className="hover:underline">
           {edit ? "Cancel" : "Edit"}
         </button>
@@ -49,7 +51,7 @@ const ThumbnailField = ({ courseId, thumbnail }: ThumbnailFieldProps) => {
         <img
           src={thumbnail}
           alt="thumbnail"
-          className="object-cover rounded-md"
+          className="object-fill w-full max-h-72 rounded-md"
         />
       )}
     </div>

@@ -93,7 +93,7 @@ const page = () => {
             <Button type="submit" variant={"default"}>
               Submit
             </Button>
-            <Link href="/dashboard">
+            <Link href="/course-studio">
               <Button type="button" variant={"outline"}>
                 Cancel
               </Button>

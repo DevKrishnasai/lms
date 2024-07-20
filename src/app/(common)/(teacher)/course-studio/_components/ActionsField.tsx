@@ -22,7 +22,7 @@ const ActionsField = ({ chapter }: ActionsFieldProps) => {
   };
 
   const pushToUsersScreen = (courseId: string) => {
-    router.push(`dashboard/${courseId}/users`);
+    router.push(`course-studio/${courseId}/users`);
   };
 
   const deleteCourse = async (courseId: string) => {
