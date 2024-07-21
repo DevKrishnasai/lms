@@ -1,13 +1,10 @@
 import { prisma } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 
 import { render } from "@react-email/render";
 import nodemailer from "nodemailer";
 import { WelcomeToLMS } from "@/templates/WelcomeToLMS";
-
-const emailProvider = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
   try {
@@ -52,20 +49,6 @@ export async function POST(req: Request) {
     });
 
     console.log(users);
-
-    //Resend mail provider
-    // const emails = users.map((user) => user.email);
-    // const sendAllEmails = emails.map((email) => {
-    //   const user = users.find((user) => user.email === email);
-    //   return emailProvider.emails.send({
-    //     from: "LMS-dev <onboarding@resend.dev>",
-    //     to: [email],
-    //     subject: "hello world",
-    //     text: "it works!",
-    //     react: OnbordingTemplate({ firstName: user?.name || "student" }),
-    //   });
-    // });
-    // const data = await Promise.all(sendAllEmails);
 
     //node mailer
     const emails = users.map((user) => user.email);

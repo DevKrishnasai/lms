@@ -15,6 +15,7 @@ interface RightPartProps {
   fullChapter: fullChapterType;
   isCompleted: boolean;
   setIsCompleted: (value: boolean) => void;
+  isAuther: boolean;
 }
 const PreviewChapter = ({
   courseId,
@@ -24,6 +25,7 @@ const PreviewChapter = ({
   fullChapter,
   isCompleted,
   setIsCompleted,
+  isAuther,
 }: RightPartProps) => {
   const path = usePathname();
   const router = useRouter();
@@ -43,7 +45,7 @@ const PreviewChapter = ({
 
   if (!fullChapter) return null;
   return (
-    <div className="h-full w-full space-y-3 py-3 px-3">
+    <div className="h-full w-full space-y-3 ">
       {isCompleted && <ChapterBanner isCompleted={isCompleted} />}
       <div className="max-w-5xl mx-auto space-y-5 mt-1">
         {fullChapter.videoUrl !== "" && fullChapter.videoUrl !== null && (
@@ -55,13 +57,17 @@ const PreviewChapter = ({
 
         <div
           className={cn(
-            "flex justify-between items-center"
-            // (fullChapter.videoUrl === null || fullChapter.videoUrl === "") &&
-            //   "mt-4"
+            "flex justify-between items-center",
+            (fullChapter.videoUrl === null || fullChapter.videoUrl === "") &&
+              "mt-4"
           )}
         >
           <p className="font-bold text-xl">{fullChapter?.title}</p>
-          {!visitedUser && isAccessable ? (
+          {isAuther ? (
+            <Link href={`/create/course/${courseId}/chapter/${chapterId}`}>
+              <Button>Edit</Button>
+            </Link>
+          ) : !visitedUser && isAccessable ? (
             <Button
               className="bg-blue-500 text-white px-3 py-1 rounded"
               onClick={markAsComplete}

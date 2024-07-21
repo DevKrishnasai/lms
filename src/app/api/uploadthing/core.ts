@@ -16,7 +16,11 @@ export const ourFileRouter = {
   uploadThumbnail: f({ image: { maxFileCount: 1 } })
     .middleware(() => funAuth())
     .onUploadComplete(() => {}),
-  uploadChapterVideo: f({ video: { maxFileCount: 1, maxFileSize: "8GB" } })
+  uploadChapterVideo: f({
+    "video/mp4": { maxFileCount: 1, maxFileSize: "8GB" },
+    "video/ogg": { maxFileCount: 1, maxFileSize: "8GB" },
+    "video/webm": { maxFileCount: 1, maxFileSize: "8GB" },
+  })
     .middleware(() => funAuth())
     .onUploadComplete(() => {}),
   uploadChapterAttachement: f({

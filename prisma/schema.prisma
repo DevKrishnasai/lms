@@ -13,14 +13,14 @@ enum Role {
 }
 
 model User {
-  id         String         @id @default(uuid())
-  email      String         @unique
+  id         String           @id @default(uuid())
+  email      String           @unique
   name       String?
-  role       Role           @default(STUDENT)
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
-  authId     String         @unique
-  onBoarded  Boolean        @default(false)
+  role       Role             @default(STUDENT)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  authId     String           @unique
+  onBoarded  Boolean          @default(false)
   profilePic String?
   bio        String?
   courses    Course[]
@@ -30,8 +30,21 @@ model User {
   categories UserCategory[]
   goals      UserGoal[]
   purchases  purchases[]
+  mail       MailCredentials?
 
   @@unique([id, authId])
+}
+
+model MailCredentials {
+  id        String   @id @default(uuid())
+  email     String
+  pass      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId])
 }
 
 model Goal {

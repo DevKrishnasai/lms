@@ -4,6 +4,7 @@ import { Course } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { Player } from "video-react";
 import { getCourse } from "../action";
+// import Video from 'next-video';
 
 interface VideoPlayerProps {
   videoUrl: string;
@@ -26,6 +27,7 @@ const VideoPlayer = ({ videoUrl, courseId }: VideoPlayerProps) => {
       videoId={videoUrl}
       poster={courseDetails?.thumbnail || ""}
     />
+    // <Video src={videoUrl} />
     // <ReactPlayer
     //   playbackId={muxData.playbackId}
 

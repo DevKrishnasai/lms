@@ -1,9 +1,11 @@
 import { prisma } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { purchases } from "@prisma/client";
-import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import Razorpay from "razorpay";
+import nodemailer from "nodemailer";
+import { render } from "@react-email/render";
+import CourseEnrollmentEmail from "../../../../emails/CourseEnrollmentEmail";
 
 export async function POST(req: NextRequest) {
   try {
@@ -41,6 +43,10 @@ export async function POST(req: NextRequest) {
     const course = await prisma.course.findUnique({
       where: {
         id: details.courseId,
+      },
+      include: {
+        chapters: true,
+        user: true,
       },
     });
 
@@ -96,6 +102,14 @@ export async function POST(req: NextRequest) {
 
     console.log(options);
 
+    let emailDetails = {
+      authorName: course.user.name || course.user.email.split("@")[0],
+      chapterCount: course.chapters.length,
+      courseName: course.title,
+      courseUrl: `course/${course.id}?chapterId=${course.chapters[0].id}`,
+      name: user?.name || user.email.split("@")[0],
+    };
+
     const response = await razorpay.orders.create(options);
     let orderDetails: purchases;
     if (course.price === 0) {
@@ -119,6 +133,30 @@ export async function POST(req: NextRequest) {
           courseId: course.id,
         },
       });
+
+      const transport = nodemailer.createTransport({
+        service: "Gmail",
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASS,
+        },
+      });
+
+      const mailOptions = {
+        from: process.env.MAIL_USER,
+        to: user.email,
+        subject: "Course Enrollment in YourLMS",
+        html: render(CourseEnrollmentEmail({ ...emailDetails })),
+      };
+
+      transport.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        }
+      });
     } else {
       orderDetails = await prisma.purchases.create({
         data: {
@@ -135,11 +173,11 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Send email to user (TODO)
     console.log(orderDetails);
     return NextResponse.json(
       {
         ...orderDetails,
+        emailDetails,
         message: "transaction going on...",
         courseName: course.title,
         email: user.email,

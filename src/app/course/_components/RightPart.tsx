@@ -14,9 +14,15 @@ interface RightPartProps {
   courseId: string;
   isAccessable: boolean;
   visitedUser: boolean;
+  isAuther: boolean;
 }
 
-const RightPart = ({ courseId, isAccessable, visitedUser }: RightPartProps) => {
+const RightPart = ({
+  courseId,
+  isAccessable,
+  visitedUser,
+  isAuther,
+}: RightPartProps) => {
   const path = usePathname();
   const chapterId = useSearchParams().get("chapter") || "";
   const [isCompleted, setIsCompleted] = useState(false);
@@ -69,8 +75,9 @@ const RightPart = ({ courseId, isAccessable, visitedUser }: RightPartProps) => {
                 fullChapter={fullChapter}
                 isCompleted={isCompleted}
                 setIsCompleted={setIsCompleted}
+                isAuther={isAuther}
               />
-            ) : isAccessable ? (
+            ) : isAccessable || isAuther ? (
               <PreviewForChapter
                 courseId={courseId}
                 isAccessable={isAccessable}
@@ -79,6 +86,7 @@ const RightPart = ({ courseId, isAccessable, visitedUser }: RightPartProps) => {
                 fullChapter={fullChapter}
                 isCompleted={isCompleted}
                 setIsCompleted={setIsCompleted}
+                isAuther={isAuther}
               />
             ) : !visitedUser ? (
               <div className="w-full h-[calc(100vh-90px)] flex flex-col gap-3 justify-center items-center font-bold text-xl">

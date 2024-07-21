@@ -2,9 +2,16 @@
 
 import { prisma } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
+import { render } from "@react-email/render";
 import { redirect } from "next/navigation";
+import nodemailer from "nodemailer";
+import CourseEnrollmentEmail from "../../../../emails/CourseEnrollmentEmail";
 
-export const updatePaymentStatus = async (id: string, paymentId: string) => {
+export const updatePaymentStatus = async (
+  id: string,
+  paymentId: string,
+  emailDetails: any
+) => {
   try {
     const { userId } = auth();
     if (!userId) {
@@ -36,9 +43,34 @@ export const updatePaymentStatus = async (id: string, paymentId: string) => {
         userId: user.id,
       },
     });
-    return payment;
+
+    const transport = nodemailer.createTransport({
+      service: "Gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.MAIL_USER,
+      to: user.email,
+      subject: "Course Enrollment in YourLMS",
+      html: render(CourseEnrollmentEmail({ ...emailDetails })),
+    };
+
+    transport.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      }
+    });
+
+    return true;
   } catch (error) {
     console.error(error);
-    return null;
+    return false;
   }
 };

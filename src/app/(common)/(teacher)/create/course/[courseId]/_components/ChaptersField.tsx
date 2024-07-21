@@ -19,6 +19,7 @@ import { updateTheField } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Chapter } from "@prisma/client";
 import ChaptersArea from "./ChaptersArea";
+import { toast } from "sonner";
 
 interface ChaptersFieldProps {
   chapters: Chapter[];
@@ -63,7 +64,13 @@ const ChaptersField = ({ courseId, chapters }: ChaptersFieldProps) => {
   };
 
   const onEdit = (id: string) => {
+    toast.loading("Loading chapter environment...", {
+      id: "chapter",
+    });
     router.push(`/create/course/${courseId}/chapter/${id}`);
+    toast.success("Loading chapter editing environment...", {
+      id: "chapter",
+    });
   };
 
   return (

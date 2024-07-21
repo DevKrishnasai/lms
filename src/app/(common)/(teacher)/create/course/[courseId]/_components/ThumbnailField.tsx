@@ -51,7 +51,7 @@ const ThumbnailField = ({ courseId, thumbnail }: ThumbnailFieldProps) => {
         <img
           src={thumbnail}
           alt="thumbnail"
-          className="object-fill w-full max-h-72 rounded-md"
+          className="object-cover w-full max-h-90 rounded-md"
         />
       )}
     </div>

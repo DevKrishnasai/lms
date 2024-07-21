@@ -10,6 +10,7 @@ import { updateTheField } from "@/lib/utils";
 import { MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { TeachersPublishedCoursesType } from "../actions";
+import { toast } from "sonner";
 
 interface ActionsFieldProps {
   chapter: TeachersPublishedCoursesType;
@@ -18,11 +19,23 @@ const ActionsField = ({ chapter }: ActionsFieldProps) => {
   const router = useRouter();
 
   const pushToEditScreen = (courseId: string) => {
+    toast.loading("loading course...", {
+      id: "loading-course",
+    });
     router.push(`/create/course/${courseId}`);
+    toast.success("Course loaded", {
+      id: "loading-course",
+    });
   };
 
   const pushToUsersScreen = (courseId: string) => {
+    toast.loading("loading users...", {
+      id: "loading-users",
+    });
     router.push(`course-studio/${courseId}/users`);
+    toast.success("Users loaded", {
+      id: "loading-users",
+    });
   };
 
   const deleteCourse = async (courseId: string) => {

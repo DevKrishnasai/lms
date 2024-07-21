@@ -8,6 +8,25 @@ export const courseAccess = async (courseId: string) => {
   let visitedUser = false;
   if (!userId) visitedUser = true;
   let isCourseAccessableByTheUser = false;
+  let isauther = false;
+  const course = await prisma.course.findUnique({
+    where: {
+      id: courseId,
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  if (!course) {
+    return { visitedUser, isCourseAccessableByTheUser, isauther };
+  }
+
+  if (course.user.authId === userId) {
+    isauther = true;
+    visitedUser = false;
+    return { visitedUser, isCourseAccessableByTheUser, isauther };
+  }
   if (userId) {
     const user = await prisma.user.findUnique({
       where: {
@@ -23,11 +42,11 @@ export const courseAccess = async (courseId: string) => {
           },
         },
       });
-      console.log("$$$$$$$$$$$ access -->", courseAccess);
       if (courseAccess) isCourseAccessableByTheUser = true;
     }
   }
-  return { visitedUser, isCourseAccessableByTheUser };
+
+  return { visitedUser, isCourseAccessableByTheUser, isauther };
 };
 
 export const getCourses = async (word: string) => {

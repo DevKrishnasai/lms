@@ -41,6 +41,7 @@ const PublishField = ({
       "PUT",
       true
     );
+
     if (chapterDeatils.isPublished) {
       toast.success("Chapter unpublished", {
         duration: 1500,
@@ -48,7 +49,13 @@ const PublishField = ({
       router.refresh();
       return;
     }
+    toast.loading("making chapter publish", {
+      id: "making-chapter-live",
+    });
     router.push(`/create/course/${courseId}`);
+    toast.success("chapter published", {
+      id: "making-chapter-live",
+    });
   };
   return (
     <div className="flex items-center">

@@ -7,9 +7,8 @@ import MobileLeftPart from "../_components/MobileLeftPart";
 const Page = async ({ params }: { params: { courseId: string } }) => {
   const courseId = params.courseId;
 
-  const { isCourseAccessableByTheUser, visitedUser } = await courseAccess(
-    courseId
-  );
+  const { isCourseAccessableByTheUser, visitedUser, isauther } =
+    await courseAccess(courseId);
 
   return (
     <div className="flex">
@@ -38,6 +37,7 @@ const Page = async ({ params }: { params: { courseId: string } }) => {
           courseId={courseId}
           isAccessable={isCourseAccessableByTheUser}
           visitedUser={visitedUser}
+          isAuther={isauther}
         />
       </div>
     </div>

@@ -8,7 +8,6 @@ import { updateTheField } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import Fileupload from "@/components/Fileupload";
 import { VideoIcon } from "lucide-react";
-import Video from "next-video";
 import {
   Player,
   ControlBar,

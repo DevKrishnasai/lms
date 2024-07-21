@@ -70,9 +70,6 @@ const FormForCheckOut: React.FC<FormForCheckOutProps> = ({
         ...details,
         courseId,
       });
-      if (status !== 201) {
-        alert(data.message);
-      }
 
       if (status === 201) {
         toast.success("Payment gateway loaded", {
@@ -80,7 +77,7 @@ const FormForCheckOut: React.FC<FormForCheckOutProps> = ({
         });
         var options = {
           key: process.env.RAZORPAY_KEY,
-          name: data.name,
+          name: "YourLMS",
           currency: "INR",
           amount: data.price,
           order_id: data.orderId,
@@ -91,20 +88,33 @@ const FormForCheckOut: React.FC<FormForCheckOutProps> = ({
             razorpay_order_id: any;
             razorpay_signature: any;
           }) {
-            const status = await updatePaymentStatus(
-              data.id,
-              response.razorpay_payment_id
-            );
-            if (!status) {
-              toast.error("Payment failed", {
-                id: "payment",
-              });
-              return;
-            }
-            toast.success("Payment successful", {
+            toast.success("Payment successful ", {
               id: "payment",
             });
+
+            toast.loading("making this course your's...", {
+              id: "loading-1",
+            });
+
+            await updatePaymentStatus(
+              data.id,
+              response.razorpay_payment_id,
+              data.emailDetails
+            );
+
+            toast.success("Now the course is your's", {
+              id: "loading-1",
+            });
+
+            toast.loading("Redirecting to course page...", {
+              id: "loading-2",
+            });
+
             router.push(`/course/${courseId}`);
+
+            toast.success("Happy learning...", {
+              id: "loading-2",
+            });
           },
           prefill: {
             name: data.name,

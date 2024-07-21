@@ -2,7 +2,10 @@
 import { prisma } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { Role } from "@prisma/client";
+import { render } from "@react-email/render";
 import { redirect } from "next/navigation";
+import nodemailer from "nodemailer";
+import WelcomeToLMS from "../../../emails/WelcomeToLMS";
 
 export const updateOnboarding = async (data: {
   selectedCategories: string[];
@@ -60,6 +63,35 @@ export const updateOnboarding = async (data: {
     skipDuplicates: true,
   });
 
-  console.log("User onboarding data updated", user);
+  const transport = nodemailer.createTransport({
+    service: "Gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.MAIL_USER,
+    to: user.email,
+    subject: "Welcome To YourLMS Portal",
+    html: render(
+      WelcomeToLMS({
+        name: user?.name || user.email.split("@")[0],
+        role: user.role,
+      })
+    ),
+  };
+
+  transport.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+      throw new Error("Error sending email");
+    }
+  });
+
   redirect("/dashboard");
 };

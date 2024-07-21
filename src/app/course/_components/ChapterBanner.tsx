@@ -1,4 +1,5 @@
 import {
+  AlertTriangle,
   BookMarked,
   LucideMessageSquareWarning,
   MessageSquareWarning,
@@ -14,13 +15,13 @@ const ChapterBanner = ({ isCompleted }: ChapterBannerProps) => {
     "You have completed this chapter. You can move to the next chapter";
 
   return (
-    <div className="w-full">
+    <div className="w-full p-4">
       <div
-        className="bg-yellow-300 border flex gap-3 border-red-400 text-red-700 px-4 py-3"
-        role="banner"
+        className="bg-gray-100  border-yellow-400   dark:bg-transparent dark:border-y-[1px] dark:border-y-white dark:border-r-white dark:border-r-[1px] border-l-4 px-6 py-4 rounded-r flex items-center shadow-sm"
+        role="alert"
       >
-        <BookMarked className="w-5 h-5 inline-block mr-1" />
-        <span className="block sm:inline">{content}</span>
+        <AlertTriangle className="w-7 h-7 mr-3 text-yellow-400 flex-shrink-0" />
+        <span className="flex-1 text-sm sm:text-base">{content}</span>
       </div>
     </div>
   );

@@ -64,8 +64,8 @@ const Navbar = () => {
             {...form.register("search")}
           />
         ) : path.includes("course") ? (
-          !path.includes("chapter") ? (
-            <Link href="/courses" className="flex gap-2 items-center">
+          !path.includes("chapter") && !path.includes("course-") ? (
+            <Link href="/dashboard" className="flex gap-2 items-center">
               <ArrowLeftSquare /> <span>back</span>
             </Link>
           ) : null

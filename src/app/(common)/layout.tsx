@@ -1,10 +1,25 @@
 import MobileSideBar from "@/components/MobileSideBar";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
+import { prisma } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 import React from "react";
 
-const layout = ({ children }: { children: React.ReactNode }) => {
+const layout = async ({ children }: { children: React.ReactNode }) => {
+  const { userId } = auth();
+  if (userId) {
+    const user = await prisma.user.findUnique({
+      where: {
+        authId: userId,
+      },
+    });
+
+    if (!user) redirect("/api/sign-in");
+
+    if (!user.onBoarded) redirect("/onboarding");
+  }
   return (
     <div className="flex h-full w-full">
       <Sidebar />

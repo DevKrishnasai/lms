@@ -16,6 +16,9 @@ export const columns: ColumnDef<TeachersPublishedCoursesType>[] = [
   {
     accessorKey: "category",
     header: "Category",
+    cell: ({ row: { original } }) => {
+      return original.category?.title || "No Category";
+    },
   },
   {
     accessorKey: "isPublished",
