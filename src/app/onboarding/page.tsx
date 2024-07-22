@@ -7,7 +7,7 @@ const OnboardingPage = async () => {
   const user = await currentUser();
 
   if (!user) {
-    redirect("/api/sign-in");
+    redirect("auth/signin");
   }
 
   const data = await prisma.user.findUnique({
@@ -15,7 +15,6 @@ const OnboardingPage = async () => {
       authId: user.id,
     },
   });
-  console.log("@@@@@@@@in onbaording", data);
   if (data) {
     if (data.onBoarded) {
       redirect("/dashboard");
@@ -25,7 +24,8 @@ const OnboardingPage = async () => {
       data: {
         authId: user.id,
         email: user.emailAddresses[0].emailAddress,
-        name: user.fullName,
+        name: user.fullName || user.firstName,
+        profilePic: user.imageUrl,
       },
     });
   }
@@ -70,8 +70,8 @@ const OnboardingPage = async () => {
           Welcome to YourLMS, {user?.firstName}!
         </h1>
         <p className="text-lg mb-8 text-center text-gray-600">
-          Let's personalize your learning journey. Tell us a bit about yourself
-          and your goals.
+          Let&apos;s personalize your learning journey. Tell us a bit about
+          yourself and your goals.
         </p>
 
         <OnboardingForm

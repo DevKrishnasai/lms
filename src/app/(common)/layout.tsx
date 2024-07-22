@@ -16,7 +16,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
       },
     });
 
-    if (!user) redirect("/api/sign-in");
+    if (!user) redirect("/onboarding");
 
     if (!user.onBoarded) redirect("/onboarding");
   }

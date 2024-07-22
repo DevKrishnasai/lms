@@ -88,6 +88,7 @@ const page = async ({ params }: { params: { courseId: string } }) => {
             courseDeatils={courseDetails}
             isCompleted={isAllFieldsFilled}
             courseId={params.courseId}
+            user={user}
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">

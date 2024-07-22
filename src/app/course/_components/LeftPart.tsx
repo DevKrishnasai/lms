@@ -40,7 +40,7 @@ const LeftPart = async ({
   }
 
   return (
-    <div className={cn("min-h-screen", !isSidebar && "border-r")}>
+    <div className={cn("min-h-screen ", !isSidebar && "border-r w-80")}>
       <div className="p-3 border-b-2 flex gap-3 flex-col justify-center items-center">
         <h2 className="font-bold">{course?.title}</h2>
         <Progress

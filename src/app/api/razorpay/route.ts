@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
 
     console.log(isPurchased);
 
-    const amount = course.price || 0;
+    const amount = course.price || 1;
     const currency = "INR";
     const receipt = `recp_${new Date().getTime()}`;
 

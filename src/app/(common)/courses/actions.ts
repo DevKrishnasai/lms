@@ -2,6 +2,9 @@
 
 import { prisma } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
+import { render } from "@react-email/render";
+import nodemailer from "nodemailer";
+import CourseCompletionEmail from "../../../../emails/CourseCompletionEmail";
 
 export const courseAccess = async (courseId: string) => {
   const { userId } = auth();
@@ -138,8 +141,13 @@ export const getTotalCourseProgress = async (courseId: string) => {
           id: true,
         },
       },
+      user: true,
     },
   });
+
+  if (!chaptersCompleted) {
+    return 0;
+  }
 
   const chapterIds =
     chaptersCompleted?.chapters.map((chapter) => chapter.id) || [];
@@ -157,6 +165,72 @@ export const getTotalCourseProgress = async (courseId: string) => {
   const totalChapters = chapterIds.length;
   const completedChapters = chapterProgressIds.length;
   const progress = (completedChapters / totalChapters) * 100;
+
+  if (progress === 100) {
+    const isAlreadyNotified = await prisma.certificate.findUnique({
+      where: {
+        courseId_userId: {
+          courseId: courseId,
+          userId: user.id,
+        },
+      },
+    });
+
+    if (isAlreadyNotified) {
+      return progress;
+    }
+
+    const certificate = await prisma.certificate.upsert({
+      where: {
+        courseId_userId: {
+          courseId: courseId,
+          userId: user.id,
+        },
+      },
+      update: {},
+      create: {
+        title: chaptersCompleted.title,
+        userId: user.id,
+        courseId: courseId,
+      },
+    });
+    if (certificate.createdAt === certificate.updatedAt) {
+      const transport = nodemailer.createTransport({
+        service: "Gmail",
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASS,
+        },
+      });
+
+      const mailOptions = {
+        from: process.env.MAIL_USER,
+        to: user.email,
+        subject: "Course Completion Certificate",
+        html: render(
+          CourseCompletionEmail({
+            studentName: user?.name || user.email.split("@")[0],
+            certificateUrl: `certificate/${certificate.id}`,
+            courseName: chaptersCompleted.title,
+            instructorName:
+              chaptersCompleted.user.name ||
+              chaptersCompleted.user.email.split("@")[0],
+            instructorPic: chaptersCompleted.user.profilePic || "",
+          })
+        ),
+      };
+
+      transport.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+          throw new Error("Error sending email");
+        }
+      });
+    }
+  }
 
   return progress;
 };

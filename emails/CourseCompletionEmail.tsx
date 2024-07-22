@@ -1,4 +1,3 @@
-import { Role } from "@prisma/client";
 import {
   Body,
   Button,
@@ -15,23 +14,37 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-interface WelcomeToLMSProps {
-  name: string;
-  role: Role;
+interface CourseCompletionEmailProps {
+  studentName: string;
+  courseName: string;
+  instructorName: string;
+  certificateUrl: string;
+  instructorPic: string;
 }
 
-export const WelcomeToLMS = ({ name, role }: WelcomeToLMSProps) => {
+// const defaultCourseCompletionEmailProps: CourseCompletionEmailProps = {
+//   studentName: "John Doe",
+//   courseName: "Introduction to React",
+//   instructorName: "Jane Smith",
+//   certificateUrl: "https://yourlms.com/certificates/123",
+// };
+
+export const CourseCompletionEmail = ({
+  studentName,
+  courseName,
+  instructorName,
+  certificateUrl,
+  instructorPic,
+}: CourseCompletionEmailProps) => {
   const baseUrl =
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
       : process.env.BASE_URL;
 
-  const isStudent = role === Role.STUDENT;
-
   return (
     <Html>
       <Head />
-      <Preview>Your Gateway to Learning Excellence!</Preview>
+      <Preview>Congratulations on completing your course!</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section style={headerImageContainer}>
@@ -39,95 +52,56 @@ export const WelcomeToLMS = ({ name, role }: WelcomeToLMSProps) => {
               src={`${baseUrl}/banner.png`}
               width={600}
               height={200}
-              alt="YourLMS Welcome Banner"
+              alt="YourLMS Course Completion"
               style={headerImage}
             />
           </Section>
           <Section style={content}>
-            <Heading style={heading}>Welcome to YourLMS, {name}!</Heading>
+            <Heading style={heading}>Congratulations, {studentName}!</Heading>
             <Text style={subheading}>
-              Your journey to {isStudent ? "learning" : "teaching"} excellence
-              starts here.
+              You've successfully completed your course. Here's your
+              certificate!
             </Text>
-            <Section style={cardContainer}>
+            <Section style={certificateInfoContainer}>
               <Row>
-                <Column style={card}>
+                <Column style={certificateInfoColumn}>
                   <Img
                     src={`${baseUrl}/icon-course.png`}
                     width={64}
                     height={64}
-                    alt="Courses Icon"
+                    alt="Course Icon"
                     style={icon}
                   />
-                  <Text style={cardTitle}>
-                    {isStudent ? "Access Courses" : "Create Courses"}
-                  </Text>
-                  <Text style={cardText}>
-                    {isStudent
-                      ? "Explore a wide range of courses tailored to your interests."
-                      : "Design and manage engaging courses with our intuitive tools."}
-                  </Text>
+                  <Text style={certificateInfoTitle}>Course</Text>
+                  <Text style={certificateInfoText}>{courseName}</Text>
                 </Column>
-                <Column style={card}>
+                <Column style={certificateInfoColumn}>
                   <Img
-                    src={`${baseUrl}/icon-community.png`}
+                    src={
+                      instructorPic
+                        ? `${instructorPic}`
+                        : `${baseUrl}/icon-author.png`
+                    }
                     width={64}
                     height={64}
-                    alt="Community Icon"
+                    alt="Instructor Icon"
                     style={icon}
                   />
-                  <Text style={cardTitle}>Join Our Community</Text>
-                  <Text style={cardText}>
-                    Connect with peers, share insights, and collaborate on
-                    projects.
-                  </Text>
-                </Column>
-              </Row>
-              <Row>
-                <Column style={card}>
-                  <Img
-                    src={`${baseUrl}/icon-progress.png`}
-                    width={64}
-                    height={64}
-                    alt="Progress Icon"
-                    style={icon}
-                  />
-                  <Text style={cardTitle}>
-                    {isStudent ? "Track Progress" : "Monitor Student Progress"}
-                  </Text>
-                  <Text style={cardText}>
-                    {isStudent
-                      ? "Visualize your learning journey and set achievable goals."
-                      : "Gain insights into student performance and provide timely feedback."}
-                  </Text>
-                </Column>
-                <Column style={card}>
-                  <Img
-                    src={`${baseUrl}/icon-support.png`}
-                    width={64}
-                    height={64}
-                    alt="Support Icon"
-                    style={icon}
-                  />
-                  <Text style={cardTitle}>Support</Text>
-                  <Text style={cardText}>
-                    Our dedicated team is here to assist you every step of the
-                    way.
-                  </Text>
+                  <Text style={certificateInfoTitle}>Instructor</Text>
+                  <Text style={certificateInfoText}>{instructorName}</Text>
                 </Column>
               </Row>
             </Section>
             <Section style={ctaContainer}>
-              {isStudent ? (
-                <Button href={`${baseUrl}/courses`} style={button}>
-                  Get Started Now
-                </Button>
-              ) : (
-                <Button href={`${baseUrl}/dashboard`} style={button}>
-                  Create Your First Course
-                </Button>
-              )}
+              <Button href={`${baseUrl}/${certificateUrl}`} style={button}>
+                Download Your Certificate
+              </Button>
             </Section>
+            <Text style={encouragementText}>
+              Your hard work and dedication have paid off. We hope this course
+              has been valuable to you and wish you continued success in your
+              learning journey!
+            </Text>
           </Section>
           <Section style={footerImageContainer}>
             <Img
@@ -147,7 +121,7 @@ export const WelcomeToLMS = ({ name, role }: WelcomeToLMSProps) => {
   );
 };
 
-export default WelcomeToLMS;
+export default CourseCompletionEmail;
 
 const main = {
   backgroundColor: "#f0f4f8",
@@ -193,15 +167,15 @@ const subheading = {
   color: "#4a5568",
 };
 
-const cardContainer = {
+const certificateInfoContainer = {
   margin: "0 0 32px",
 };
 
-const card = {
-  padding: "10px",
+const certificateInfoColumn = {
+  padding: "16px",
   borderRadius: "6px",
   border: "1px solid #e2e8f0",
-  // margin: "0 0 16px",
+  margin: "0 8px",
   width: "50%",
 };
 
@@ -210,15 +184,15 @@ const icon = {
   display: "block",
 };
 
-const cardTitle = {
-  fontSize: "18px",
+const certificateInfoTitle = {
+  fontSize: "16px",
   fontWeight: "bold",
-  margin: "0 0 8px",
+  margin: "0",
   textAlign: "center" as const,
   color: "#2d3748",
 };
 
-const cardText = {
+const certificateInfoText = {
   fontSize: "14px",
   lineHeight: "22px",
   margin: "0",
@@ -228,7 +202,7 @@ const cardText = {
 
 const ctaContainer = {
   textAlign: "center" as const,
-  margin: "32px 0 0",
+  margin: "32px 0 24px",
 };
 
 const button = {
@@ -241,6 +215,14 @@ const button = {
   textAlign: "center" as const,
   padding: "12px 24px",
   display: "inline-block",
+};
+
+const encouragementText = {
+  fontSize: "14px",
+  lineHeight: "22px",
+  textAlign: "center" as const,
+  color: "#4a5568",
+  fontStyle: "italic",
 };
 
 const footerImageContainer = {

@@ -92,6 +92,4 @@ export const updateOnboarding = async (data: {
       throw new Error("Error sending email");
     }
   });
-
-  redirect("/dashboard");
 };

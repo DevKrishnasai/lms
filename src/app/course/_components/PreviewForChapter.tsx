@@ -47,7 +47,7 @@ const PreviewChapter = ({
   return (
     <div className="h-full w-full space-y-3 ">
       {isCompleted && <ChapterBanner isCompleted={isCompleted} />}
-      <div className="max-w-5xl mx-auto space-y-5 mt-1">
+      <div className="max-w-5xl mx-auto space-y-5 mt-1 p-2">
         {fullChapter.videoUrl !== "" && fullChapter.videoUrl !== null && (
           <VideoPlayer
             videoUrl={fullChapter?.videoUrl || ""}

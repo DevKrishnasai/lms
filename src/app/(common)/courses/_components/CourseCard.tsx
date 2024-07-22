@@ -30,7 +30,8 @@ const CourseCard = ({ course, chapterId }: CourseCardProps) => {
 
   return (
     <Link
-      href={`/course/${course.id}?chapter=${chapterId}`}
+      // href={`/course/${course.id}?chapter=${chapterId}`}
+      href={`/preview?courseId=${course.id}`}
       className="shadow-md rounded-md border flex flex-col cursor-pointer"
     >
       <Image

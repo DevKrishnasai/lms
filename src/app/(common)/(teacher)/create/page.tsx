@@ -90,11 +90,19 @@ const page = () => {
             )}
           />
           <div className="flex justify-between">
-            <Button type="submit" variant={"default"}>
+            <Button
+              type="submit"
+              variant={"default"}
+              disabled={form.formState.isSubmitting}
+            >
               Submit
             </Button>
             <Link href="/course-studio">
-              <Button type="button" variant={"outline"}>
+              <Button
+                type="button"
+                variant={"outline"}
+                disabled={form.formState.isSubmitting}
+              >
                 Cancel
               </Button>
             </Link>

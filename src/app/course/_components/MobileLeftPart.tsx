@@ -18,7 +18,7 @@ const MobileLeftPart = ({
       <SheetTrigger>
         <FaBars size={23} className="ml-2 cursor-pointer " />
       </SheetTrigger>
-      <SheetContent className="w-full h-full">
+      <SheetContent className="w-1/2 h-full">
         <LeftPart
           courseId={courseId}
           isAccessable={isAccessable}

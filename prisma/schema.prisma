@@ -13,24 +13,26 @@ enum Role {
 }
 
 model User {
-  id         String           @id @default(uuid())
-  email      String           @unique
-  name       String?
-  role       Role             @default(STUDENT)
-  createdAt  DateTime         @default(now())
-  updatedAt  DateTime         @updatedAt
-  authId     String           @unique
-  onBoarded  Boolean          @default(false)
-  profilePic String?
-  bio        String?
-  courses    Course[]
-  progress   progress[]
-  accesses   Access[]
-  requests   requests[]
-  categories UserCategory[]
-  goals      UserGoal[]
-  purchases  purchases[]
-  mail       MailCredentials?
+  id           String           @id @default(uuid())
+  email        String           @unique
+  name         String?
+  role         Role             @default(STUDENT)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  authId       String           @unique
+  onBoarded    Boolean          @default(false)
+  profilePic   String?
+  bio          String?
+  signature    String?
+  courses      Course[]
+  progress     progress[]
+  accesses     Access[]
+  requests     requests[]
+  categories   UserCategory[]
+  goals        UserGoal[]
+  purchases    purchases[]
+  mail         MailCredentials?
+  certificates Certificate[]
 
   @@unique([id, authId])
 }
@@ -95,16 +97,17 @@ model Course {
   isPublished Boolean   @default(false)
   isFree      Boolean   @default(false)
   categoryid  String?
+  duration    Int       @default(5)
   category    Category? @relation(fields: [categoryid], references: [id])
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  chapters  Chapter[]
-  accesses  Access[]
-  purchases purchases[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  chapters     Chapter[]
+  accesses     Access[]
+  purchases    purchases[]
+  certificates Certificate[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 enum PurchaseStatusEnum {
@@ -206,4 +209,17 @@ model requests {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Certificate {
+  id        String   @id @default(uuid())
+  title     String
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([courseId, userId])
 }

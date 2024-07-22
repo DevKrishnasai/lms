@@ -7,6 +7,7 @@ import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
 import { FaLockOpen } from "react-icons/fa";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
+import { toast } from "sonner";
 
 interface ChapterButtonProps {
   isCompleted: boolean;
@@ -34,7 +35,10 @@ const ChapterButton = ({
   const chapter = searchParams.get("chapter");
 
   const openChapter = () => {
+    if (chapter === chapterId) return;
+    toast.loading("loading chapter...", { id: "chapter" });
     router.push(`/course/${courseId}?chapter=${chapterId}`);
+    toast.success("chapter loaded", { id: "chapter" });
   };
 
   return isSidebar ? (

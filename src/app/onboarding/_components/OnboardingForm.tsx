@@ -7,6 +7,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { updateOnboarding } from "../actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface OnboardingFormProps {
   categories: string[];
@@ -25,6 +27,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
   const [role, setRole] = useState<string>("Student");
   const [bio, setBio] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<{
     message: string;
     field: "category" | "goal" | "role" | "bio" | "";
@@ -32,6 +35,8 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({
     message: "",
     field: "",
   });
+
+  const router = useRouter();
 
   const toggleCategory = (category: string) => {
     setSelectedCategories((prev) =>
@@ -89,16 +94,26 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({
       message: "",
       field: "",
     });
-    console.log({
-      selectedCategories,
-      selectedGoals,
-      bio,
+
+    setLoading(true);
+
+    toast.loading("Updating your profile...", {
+      id,
     });
+
     await updateOnboarding({
       selectedCategories,
       selectedGoals,
       bio,
       role: role === "Student" ? "STUDENT" : "TEACHER",
+    });
+
+    setLoading(false);
+
+    router.replace("/dashboard");
+
+    toast.success("redirecting to dashboard...", {
+      id,
     });
   };
 
@@ -181,8 +196,8 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({
       {error.field === "bio" && (
         <div className="text-red-500 text-sm mt-2">{error.message}</div>
       )}
-      <Button type="submit" className="w-full">
-        Start My Learning Journey
+      <Button type="submit" className="w-full" disabled={loading}>
+        {loading ? "Loading..." : "Start My Learning Journey"}
       </Button>
     </form>
   );

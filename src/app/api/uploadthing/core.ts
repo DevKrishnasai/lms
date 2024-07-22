@@ -31,6 +31,9 @@ export const ourFileRouter = {
   })
     .middleware(() => funAuth())
     .onUploadComplete(() => {}),
+  uploadBasicStuff: f({ image: { maxFileCount: 1 } })
+    .middleware(() => funAuth())
+    .onUploadComplete(() => {}),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

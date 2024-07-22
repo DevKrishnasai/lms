@@ -16,6 +16,8 @@ const CheckoutPage = async ({
     redirect("/");
   }
 
+  let isAuthor = false;
+
   const course = await prisma.course.findUnique({
     where: {
       id: searchParams.courseId,
@@ -38,6 +40,7 @@ const CheckoutPage = async ({
       user: {
         select: {
           name: true,
+          authId: true,
         },
       },
     },
@@ -53,9 +56,12 @@ const CheckoutPage = async ({
       </div>
     );
   }
+  if (course.user.authId === userId) {
+    isAuthor = true;
+  }
 
   return (
-    <div className="w-full min-h-screen   flex items-center justify-center p-4">
+    <div className="w-full min-h-screen   flex flex-col items-center justify-center p-4">
       <div className="max-w-6xl w-full bg-white dark:bg-gray-900 rounded-lg shadow-xl overflow-hidden flex flex-col md:flex-row">
         {/* Left side - Course Information */}
         <div className="md:w-1/2 bg-indigo-600 text-white">
@@ -91,7 +97,11 @@ const CheckoutPage = async ({
         </div>
 
         {/* Right side - Payment Information */}
-        <RightPart price={course.price || 0} courseId={course.id} />
+        <RightPart
+          price={course.price || 0}
+          courseId={course.id}
+          isAuthor={isAuthor}
+        />
       </div>
     </div>
   );

@@ -23,11 +23,13 @@ type FormInputs = z.infer<typeof formSchema>;
 interface FormForCheckOutProps {
   price: number;
   courseId: string;
+  isAuthor: boolean;
 }
 
 const FormForCheckOut: React.FC<FormForCheckOutProps> = ({
   price,
   courseId,
+  isAuthor,
 }) => {
   const {
     register,
@@ -72,6 +74,19 @@ const FormForCheckOut: React.FC<FormForCheckOutProps> = ({
       });
 
       if (status === 201) {
+        if (data.isFree) {
+          toast.success("Course is now your's", {
+            id: "payment",
+          });
+          toast.loading("Redirecting to course page...", {
+            id: "loading-1",
+          });
+          router.push(`/course/${courseId}`);
+          toast.success("Happy learing...", {
+            id: "loading-1",
+          });
+          return;
+        }
         toast.success("Payment gateway loaded", {
           id: "payment",
         });
@@ -184,9 +199,15 @@ const FormForCheckOut: React.FC<FormForCheckOutProps> = ({
       <Button
         type="submit"
         className="w-full py-3 text-lg bg-indigo-600 hover:bg-indigo-700"
+        disabled={isAuthor}
       >
         Complete Purchase
       </Button>
+      <div className="text-center mt-3">
+        {isAuthor && (
+          <p className="text-red-700">You can't purchase your own course.</p>
+        )}
+      </div>
     </form>
   );
 };

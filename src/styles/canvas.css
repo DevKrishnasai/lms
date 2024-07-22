@@ -1,0 +1,14 @@
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  canvas,
+  canvas * {
+    visibility: visible;
+  }
+  canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}
