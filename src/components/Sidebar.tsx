@@ -42,6 +42,11 @@ const Sidebar = async () => {
       link: "/courses",
     },
     {
+      icon: <FaCertificate size={24} className="group-hover:animate-spin  " />,
+      label: "Certificates",
+      link: "/certificates",
+    },
+    {
       icon: <Settings className="group-hover:animate-spin" />,
       label: "Settings",
       link: "/settings",
