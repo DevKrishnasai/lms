@@ -1,6 +1,7 @@
 import {
   BookCheck,
   Contact,
+  GitPullRequestCreate,
   LayoutDashboard,
   LucideShieldQuestion,
   PenTool,
@@ -16,7 +17,11 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { IoLogoWindows } from "react-icons/io";
 import { cn } from "@/lib/utils";
-import { FaCreativeCommonsShare } from "react-icons/fa";
+import {
+  FaCertificate,
+  FaCreativeCommonsShare,
+  FaCreativeCommonsZero,
+} from "react-icons/fa";
 
 interface SideBarItemType {
   icon: React.ReactNode;
@@ -55,20 +60,26 @@ const Sidebar = async () => {
       link: "/courses",
     },
     {
-      icon: <FaCreativeCommonsShare className="group-hover:animate-spin" />,
+      icon: <GitPullRequestCreate className="group-hover:animate-bounce" />,
       label: "Course Studio",
       link: "/course-studio",
     },
+    // {
+    //   icon: <PenTool className="group-hover:animate-pulse" />,
+    //   label: "Access",
+    //   link: "/access",
+    // },
+    // {
+    //   icon: <LucideShieldQuestion className="group-hover:animate-pulse" />,
+    //   label: "Queries",
+    //   link: "/queries",
+    // },
     {
-      icon: <PenTool className="group-hover:animate-pulse" />,
-      label: "Access",
-      link: "/access",
+      icon: <FaCertificate size={24} className="group-hover:animate-spin  " />,
+      label: "Certificates",
+      link: "/certificates",
     },
-    {
-      icon: <LucideShieldQuestion className="group-hover:animate-pulse" />,
-      label: "Queries",
-      link: "/queries",
-    },
+
     {
       icon: <Settings className="group-hover:animate-spin" />,
       label: "Settings",
@@ -137,14 +148,14 @@ const Sidebar = async () => {
               ))}
         </div>
       </div>
-      <div className="sidebar-logo flex items-center justify-between p-3">
+      {/* <div className="sidebar-logo flex items-center justify-between p-3">
         <ThemeSwitch />
         <Link href="/contact">
           <Button size="icon" variant="outline">
             <Phone size={20} />
           </Button>
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 };

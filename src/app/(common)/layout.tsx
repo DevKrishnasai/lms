@@ -1,4 +1,3 @@
-import MobileSideBar from "@/components/MobileSideBar";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { prisma } from "@/lib/db";

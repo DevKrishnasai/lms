@@ -98,6 +98,7 @@ export const getCourses = async (word: string) => {
           order: "asc",
         },
       },
+      user: true,
     },
   });
   const finalCourses = courses.map((course) => {
@@ -166,6 +167,8 @@ export const getTotalCourseProgress = async (courseId: string) => {
   const completedChapters = chapterProgressIds.length;
   const progress = (completedChapters / totalChapters) * 100;
 
+  console.log("^^^^in progress", progress);
+
   if (progress === 100) {
     const isAlreadyNotified = await prisma.certificate.findUnique({
       where: {
@@ -180,56 +183,50 @@ export const getTotalCourseProgress = async (courseId: string) => {
       return progress;
     }
 
-    const certificate = await prisma.certificate.upsert({
-      where: {
-        courseId_userId: {
-          courseId: courseId,
-          userId: user.id,
-        },
-      },
-      update: {},
-      create: {
+    console.log("certificate present ? ", isAlreadyNotified);
+
+    const certificate = await prisma.certificate.create({
+      data: {
         title: chaptersCompleted.title,
         userId: user.id,
         courseId: courseId,
       },
     });
-    if (certificate.createdAt === certificate.updatedAt) {
-      const transport = nodemailer.createTransport({
-        service: "Gmail",
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASS,
-        },
-      });
+    console.log("certificate created", certificate);
+    const transport = nodemailer.createTransport({
+      service: "Gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      },
+    });
 
-      const mailOptions = {
-        from: process.env.MAIL_USER,
-        to: user.email,
-        subject: "Course Completion Certificate",
-        html: render(
-          CourseCompletionEmail({
-            studentName: user?.name || user.email.split("@")[0],
-            certificateUrl: `certificate/${certificate.id}`,
-            courseName: chaptersCompleted.title,
-            instructorName:
-              chaptersCompleted.user.name ||
-              chaptersCompleted.user.email.split("@")[0],
-            instructorPic: chaptersCompleted.user.profilePic || "",
-          })
-        ),
-      };
+    const mailOptions = {
+      from: process.env.MAIL_USER,
+      to: user.email,
+      subject: "Course Completion Certificate",
+      html: render(
+        CourseCompletionEmail({
+          studentName: user?.name || user.email.split("@")[0],
+          certificateUrl: `certificate/${certificate.id}`,
+          courseName: chaptersCompleted.title,
+          instructorName:
+            chaptersCompleted.user.name ||
+            chaptersCompleted.user.email.split("@")[0],
+          instructorPic: chaptersCompleted.user.profilePic || "",
+        })
+      ),
+    };
 
-      transport.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error);
-          throw new Error("Error sending email");
-        }
-      });
-    }
+    transport.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+        throw new Error("Error sending email");
+      }
+    });
   }
 
   return progress;

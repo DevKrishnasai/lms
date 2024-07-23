@@ -31,8 +31,8 @@ export function MagicCard({
         mouseY.set(e.clientY - top);
       }}
       className={cn(
-        "group relative flex size-full overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-900 border text-black dark:text-white",
-        className,
+        "group relative flex size-full overflow-hidden rounded-xl  bg-neutral-900 border  text-white",
+        className
       )}
     >
       <div className="relative z-10">{children}</div>

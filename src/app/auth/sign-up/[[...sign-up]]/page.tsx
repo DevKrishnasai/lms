@@ -1,5 +1,13 @@
-import { SignUp } from "@clerk/nextjs";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ClerkLoading, SignUp } from "@clerk/nextjs";
 
 export default function Page() {
-  return <SignUp />;
+  return (
+    <>
+      <ClerkLoading>
+        <Skeleton className="h-[300px] w-[25rem] rounded-lg" />
+      </ClerkLoading>
+      <SignUp />
+    </>
+  );
 }

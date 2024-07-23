@@ -5,6 +5,7 @@ import React from "react";
 import { DataTable } from "../../_components/DataTable";
 import { StudentsColumn } from "../_components/StudentsColumn";
 import { getStudentsForCourse } from "../actions";
+import { DataTableForStudents } from "../../_components/DataTableForStudents";
 
 const page = async ({ params }: { params: { courseId: string } }) => {
   if (!params.courseId)
@@ -40,7 +41,7 @@ const page = async ({ params }: { params: { courseId: string } }) => {
           </p>
         </div>
       </div>
-      <DataTable columns={StudentsColumn} data={data} />
+      <DataTableForStudents columns={StudentsColumn} data={data} />
     </div>
   );
 };

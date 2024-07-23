@@ -36,10 +36,11 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <ClerkLoading>
+              {/* <ClerkLoading>
                 <Loading />
-              </ClerkLoading>
-              <ClerkLoaded>{children}</ClerkLoaded>
+              </ClerkLoading> */}
+              {/* <ClerkLoaded>{children}</ClerkLoaded> */}
+              {children}
               <ToastProvider />
             </ThemeProvider>
           </ContextProvider>

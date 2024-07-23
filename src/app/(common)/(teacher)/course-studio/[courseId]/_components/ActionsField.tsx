@@ -22,7 +22,7 @@ const ActionsField = ({ student }: ActionsFieldProps) => {
       {
         id: student.userId,
       },
-      `/api/teacher/update/${student.courseId}/user`,
+      `/api/teacher/update/${student.courseId}/users`,
       "PUT"
     );
     router.refresh();

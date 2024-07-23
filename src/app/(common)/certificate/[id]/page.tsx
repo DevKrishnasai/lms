@@ -55,7 +55,7 @@ const page = async ({ params }: { params: { id: string } }) => {
       verificationURL={`${process.env.BASE_URL}/certificate/${certificateDetails.id}`}
       instructorSignature={certificateDetails.course.user.signature!}
       // TODO : ADMIN
-      directorSignature="/signature.png"
+      directorSignature="/signature.jpg"
     />
   );
 };

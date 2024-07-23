@@ -1,68 +1,61 @@
 "use client";
 import GridPattern from "@/components/GridPattern";
 import Link from "next/link";
-import confetti from "canvas-confetti";
 import { SignUpButton, useAuth } from "@clerk/nextjs";
 import SparklesText from "@/components/magicui/sparkles-text";
-import { Sliders } from "@/components/Sliders";
 import { MagicCard } from "@/components/magicui/magic-card";
 import AnimatedShinyText from "@/components/magicui/animated-shiny-text";
 import { ArrowRightIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/starter/Navbar";
+import { LampContainer } from "@/components/ui/lamp";
+import { motion } from "framer-motion";
+import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 
 export default function Home() {
   const features = [
     {
-      title: "Intuitive Course Creation",
+      title: "Flexible User Roles",
       description:
-        "Design engaging courses with our user-friendly interface. Drag-and-drop elements, multimedia integration, and customizable templates make course creation a breeze.",
-      icon: "📚",
+        "Distinct student and teacher roles with tailored access and capabilities.",
+      icon: "👥",
     },
     {
-      title: "Advanced Analytics",
+      title: "Comprehensive Student Features",
       description:
-        "Gain deep insights into student performance and engagement. Our analytics tools help you track progress, identify areas for improvement, and optimize your teaching methods.",
-      icon: "📊",
+        "Enroll in courses, earn certificates, and showcase achievements with public profiles.",
+      icon: "🎓",
     },
     {
-      title: "Interactive Learning Tools",
+      title: "Powerful Course Creation Tools",
       description:
-        "Enhance student engagement with built-in quizzes, discussions, and collaborative projects. Foster a dynamic learning environment that goes beyond traditional methods.",
-      icon: "🔧",
+        "Teachers can create, plan, and publish courses with videos, attachments, and pricing options.",
+      icon: "🎨",
+    },
+    {
+      title: "Automated Communication",
+      description:
+        "Automatic welcome, course enrollment, and certificate emails to keep users informed.",
+      icon: "📧",
+    },
+    {
+      title: "Flexible Course Pricing",
+      description:
+        "Offer free courses or set custom prices with integrated Razorpay payment processing.",
+      icon: "💰",
+    },
+    {
+      title: "Verifiable Certificates",
+      description:
+        "Generate and verify course completion certificates with unique URLs.",
+      icon: "🏆",
     },
   ];
 
   const { isSignedIn } = useAuth();
 
-  // const handleClick = () => {
-  //   const duration = 5 * 1000;
-  //   const animationEnd = Date.now() + duration;
-  //   const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-  //   const randomInRange = (min: number, max: number) =>
-  //     Math.random() * (max - min) + min;
-
-  //   const interval = window.setInterval(() => {
-  //     const timeLeft = animationEnd - Date.now();
-
-  //     if (timeLeft <= 0) {
-  //       return clearInterval(interval);
-  //     }
-
-  //     const particleCount = 50 * (timeLeft / duration);
-  //     confetti({
-  //       ...defaults,
-  //       particleCount,
-  //       origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-  //     });
-  //     confetti({
-  //       ...defaults,
-  //       particleCount,
-  //       origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-  //     });
-  //   }, 250);
-  // };
+  const text = `Empower educators and learners with our innovative learning management system. Experience the future of education with YourLMS's cutting-edge platform.`;
 
   return (
     <div className="w-full min-h-screen bg-black text-white">
@@ -73,33 +66,36 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="flex justify-center">
               <p className="font-display text-5xl font-bold tracking-[-0.02em] text-white sm:text-6xl md:text-7xl mb-6 text-center max-w-4xl">
-                <SparklesText text="YourLMS" className="inline-block mr-2" />
-                Empowering Education, Simplifying Management
+                <SparklesText
+                  text="YourLMS"
+                  className="inline-block mr-2 text-white"
+                />
+                <br />
+                Redefining Education for the Connected World
               </p>
             </div>
-            <p className="mt-6 text-xl text-gray-300 max-w-3xl mx-auto">
-              Empower your educational journey with our intuitive, powerful, and
-              beautifully designed learning management system.
+            <p className="mt-6 text-xl  max-w-3xl mx-auto">
+              <TextGenerateEffect words={text} />
             </p>
-            <div className=" flex justify-center">
+            <div className="flex justify-center mt-8">
               <div className="z-10 flex h-24 items-center justify-center">
                 <div
                   className={cn(
-                    "group rounded-full border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+                    "group rounded-full border text-base text-white transition-all ease-in hover:cursor-pointer border-white/5 bg-neutral-900 hover:bg-neutral-800"
                   )}
                 >
-                  <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
+                  <AnimatedShinyText className="inline-flex items-center justify-center px-6 py-3 transition ease-out hover:duration-300 hover:text-neutral-400">
                     {isSignedIn ? (
-                      <Link href="/courses">✨ Go to Courses</Link>
+                      <Link href="/dashboard">✨ Go to Dashboard</Link>
                     ) : (
                       <SignUpButton
                         forceRedirectUrl="/onboarding"
                         mode="redirect"
                       >
-                        ✨ Get Started
+                        ✨ Start Your Learning Journey
                       </SignUpButton>
                     )}
-                    <ArrowRightIcon className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+                    <ArrowRightIcon className="ml-2 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
                   </AnimatedShinyText>
                 </div>
               </div>
@@ -109,7 +105,7 @@ export default function Home() {
       </div>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-gradient-to-b  to-black">
+      <section id="features" className="py-20 bg-gradient-to-b to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-extrabold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
             Powerful Features
@@ -121,116 +117,158 @@ export default function Home() {
                 className="cursor-pointer p-8"
                 gradientColor={"#262626"}
               >
-                {/* <div className="bg-gray-800 rounded-lg p-8 hover:shadow-xl transition duration-300 transform hover:-translate-y-2"> */}
                 <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold mb-4 text-blue-400">
                   {feature.title}
                 </h3>
                 <p className="text-gray-300">{feature.description}</p>
-                {/* </div> */}
               </MagicCard>
             ))}
           </div>
         </div>
       </section>
 
-      <Sliders />
+      <LampContainer>
+        <motion.h1
+          initial={{ opacity: 0.5, y: 100 }}
+          whileInView={{ opacity: 1, y: -50 }}
+          transition={{
+            delay: 0.3,
+            duration: 0.8,
+            ease: "easeInOut",
+          }}
+          className="mt-8 bg-gradient-to-br from-slate-300 to-slate-500 py-4 bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
+        >
+          Elevate Your Teaching <br /> Amplify Your Learning
+        </motion.h1>
+      </LampContainer>
 
-      {/* About Section */}
-      {/* <section
-        id="about"
+      {/* <FeaturesSection /> */}
+
+      {/* Testimonials Section */}
+      <section
+        id="testimonials"
         className="py-20 bg-gradient-to-b from-black to-gray-900"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-extrabold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
-            Our Story
+            What Our Users Say
           </h2>
-          <div className="bg-gray-800 rounded-lg p-10 shadow-xl">
-            <p className="text-xl text-gray-300 leading-relaxed">
-              YourLMS was born from a passion for education and technology. Our
-              journey began with a simple question: How can we make learning
-              more accessible, engaging, and effective for everyone?
-            </p>
-            <p className="text-xl text-gray-300 mt-6 leading-relaxed">
-              Today, we're proud to offer a cutting-edge learning management
-              system that empowers educators and students alike. Our mission is
-              to break down barriers to education and foster a global community
-              of lifelong learners.
-            </p>
-            <div className="mt-10 flex justify-center">
-              <Link
-                href="#team"
-                className="bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold py-3 px-8 rounded-full hover:opacity-90 transition duration-300"
-              >
-                Meet Our Team
-              </Link>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="bg-gray-800 rounded-lg p-8 shadow-xl">
+              <p className="text-lg text-gray-300 mb-4">
+                "YourLMS has transformed the way I create and manage my online
+                courses. The course studio is intuitive, and the integrated
+                payment system makes it easy to monetize my expertise."
+              </p>
+              <p className="text-blue-400 font-semibold">
+                - Dr. J. Manoj Kumar, Online Instructor
+              </p>
+            </div>
+            <div className="bg-gray-800 rounded-lg p-8 shadow-xl">
+              <p className="text-lg text-gray-300 mb-4">
+                "As a student, I love how easy it is to enroll in courses and
+                track my progress. The shareable certificates and public profile
+                feature have helped me showcase my skills to potential
+                employers."
+              </p>
+              <p className="text-blue-400 font-semibold">
+                - L. Vignesh , YourLMS User
+              </p>
             </div>
           </div>
         </div>
-      </section> */}
+      </section>
 
-      {/* Contact Section */}
-      {/* <section
-        id="contact"
+      {/* Call to Action */}
+      <section
+        id="cta"
         className="py-20 bg-gradient-to-b from-gray-900 to-black"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-extrabold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-orange-500">
-            Get in Touch
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-extrabold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-orange-500">
+            Ready to Transform Your Educational Experience?
           </h2>
-          <div className="bg-gray-800 rounded-lg p-10 shadow-xl">
-            <p className="text-xl text-center text-gray-300 mb-8">
-              Have questions or want to learn more? We'd love to hear from you!
-            </p>
-            <div className="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-10">
-              <Link
-                href="mailto:contact@yourlms.com"
-                className="bg-gradient-to-r from-pink-400 to-orange-500 text-white font-semibold py-3 px-8 rounded-full hover:opacity-90 transition duration-300 flex items-center"
+          <div className="flex justify-center">
+            <div className="z-10 flex h-24 items-center justify-center">
+              <div
+                className={cn(
+                  "group rounded-full border text-base text-white transition-all ease-in hover:cursor-pointer border-white/5 bg-neutral-900 hover:bg-neutral-800"
+                )}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
-                Email Us
-              </Link>
-              <Link
-                href="#demo"
-                className="bg-white text-gray-900 font-semibold py-3 px-8 rounded-full hover:bg-gray-100 transition duration-300 flex items-center"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  />
-                </svg>
-                Request a Demo
-              </Link>
+                <AnimatedShinyText className="inline-flex items-center justify-center px-8 py-4 text-xl transition ease-out hover:duration-300 hover:text-neutral-400">
+                  {isSignedIn ? (
+                    <Link href="/dashboard">✨ Access Your Courses</Link>
+                  ) : (
+                    <SignUpButton
+                      forceRedirectUrl="/onboarding"
+                      mode="redirect"
+                    >
+                      ✨ Join YourLMS Today
+                    </SignUpButton>
+                  )}
+                  <ArrowRightIcon className="ml-2 size-5 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+                </AnimatedShinyText>
+              </div>
             </div>
           </div>
         </div>
-      </section> */}
+      </section>
 
       <div className="flex justify-center items-center gap-5 pb-10">
-        <span>@2024 YourLMS. All rights reserved. </span>
+        <span>© 2024 YourLMS. All rights reserved.</span>
       </div>
     </div>
   );
 }
+
+const FeaturesSection = () => {
+  return (
+    <BentoGrid className="max-w-4xl mx-auto">
+      {items.map((item, i) => (
+        <BentoGridItem
+          key={i}
+          title={item.title}
+          description={item.description}
+          header={item.header}
+          className={item.className}
+        />
+      ))}
+    </BentoGrid>
+  );
+};
+
+const Skeleton = () => (
+  <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)] border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
+);
+
+const items = [
+  {
+    title: "Custom Signatures",
+    description:
+      "Personalize certificates with custom signatures for a professional touch.",
+    header: <Skeleton />,
+    className: "md:col-span-2",
+  },
+  {
+    title: "Lifetime Course Access",
+    description:
+      "Students and teachers enjoy full access to their courses anytime, anywhere.",
+    header: <Skeleton />,
+    className: "md:col-span-1",
+  },
+  {
+    title: "Public Profiles",
+    description:
+      "Showcase achievements and expertise with shareable public profiles for students and teachers.",
+    header: <Skeleton />,
+    className: "md:col-span-1",
+  },
+  {
+    title: "Secure Certificate Verification",
+    description:
+      "Ensure the authenticity of certificates with our public verification system.",
+    header: <Skeleton />,
+    className: "md:col-span-2",
+  },
+];

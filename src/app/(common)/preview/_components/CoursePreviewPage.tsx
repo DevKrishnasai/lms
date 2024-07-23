@@ -97,8 +97,10 @@ const CoursePreviewPage = ({
                 className="rounded-full mr-4"
               />
               <div>
-                <h3 className="font-semibold">{course.user.name}</h3>
-                <p className="text-sm opacity-70">{course.user.email}</p>
+                <h3 className="font-semibold truncate">{course.user.name}</h3>
+                <p className="text-sm opacity-70 truncate">
+                  {course.user.email}
+                </p>
               </div>
             </div>
             <p className="text-sm opacity-80">

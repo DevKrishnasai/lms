@@ -35,9 +35,7 @@ const page = async () => {
           </p>
         </div>
       </div>
-      <div className="mx-auto px-2 space-y-3">
-        <SettingsField user={user} />
-      </div>
+      <SettingsField user={user} />
     </div>
   );
 };

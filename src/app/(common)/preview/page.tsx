@@ -55,16 +55,28 @@ const Page = async ({
 
   const { userId } = auth();
   if (userId) {
-    const access = await prisma.access.findFirst({
+    const user = await prisma.user.findUnique({
       where: {
-        userId,
-        courseId,
+        authId: userId,
       },
     });
-    isEnrolled = !!access;
+
+    if (user) {
+      const access = await prisma.access.findFirst({
+        where: {
+          userId: user.id,
+          courseId,
+        },
+      });
+
+      console.log("access", access);
+      isEnrolled = !!access;
+    }
     visitedUser = false;
     isAuthor = course.user.authId === userId;
   }
+
+  console.log("isEnrolled", isEnrolled);
 
   return (
     <CoursePreviewPage

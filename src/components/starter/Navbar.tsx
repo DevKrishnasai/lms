@@ -7,8 +7,6 @@ const Navbar = () => {
   const links = [
     { name: "Home", link: "/" },
     { name: "Features", link: "#features" },
-    { name: "Pricing", link: "#pricing" },
-    { name: "Contact", link: "#contact" },
   ];
   return (
     <nav className="fixed w-full z-10 bg-black/80 backdrop-blur-sm">
@@ -18,16 +16,22 @@ const Navbar = () => {
         </Link>
         <div className="flex items-center justify-between">
           {links.map((link) => (
-            // <CoolMode key={link.name}>
-            <Link
-              key={link.name}
-              href={link.link}
-              className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-            >
-              {link.name}
-            </Link>
-            // </CoolMode>
+            <CoolMode key={link.name}>
+              <Link
+                key={link.name}
+                href={link.link}
+                className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+              >
+                {link.name}
+              </Link>
+            </CoolMode>
           ))}
+          <Link
+            href="#testimonials"
+            className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium hidden md:flex"
+          >
+            Testimonials
+          </Link>
         </div>
         <div className="flex">
           <CoolMode>

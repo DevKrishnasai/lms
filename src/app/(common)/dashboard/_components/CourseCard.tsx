@@ -1,6 +1,6 @@
 "use client";
 import { currencyFormater } from "@/lib/utils";
-import { Course } from "@prisma/client";
+import { Course, User } from "@prisma/client";
 import { BookOpenCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,8 +11,9 @@ import {
   courseAccess,
   getTotalCourseProgress,
 } from "@/app/(common)/courses/actions";
+import { Button } from "@/components/ui/button";
 interface CourseCardProps {
-  course: Course;
+  course: Course & { user: User };
   chapters: number;
 }
 const CourseCard = ({ course, chapters }: CourseCardProps) => {
@@ -41,7 +42,7 @@ const CourseCard = ({ course, chapters }: CourseCardProps) => {
         alt={course.title}
         width={600}
         height={400}
-        className="rounded-t-md flex-1 "
+        className="rounded-t-md flex-1 max-h-[300px]"
       />
       <div className="p-4 space-y-3">
         <h2 className="text-xl font-semibold">{course.title}</h2>
@@ -60,6 +61,14 @@ const CourseCard = ({ course, chapters }: CourseCardProps) => {
         </div>
         {isCourseAccessableByTheUser && <Progress value={value} />}
       </div>
+      <Link href={`/profile/${course.user.id}`} className="w-full">
+        <Button
+          variant={"link"}
+          className="w-full border-0 rounded-none font-bold hover:scale-110"
+        >
+          by {course.user.name}
+        </Button>
+      </Link>
     </Link>
   );
 };

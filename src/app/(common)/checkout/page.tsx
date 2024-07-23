@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import { FaBook, FaGraduationCap, FaClock, FaLock } from "react-icons/fa";
 import RightPart from "./_components/RightPart";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const CheckoutPage = async ({
   searchParams,

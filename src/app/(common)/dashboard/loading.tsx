@@ -9,7 +9,7 @@ const loading = () => {
         <div>
           <h1 className="text-3xl font-bold">Courses </h1>
           <p className="mb-4 text-sm text-gray-600">
-            (Choose your course and dive into career)
+            (View your registered courses)
           </p>
         </div>
       </div>

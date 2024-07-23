@@ -6,12 +6,10 @@ const loading = () => {
   return (
     <div className="w-full min-h-[calc(100vh-100px)] p-4 space-y-3">
       <div className="flex justify-between items-center flex-wrap gap-3">
-        <div>
-          <h1 className="text-3xl font-bold">Courses </h1>
-          <p className="mb-4 text-sm text-gray-600">
-            (Choose your course and dive into career)
-          </p>
-        </div>
+        <h1 className="text-2xl font-semibold ">Certificates</h1>
+        <p className="mb-4 text-sm text-gray-600">
+          (Certificates you have earned from our courses will be displayed here)
+        </p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {user.map((access) => (

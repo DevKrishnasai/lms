@@ -9,6 +9,7 @@ import Loading from "@/components/Loading";
 import { SignInButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface RightPartProps {
   courseId: string;
@@ -52,17 +53,29 @@ const RightPart = ({
   return (
     <>
       {loading ? (
-        <div className="w-full h-[calc(100vh-90px)] flex justify-center items-center">
-          <Loading />
+        <div className="w-2/3 mx-auto h-full mt-6">
+          <Skeleton className="h-[400px] w-full" />
+          <div className="w-full flex justify-between items-center mt-4">
+            <Skeleton className="h-10 w-32" />
+            <Skeleton className="h-10 w-32" />
+          </div>
+          <Skeleton className="h-[600px] w-full mt-4" />
+
+          <div className="w-full flex flex-col gap-2 mt-4">
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-8 w-full" />
+          </div>
         </div>
       ) : (
         <div className="h-full w-full mb-10">
           {!chapterId ? (
-            <div className="w-full h-[calc(100vh-90px)] flex justify-center items-center font-bold text-xl">
+            <div className="w-full h-[calc(100vh-100px)] flex justify-center items-center font-bold text-xl">
               Select a chapter
             </div>
           ) : !fullChapter ? (
-            <div className="w-full h-[calc(100vh-90px)] flex justify-center items-center animate-spin">
+            <div className="w-full h-[calc(100vh-100px)] flex justify-center items-center animate-spin">
               <Loading />
             </div>
           ) : fullChapter ? (

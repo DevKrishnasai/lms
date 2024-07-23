@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { useReactToPrint } from "react-to-print";
@@ -20,8 +20,8 @@ interface CertificateProps {
   instructorName: string;
   directorName: string;
   verificationURL: string;
-  instructorSignature: string; // Path to instructor's signature image
-  directorSignature: string; // Path to director's signature image
+  instructorSignature: string;
+  directorSignature: string;
 }
 
 const Certificate: React.FC<CertificateProps> = ({
@@ -36,16 +36,34 @@ const Certificate: React.FC<CertificateProps> = ({
   directorSignature,
 }) => {
   const certificateRef = useRef<HTMLDivElement>(null);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadImage = (src: string) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
+    };
+
+    Promise.all([loadImage(instructorSignature), loadImage(directorSignature)])
+      .then(() => setImagesLoaded(true))
+      .catch((error) => console.error("Error loading images:", error));
+  }, [instructorSignature, directorSignature]);
 
   const handlePrint = useReactToPrint({
     content: () => certificateRef.current,
   });
 
   const generatePDF = async () => {
-    if (certificateRef.current) {
+    if (certificateRef.current && imagesLoaded) {
       const canvas = await html2canvas(certificateRef.current, {
         scale: 3,
         backgroundColor: null,
+        useCORS: true,
+        allowTaint: true,
       });
       const imgData = canvas.toDataURL("image/png");
 
@@ -66,10 +84,12 @@ const Certificate: React.FC<CertificateProps> = ({
   };
 
   const downloadPNG = async () => {
-    if (certificateRef.current) {
+    if (certificateRef.current && imagesLoaded) {
       const canvas = await html2canvas(certificateRef.current, {
         scale: 3,
         backgroundColor: null,
+        useCORS: true,
+        allowTaint: true,
       });
 
       const link = document.createElement("a");
@@ -152,7 +172,7 @@ const Certificate: React.FC<CertificateProps> = ({
               />
               <div className="w-48 border-t-2 border-black mx-auto"></div>
               <p className="mt-2 font-bold text-black">{directorName}</p>
-              <p>Program Director</p>
+              <p>YourLMS CEO</p>
             </div>
           </div>
           <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-black text-[10px] mb-1">
@@ -184,19 +204,28 @@ const Certificate: React.FC<CertificateProps> = ({
             <p className="text-lg mb-2">
               <strong>Instructor:</strong> {instructorName}
             </p>
-            <p className="text-lg mb-2">
-              <strong>Program Director:</strong> {directorName}
-            </p>
           </CardContent>
         </Card>
         <div className="flex flex-col space-y-2">
-          <Button onClick={downloadPNG} className="w-full">
+          <Button
+            onClick={downloadPNG}
+            className="w-full"
+            disabled={!imagesLoaded}
+          >
             Download PNG Certificate
           </Button>
-          <Button onClick={generatePDF} className="w-full">
+          <Button
+            onClick={generatePDF}
+            className="w-full"
+            disabled={!imagesLoaded}
+          >
             Generate PDF Certificate
           </Button>
-          <Button onClick={handlePrint} className="w-full">
+          <Button
+            onClick={handlePrint}
+            className="w-full"
+            disabled={!imagesLoaded}
+          >
             Print Certificate
           </Button>
         </div>

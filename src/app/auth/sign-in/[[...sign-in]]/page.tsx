@@ -1,9 +1,12 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { SignIn, ClerkLoading } from "@clerk/nextjs";
 
 export default function Page() {
   return (
     <>
-      <ClerkLoading>loading...</ClerkLoading>
+      <ClerkLoading>
+        <Skeleton className="h-[300px] w-[25rem] rounded-lg" />
+      </ClerkLoading>
       <SignIn />
     </>
   );
