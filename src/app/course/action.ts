@@ -75,7 +75,6 @@ export const getChapterProgress = async (chapterId: string) => {
       },
     },
   });
-  console.log(chapterProgress, "--->>chapterProgress");
   return chapterProgress?.status === "COMPLETED" ? true : false;
 };
 

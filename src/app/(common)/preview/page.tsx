@@ -69,14 +69,11 @@ const Page = async ({
         },
       });
 
-      console.log("access", access);
       isEnrolled = !!access;
     }
     visitedUser = false;
     isAuthor = course.user.authId === userId;
   }
-
-  console.log("isEnrolled", isEnrolled);
 
   return (
     <CoursePreviewPage

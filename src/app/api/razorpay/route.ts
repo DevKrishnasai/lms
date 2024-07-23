@@ -21,8 +21,6 @@ export async function POST(req: NextRequest) {
 
     const details = await req.json();
 
-    console.log(details);
-
     if (!details.courseId || !details.name || !details.address) {
       return NextResponse.json(
         { message: "Invalid request body" },
@@ -88,8 +86,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log(isPurchased);
-
     const amount = course.price || 1;
     const currency = "INR";
     const receipt = `recp_${new Date().getTime()}`;
@@ -99,8 +95,6 @@ export async function POST(req: NextRequest) {
       currency,
       receipt,
     };
-
-    console.log(options);
 
     let emailDetails = {
       authorName: course.user.name || course.user.email.split("@")[0],
@@ -173,7 +167,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    console.log(orderDetails);
     return NextResponse.json(
       {
         ...orderDetails,

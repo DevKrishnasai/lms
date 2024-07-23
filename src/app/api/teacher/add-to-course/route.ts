@@ -14,7 +14,6 @@ export async function POST(req: Request) {
   try {
     const { values, courseId }: { values: string[]; courseId: string } =
       await req.json();
-    console.log(values, courseId);
 
     if (!values) {
       return NextResponse.json(
@@ -64,8 +63,6 @@ export async function POST(req: Request) {
       skipDuplicates: true,
     });
 
-    console.log("---new users --", newUsers);
-
     const transport = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -110,8 +107,6 @@ export async function POST(req: Request) {
       skipDuplicates: true,
     });
 
-    console.log("@@@access users", connectedUsersToCourse);
-
     const emails = allUsers.map((user) => user.email);
 
     const enrollementMails = emails.map((email) => {
@@ -131,8 +126,6 @@ export async function POST(req: Request) {
       });
     });
     const data = await Promise.all(enrollementMails);
-
-    console.log(data);
 
     return NextResponse.json(
       {

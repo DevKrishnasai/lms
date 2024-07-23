@@ -24,8 +24,6 @@ export async function POST(req: Request) {
     return new Response("Bad Request", { status: 400 });
   }
 
-  console.log("from webhook--->", msg);
-
   // Rest
   if (msg && msg?.type) {
     if (msg.type == "user.created") {

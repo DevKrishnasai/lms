@@ -48,8 +48,6 @@ export async function POST(req: Request) {
       skipDuplicates: true,
     });
 
-    console.log(users);
-
     //node mailer
     const emails = users.map((user) => user.email);
 
@@ -76,8 +74,6 @@ export async function POST(req: Request) {
       });
     });
     const data = await Promise.all(sendAllEmails);
-
-    console.log(data);
 
     return NextResponse.json(
       { mesage: "users created and mails sent..." },

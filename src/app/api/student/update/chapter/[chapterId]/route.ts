@@ -18,7 +18,6 @@ export async function POST(
       );
     }
     const value = await req.json();
-    console.log("##################", value, userId);
 
     const user = await prisma.user.findUnique({
       where: {
@@ -30,7 +29,6 @@ export async function POST(
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    console.log("#########################", value, userId);
     const chapter = await prisma.progress.upsert({
       where: {
         userId_chapterId: {
@@ -47,8 +45,6 @@ export async function POST(
         status: value.completed ? "COMPLETED" : "IN_PROGRESS",
       },
     });
-
-    console.log(chapter, "chapter99999999999");
 
     return NextResponse.json({ message: "progress updated" }, { status: 200 });
   } catch (error) {

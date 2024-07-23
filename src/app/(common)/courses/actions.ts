@@ -167,8 +167,6 @@ export const getTotalCourseProgress = async (courseId: string) => {
   const completedChapters = chapterProgressIds.length;
   const progress = (completedChapters / totalChapters) * 100;
 
-  console.log("^^^^in progress", progress);
-
   if (progress === 100) {
     const isAlreadyNotified = await prisma.certificate.findUnique({
       where: {
@@ -183,8 +181,6 @@ export const getTotalCourseProgress = async (courseId: string) => {
       return progress;
     }
 
-    console.log("certificate present ? ", isAlreadyNotified);
-
     const certificate = await prisma.certificate.create({
       data: {
         title: chaptersCompleted.title,
@@ -192,7 +188,6 @@ export const getTotalCourseProgress = async (courseId: string) => {
         courseId: courseId,
       },
     });
-    console.log("certificate created", certificate);
     const transport = nodemailer.createTransport({
       service: "Gmail",
       host: "smtp.gmail.com",

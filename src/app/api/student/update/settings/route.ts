@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 
 export async function PUT(req: Request, res: Response) {
   const { name, bio, roleChange, signature } = await req.json();
-  console.log(name, bio, roleChange, signature);
   if (!name || !bio) {
     return NextResponse.json(
       { message: "Name and Bio are required" },

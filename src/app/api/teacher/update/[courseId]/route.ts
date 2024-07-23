@@ -51,7 +51,6 @@ export async function PATCH(
     }
 
     if (value?.category) {
-      console.log(value.category, "@@@@@@@category");
       const category = await prisma.category.findFirst({
         where: {
           title: value.category,
@@ -100,7 +99,6 @@ export async function PUT(
   { params }: { params: { courseId: string } }
 ) {
   try {
-    // console.log(params.courseId, "params", params, req.body);
     if (!params.courseId) {
       return NextResponse.json(
         { message: "CourseId is required" },
@@ -115,7 +113,6 @@ export async function PUT(
         { status: 400 }
       );
     }
-    console.log(value, "@@@@@@@@@@@@value");
     const { userId } = auth();
     if (!userId) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });

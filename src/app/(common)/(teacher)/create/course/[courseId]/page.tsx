@@ -68,8 +68,6 @@ const page = async ({ params }: { params: { courseId: string } }) => {
   const totalFields = requiredFileds.length;
   const filledFields = requiredFileds.filter((field) => field).length;
 
-  // console.log(courseDetails);
-
   const isAllFieldsFilled = totalFields === filledFields;
   return (
     <div className="w-full ">

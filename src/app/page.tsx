@@ -157,9 +157,10 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="bg-gray-800 rounded-lg p-8 shadow-xl">
               <p className="text-lg text-gray-300 mb-4">
-                "YourLMS has transformed the way I create and manage my online
-                courses. The course studio is intuitive, and the integrated
-                payment system makes it easy to monetize my expertise."
+                &quot;YourLMS has transformed the way I create and manage my
+                online courses. The course studio is intuitive, and the
+                integrated payment system makes it easy to monetize my
+                expertise.&quot;
               </p>
               <p className="text-blue-400 font-semibold">
                 - Dr. J. Manoj Kumar, Online Instructor
@@ -167,10 +168,10 @@ export default function Home() {
             </div>
             <div className="bg-gray-800 rounded-lg p-8 shadow-xl">
               <p className="text-lg text-gray-300 mb-4">
-                "As a student, I love how easy it is to enroll in courses and
-                track my progress. The shareable certificates and public profile
-                feature have helped me showcase my skills to potential
-                employers."
+                &quot;As a student, I love how easy it is to enroll in courses
+                and track my progress. The shareable certificates and public
+                profile feature have helped me showcase my skills to potential
+                employers.&quot;
               </p>
               <p className="text-blue-400 font-semibold">
                 - L. Vignesh , YourLMS User

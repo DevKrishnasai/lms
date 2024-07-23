@@ -146,7 +146,6 @@ const FormForCheckOut: React.FC<FormForCheckOutProps> = ({
           });
         });
       } else {
-        console.log(data, status, statusText);
         toast.error(statusText, {
           id: "payment",
         });
@@ -205,7 +204,9 @@ const FormForCheckOut: React.FC<FormForCheckOutProps> = ({
       </Button>
       <div className="text-center mt-3">
         {isAuthor && (
-          <p className="text-red-700">You can't purchase your own course.</p>
+          <p className="text-red-700">
+            You can&apos;t purchase your own course.
+          </p>
         )}
       </div>
     </form>
