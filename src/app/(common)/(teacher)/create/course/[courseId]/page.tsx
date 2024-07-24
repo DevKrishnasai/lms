@@ -10,6 +10,7 @@ import CourseFreeField from "./_components/CourseFreeField";
 import ChaptersField from "./_components/ChaptersField";
 import Banner from "@/components/Banner";
 import PublishField from "./_components/PublishField";
+import DurationField from "./_components/DurationField";
 
 const page = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
@@ -112,6 +113,10 @@ const page = async ({ params }: { params: { courseId: string } }) => {
           <div className="space-y-4">
             <ChaptersField
               chapters={courseDetails.chapters}
+              courseId={params.courseId}
+            />
+            <DurationField
+              duration={courseDetails.duration}
               courseId={params.courseId}
             />
             <CourseFreeField

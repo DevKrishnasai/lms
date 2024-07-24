@@ -11,6 +11,12 @@ export const titleSchema = z.object({
     }),
 });
 
+export const durationSchema = z.object({
+  duration: z.coerce.number().min(1, {
+    message: "duration is too short",
+  }),
+});
+
 export const descriptionSchema = z.object({
   description: z.string().min(10, {
     message: "description is too short",
