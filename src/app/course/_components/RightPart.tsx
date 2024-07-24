@@ -53,19 +53,23 @@ const RightPart = ({
   return (
     <>
       {loading ? (
-        <div className="w-2/3 mx-auto h-full mt-6">
-          <Skeleton className="h-[400px] w-full" />
-          <div className="w-full flex justify-between items-center mt-4">
-            <Skeleton className="h-10 w-32" />
-            <Skeleton className="h-10 w-32" />
+        <div className="w-full h-full flex-col">
+          <div className="flex justify-between items-center border-b px-3 py-5">
+            <Skeleton className="h-8 w-32" />
+            <Skeleton className="h-8 w-32" />
           </div>
-          <Skeleton className="h-[600px] w-full mt-4" />
-
-          <div className="w-full flex flex-col gap-2 mt-4">
-            <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-8 w-full" />
+          <div className="p-4">
+            <Skeleton className="h-[400px] w-full mb-4" />
+            <div className="flex justify-between mb-4">
+              <Skeleton className="h-10 w-32" />
+              <Skeleton className="h-10 w-32" />
+            </div>
+            <Skeleton className="h-[200px] w-full mb-4" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+            </div>
           </div>
         </div>
       ) : (

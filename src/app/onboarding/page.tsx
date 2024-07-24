@@ -7,7 +7,7 @@ const OnboardingPage = async () => {
   const user = await currentUser();
 
   if (!user) {
-    redirect("auth/signin");
+    redirect("auth/sign-in");
   }
 
   const data = await prisma.user.findUnique({

@@ -3,9 +3,9 @@ import React from "react";
 
 const loading = () => {
   return (
-    <div className=" rounded-lg shadow-xl p-8 max-w-3xl w-full h-full mx-auto">
-      <Skeleton className="text-4xl font-bold mb-6 text-center h-[15%]" />
-      <Skeleton className="text-lg mb-8 text-center text-gray-600 h-[7%]" />
+    <div className=" rounded-lg shadow-xl p-8 max-w-4xl w-full min-h-screen mx-auto">
+      <Skeleton className="text-4xl font-bold mb-6 text-center h-20 " />
+      <Skeleton className="text-lg mb-8 text-center text-gray-600 h-10" />
       <div>
         <Skeleton className="text-2xl font-semibold mb-4 h-10" />
 

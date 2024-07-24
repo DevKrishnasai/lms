@@ -3,8 +3,8 @@ import React from "react";
 
 const loading = () => {
   return (
-    <div className="w-full min-h-[calc(100vh-100px)]   flex flex-col items-center justify-center p-4">
-      <div className="max-w-6xl w-full bg-white dark:bg-gray-900 rounded-lg shadow-xl overflow-hidden flex flex-col md:flex-row">
+    <div className="w-full h-full  flex flex-col overscroll-y-auto lg:items-center lg:justify-center p-4">
+      <div className="max-w-6xl w-full bg-white dark:bg-gray-900 rounded-lg shadow-xl flex flex-col md:flex-row">
         <div className="md:w-1/2  text-white">
           <Skeleton className="relative w-full h-60" />
 

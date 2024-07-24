@@ -76,12 +76,14 @@ const Page = async ({
   }
 
   return (
-    <CoursePreviewPage
-      course={course}
-      isEnrolled={isEnrolled}
-      visitedUser={visitedUser}
-      isAuthor={isAuthor}
-    />
+    <div className="overflow-y-auto w-full mx-auto">
+      <CoursePreviewPage
+        course={course}
+        isEnrolled={isEnrolled}
+        visitedUser={visitedUser}
+        isAuthor={isAuthor}
+      />
+    </div>
   );
 };
 

@@ -52,62 +52,40 @@ export const courseAccess = async (courseId: string) => {
   return { visitedUser, isCourseAccessableByTheUser, isauther };
 };
 
-export const getCourses = async (word: string) => {
+export const getCourses = async (word: string, page = 1, pageSize = 20) => {
+  const skip = (page - 1) * pageSize;
   const courses = await prisma.course.findMany({
     where: {
       isPublished: true,
       OR: [
-        {
-          title: {
-            contains: word,
-          },
-        },
-        {
-          description: {
-            contains: word,
-          },
-        },
-        {
-          category: {
-            title: {
-              contains: word,
-            },
-          },
-        },
+        { title: { contains: word } },
+        { description: { contains: word } },
+        { category: { title: { contains: word } } },
+        { user: { name: { contains: word } } },
       ],
     },
-
     include: {
       _count: {
         select: {
-          chapters: {
-            where: {
-              isPublished: true,
-            },
-          },
+          chapters: { where: { isPublished: true } },
         },
       },
       chapters: {
-        select: {
-          id: true,
-        },
-        where: {
-          isPublished: true,
-        },
-        orderBy: {
-          order: "asc",
-        },
+        select: { id: true },
+        where: { isPublished: true },
+        orderBy: { order: "asc" },
       },
       user: true,
     },
+    skip,
+    take: pageSize,
   });
-  const finalCourses = courses.map((course) => {
-    return {
-      ...course,
-      chapters: course._count.chapters,
-      chapterId: course.chapters[0].id,
-    };
-  });
+
+  const finalCourses = courses.map((course) => ({
+    ...course,
+    chapters: course._count.chapters,
+    chapterId: course.chapters[0]?.id,
+  }));
 
   return finalCourses;
 };

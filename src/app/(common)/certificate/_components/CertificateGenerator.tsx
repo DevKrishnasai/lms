@@ -106,83 +106,87 @@ const Certificate: React.FC<CertificateProps> = ({
   };
 
   return (
-    <div className="min-h-full flex flex-col lg:flex-row items-center justify-evenly gap-4 overflow-auto p-4">
-      <div className="w-[800px] h-[700px] bg-white text-black border border-gray-300 rounded-lg shadow-lg">
-        <div
-          ref={certificateRef}
-          className="relative bg-white  rounded-lg text-center border-4 border-black w-full h-full p-12"
-          style={{
-            backgroundImage: "url('/certificate-background.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          {/* Watermark */}
+    <div className="flex w-full h-full flex-col lg:flex-row md:items-center lg:justify-center gap-10 overflow-y-auto p-4">
+      <div className="w-screen min-h-[70%] overflow-x-auto lg:w-auto lg:overflow-hidden ">
+        <div className="w-[800px] h-[700px] bg-white text-black border border-gray-300 rounded-lg shadow-lg">
           <div
-            className="absolute inset-0 flex items-center justify-center text-gray-300 opacity-30"
+            ref={certificateRef}
+            className="relative bg-white  rounded-lg text-center border-4 border-black w-full h-full p-12"
             style={{
-              fontSize: "8rem",
-              pointerEvents: "none",
-              transform: "rotate(-30deg)",
+              backgroundImage: "url('/certificate-background.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
             }}
           >
-            <p>YourLMS</p>
-          </div>
-
-          {/* Award Icon as SVG */}
-          <div className="w-16 h-16 mx-auto mb-4 text-black">
-            <Award className="w-full h-full" />
-          </div>
-          <h1 className="text-4xl font-bold mb-6 text-black">
-            Certificate of Achievement
-          </h1>
-          <p className="text-xl mb-2">This is to certify that</p>
-          <p className="text-3xl font-bold mb-2 text-black">{studentName}</p>
-          <p className="text-xl mb-2">has successfully completed the course</p>
-          <p className="text-2xl font-bold mb-4 text-black">{courseName}</p>
-          <div className="flex justify-center items-center space-x-4 mb-2">
-            <div className="flex items-center space-x-2">
-              <Clock className="w-6 h-6 text-black" />
-              <p className="text-lg">Completed on: {completionDate}</p>
-            </div>
-          </div>
-          <div className="flex justify-center items-center space-x-4 mb-2">
-            <div className="flex items-center space-x-2">
-              <BookOpen className="w-6 h-6 text-black" />
-              <p className="text-lg">Course Duration: {courseDuration}</p>
-            </div>
-          </div>
-          <div className="flex justify-between items-baseline mb-10">
-            <div>
-              <img
-                src={instructorSignature}
-                alt="Instructor Signature"
-                className="w-32 mx-auto mb-2"
-              />
-              <div className="w-48 border-t-2 border-black mx-auto"></div>
-              <p className="mt-2 font-bold text-black">{instructorName}</p>
-              <p>Course Instructor</p>
-            </div>
-            <div>
-              <img
-                src={directorSignature}
-                alt="Director Signature"
-                className="w-32 mx-auto mb-2"
-              />
-              <div className="w-48 border-t-2 border-black mx-auto"></div>
-              <p className="mt-2 font-bold text-black">{directorName}</p>
-              <p>YourLMS CEO</p>
-            </div>
-          </div>
-          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-black text-[10px] mb-1">
-            <p className="">Verify at:</p>
-            <a
-              href={verificationURL}
-              className="hover:text-blue-600 hover:underline"
+            {/* Watermark */}
+            <div
+              className="absolute inset-0 flex items-center justify-center text-gray-300 opacity-30"
+              style={{
+                fontSize: "8rem",
+                pointerEvents: "none",
+                transform: "rotate(-30deg)",
+              }}
             >
-              {verificationURL}
-            </a>
+              <p>YourLMS</p>
+            </div>
+
+            {/* Award Icon as SVG */}
+            <div className="w-16 h-16 mx-auto mb-4 text-black">
+              <Award className="w-full h-full" />
+            </div>
+            <h1 className="text-4xl font-bold mb-6 text-black">
+              Certificate of Achievement
+            </h1>
+            <p className="text-xl mb-2">This is to certify that</p>
+            <p className="text-3xl font-bold mb-2 text-black">{studentName}</p>
+            <p className="text-xl mb-2">
+              has successfully completed the course
+            </p>
+            <p className="text-2xl font-bold mb-4 text-black">{courseName}</p>
+            <div className="flex justify-center items-center space-x-4 mb-2">
+              <div className="flex items-center space-x-2">
+                <Clock className="w-6 h-6 text-black" />
+                <p className="text-lg">Completed on: {completionDate}</p>
+              </div>
+            </div>
+            <div className="flex justify-center items-center space-x-4 mb-2">
+              <div className="flex items-center space-x-2">
+                <BookOpen className="w-6 h-6 text-black" />
+                <p className="text-lg">Course Duration: {courseDuration}</p>
+              </div>
+            </div>
+            <div className="flex justify-between items-baseline mb-10">
+              <div>
+                <img
+                  src={instructorSignature}
+                  alt="Instructor Signature"
+                  className="w-32 mx-auto mb-2"
+                />
+                <div className="w-48 border-t-2 border-black mx-auto"></div>
+                <p className="mt-2 font-bold text-black">{instructorName}</p>
+                <p>Course Instructor</p>
+              </div>
+              <div>
+                <img
+                  src={directorSignature}
+                  alt="Director Signature"
+                  className="w-32 mx-auto mb-2"
+                />
+                <div className="w-48 border-t-2 border-black mx-auto"></div>
+                <p className="mt-2 font-bold text-black">{directorName}</p>
+                <p>YourLMS CEO</p>
+              </div>
+            </div>
+            <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-black text-[10px] mb-1">
+              <p className="">Verify at:</p>
+              <a
+                href={verificationURL}
+                className="hover:text-blue-600 hover:underline"
+              >
+                {verificationURL}
+              </a>
+            </div>
           </div>
         </div>
       </div>

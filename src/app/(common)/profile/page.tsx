@@ -7,20 +7,26 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookOpen, Target, Folder } from "lucide-react";
 import { FaCertificate } from "react-icons/fa";
 import Link from "next/link";
-import { Skeleton } from "@/components/ui/skeleton";
+import { auth } from "@clerk/nextjs/server";
+import { Button } from "@/components/ui/button";
+import { SignInButton } from "@clerk/nextjs";
 
-const ProfilePage = async ({ params }: { params: { profileId: string } }) => {
-  if (!params.profileId) {
+const ProfilePage = async () => {
+  const { userId } = auth();
+
+  if (!userId)
     return (
-      <div className="w-full h-[calc(100vh-100px)] flex justify-center items-center">
-        <h1 className="text-2xl font-bold ">Profile Not Found</h1>
+      <div className="h-[calc(100vh-100px)] w-full flex flex-col justify-center items-center gap-3 p-4 text-center">
+        <p className="text-lg">Sign in to view your profile</p>
+        <Button>
+          <SignInButton mode="redirect" forceRedirectUrl="/profile" />
+        </Button>
       </div>
     );
-  }
 
   const user = await prisma.user.findUnique({
     where: {
-      id: params.profileId,
+      authId: userId,
     },
     include: {
       courses: {
@@ -54,8 +60,8 @@ const ProfilePage = async ({ params }: { params: { profileId: string } }) => {
 
   if (!user) {
     return (
-      <div className="w-full h-[calc(100vh-100px)] flex justify-center items-center">
-        <h1 className="text-2xl font-bold ">Profile Not Found</h1>
+      <div className="w-full h-[calc(100vh-100px)] flex justify-center items-center p-4 text-center">
+        <h1 className="text-2xl font-bold">Profile Not Found</h1>
       </div>
     );
   }

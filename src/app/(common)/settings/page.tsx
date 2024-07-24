@@ -26,7 +26,7 @@ const page = async () => {
   if (!user) redirect("/not-authorized");
 
   return (
-    <div className="w-full h-full p-4 space-y-3">
+    <div className="w-full h-full overflow-y-auto p-4 space-y-3">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Settings</h1>

@@ -38,8 +38,8 @@ const CoursePreviewPage = ({
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-background text-foreground">
-      <div className="flex flex-col md:flex-row gap-8">
+    <div className="max-w-6xl h-full  mx-auto p-6 bg-background text-foreground">
+      <div className="flex flex-col md:flex-row gap-8 mb-5">
         {/* Left Column */}
         <div className="md:w-2/3 border border-foreground/20 rounded-lg p-6">
           <Image
@@ -49,17 +49,17 @@ const CoursePreviewPage = ({
             height={450}
             className="rounded-lg mb-4"
           />
-          <h1 className="text-2xl font-bold mb-4">{course.title}</h1>
+          <h1 className="text-2xl font-bold mb-4 text-clip">{course.title}</h1>
           <div className="flex items-center mb-4 space-x-4 text-sm opacity-70">
             <div className="flex items-center gap-2">
               <Tag className="" size={16} />
-              <Badge className="bg-black text-white dark:bg-white dark:text-black">
+              <Badge className="bg-black text-white dark:bg-white dark:text-black truncate">
                 <span>{course.category.title}</span>
               </Badge>
             </div>
             <div className="flex items-center gap-2">
               <Users className="" size={16} />
-              <Badge className="bg-black text-white dark:bg-white dark:text-black">
+              <Badge className="bg-black text-white dark:bg-white dark:text-black truncate">
                 <span>{course._count.accesses} enrolled</span>
               </Badge>
             </div>
@@ -97,8 +97,10 @@ const CoursePreviewPage = ({
                 className="rounded-full mr-4"
               />
               <div>
-                <h3 className="font-semibold truncate">{course.user.name}</h3>
-                <p className="text-sm opacity-70 truncate">
+                <h3 className="font-semibold truncate text-clip">
+                  {course.user.name}
+                </h3>
+                <p className="text-sm opacity-70 truncate text-clip">
                   {course.user.email}
                 </p>
               </div>

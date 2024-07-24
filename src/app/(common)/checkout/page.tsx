@@ -6,6 +6,7 @@ import Image from "next/image";
 import { FaBook, FaGraduationCap, FaClock, FaLock } from "react-icons/fa";
 import RightPart from "./_components/RightPart";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 const CheckoutPage = async ({
   searchParams,
@@ -49,11 +50,11 @@ const CheckoutPage = async ({
 
   if (!course) {
     return (
-      <div className="h-full w-full flex flex-col justify-center items-center gap-3 p-6 bg-gray-100 dark:bg-gray-800">
-        <p className="font-bold text-2xl text-red-500 dark:text-red-300">
-          Course not found
-        </p>
-        <Button className="mt-4">Go to Dashboard</Button>
+      <div className="h-full w-full flex flex-col justify-center items-center gap-2 ">
+        <p className="font-bold text-2xl">Course not found</p>
+        <Link href="/dashboard">
+          <Button className="">Go to Dashboard</Button>
+        </Link>
       </div>
     );
   }
@@ -62,8 +63,8 @@ const CheckoutPage = async ({
   }
 
   return (
-    <div className="w-full min-h-screen   flex flex-col items-center justify-center p-4">
-      <div className="max-w-6xl w-full bg-white dark:bg-gray-900 rounded-lg shadow-xl overflow-hidden flex flex-col md:flex-row">
+    <div className="w-full min-h-screen   flex flex-col lg:items-center lg:justify-center p-4 overflow-y-scroll">
+      <div className="max-w-6xl w-full bg-white dark:bg-gray-900 rounded-lg shadow-xl  flex flex-col md:flex-row">
         {/* Left side - Course Information */}
         <div className="md:w-1/2 bg-indigo-600 text-white">
           <div className="relative w-full h-60">

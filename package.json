@@ -33,6 +33,7 @@
     "@react-email/components": "^0.0.20",
     "@react-email/render": "0.0.16",
     "@react-pdf/renderer": "^3.4.4",
+    "@tabler/icons-react": "^3.11.0",
     "@tanstack/react-table": "^8.19.2",
     "@types/jspdf": "^2.0.0",
     "@uploadthing/react": "^6.7.2",
@@ -49,6 +50,7 @@
     "highlight.js": "^11.10.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.399.0",
     "next": "14.2.4",
     "next-themes": "^0.3.0",
@@ -76,6 +78,7 @@
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.6.4",
+    "@types/lodash": "^4.17.7",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.15",
     "@types/react": "^18",
