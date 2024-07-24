@@ -70,11 +70,11 @@ const page = async ({ params }: { params: { courseId: string } }) => {
 
   const isAllFieldsFilled = totalFields === filledFields;
   return (
-    <div className="w-full ">
+    <div className="w-full overflow-y-auto">
       {!courseDetails.isPublished && <Banner isCourse={true} />}
       {/* <BackField courseId={params.courseId} /> */}
 
-      <div className="p-3 w-full h-full overflow-y-auto">
+      <div className="p-3 w-full h-full ">
         <div className="mb-4 flex justify-between items-center">
           <div className="space-y-2 ">
             <h1 className="text-3xl font-bold">Course setup</h1>
