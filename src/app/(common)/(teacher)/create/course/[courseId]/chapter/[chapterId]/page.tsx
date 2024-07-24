@@ -45,7 +45,7 @@ const page = async ({
   const isAllFieldsFilled = totalFields === filledFields;
 
   return (
-    <div className="w-full ">
+    <div className="w-full h-full overflow-y-auto">
       {!chapterDeatils.isPublished && <Banner isCourse={false} />}
       <BackField courseId={params.courseId} />
       <div className="p-3 w-full h-full space-y-4">
