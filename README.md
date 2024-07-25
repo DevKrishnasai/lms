@@ -1,130 +1,126 @@
-# Learning Management System (LMS)
 
-Welcome to the LMS project! This repository contains the code for a comprehensive Learning Management System built with Next.js, Tailwind CSS, Shadcn UI, Magic UI, React Video, Prisma ORM, PostgreSQL, and Clerk.
+# YourLMS - Advanced Learning Management System
+
+Welcome to YourLMS! This repository contains the code for a comprehensive Learning Management System built with Next.js, Tailwind CSS, Shadcn UI, React Video, Prisma ORM, PostgreSQL, and Clerk.
 
 ## Table of Contents
-
 - [Introduction](#introduction)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 
-This LMS project is designed to facilitate a seamless learning experience for both teachers and students. The platform is divided into two main sections: Teachers Portal and Students Portal.
+YourLMS is designed to provide a seamless learning experience for both teachers and students. The platform offers a range of features to facilitate course creation, enrollment, and completion.
 
 ## Features
 
-### Teachers Portal
-- Access and manage courses created by the teacher
-- Add, edit, and delete chapters, videos, attachments, PDFs, and video thumbnails
-- Manage course content efficiently
+### User Roles
+- Choose between student and teacher roles during signup
+- Teachers can create courses, publish content, issue certifications, and earn from course sales
+- Students can enroll in courses (free or paid) and complete them and get certificates
 
-### Students Portal
-- Request access to courses
-- Coordinators handle student requests and contact students
-- Enrollment handled by coordinators, including sending welcome and enrollment emails
-- Access to a free chapter for course outcomes/introduction before requesting enrollment
+### Course Management
+- Teachers can access Course Studio to customize course structure
+- Options to make courses free or paid
+- Publish chapters with videos, attachments, and explanations in Markdown format
 
-### User Dashboard
-- View all enrolled courses and progress
-- Click on a course to see detailed course content
-- Course page includes video attachments, resources, and markdown format descriptions on the right side
-- Chapters, chapter completion status, and progress shown on the left side
+### Payment Integration
+- Razorpay integration for secure course payments
 
-### Coordinator
-- Full access to all course-related actions
-- Modify and delete users
-- Add users and send emails
-- Contact users and manage their enrollment
+### Search Functionality
+- Search courses by teacher name, title, or category (e.g., web development, mobile development)
+
+### Email Automation
+- Welcome email upon signup
+- Course enrollment confirmation email
+- Course completion email with certificate download link
+- Course update notifications for enrolled students
+
+### User Profiles
+- Shareable profiles showcasing enrolled courses, certifications, goals, and interests
+- Customizable user settings
+
+### Certifications
+- Teachers can upload signatures for course certificates
+- Certificates include teacher and portal owner signatures
+
+### UI/UX
+- Clean user interface with black and white theme
+- Toast notifications for user feedback
+- Skeleton states for improved loading experience
+
+### Navigation
+- Dashboard for quick overview
+- Course Studio for teachers
+- Certificates section
+- Profile management
+- Settings page
+
+### Additional Features
+- Beautiful landing page
+- Onboarding form for user interests and goals
 
 ## Tech Stack
-
 - **Next.js** ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=nextdotjs&logoColor=white)
 - **Tailwind CSS** ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
 - **Shadcn UI** ![Shadcn UI](https://img.shields.io/badge/Shadcn%20UI-00a0e4?style=flat)
-- **Magic UI** ![Magic UI](https://img.shields.io/badge/Magic%20UI-FF6F61?style=flat)
 - **React Video** ![React Video](https://img.shields.io/badge/React_Video-61DAFB?style=flat&logo=react&logoColor=white)
 - **Prisma ORM** ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat&logo=prisma&logoColor=white)
 - **PostgreSQL** ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white)
 - **Clerk** ![Clerk](https://img.shields.io/badge/Clerk-3E70F7?style=flat)
+- **Razorpay** ![Razorpay](https://img.shields.io/badge/Razorpay-02042B?style=flat&logo=razorpay&logoColor=white)
 
 ## Installation
 
 To get a local copy up and running, follow these simple steps.
 
 ### Prerequisites
-
 - Node.js
 - PostgreSQL
 
 ### Clone the Repository
-
 ```sh
 git clone https://github.com/DevKrishnasai/lms.git
 cd lms
 ```
 
 ### Install Dependencies
-
 ```sh
 pnpm install
 ```
 
 ### Setup Environment Variables
+Create a `.env` file in the root directory and add the necessary environment variables.
 
-Create a `.env` file in the root directory and add the following:
-
-```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
-
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=/auth/sign-in
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=/auth/sign-up
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/courses
-PRIVATE_ID=
-
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/lms?schema=public
-
-
-UPLOADTHING_SECRET=
-UPLOADTHING_APP_ID=
-
-MAIL_USER=
-MAIL_PASS=
-
-BASE_URL=http://localhost:3000
+### Run Database Schema Push
+```sh
+pnpm dlx prisma db push
 ```
 
-### Run Database Migrations
-
+### Run Schema Types Generation
 ```sh
-pnpm prisma migrate dev
+pnpm dlx prisma generate
 ```
 
 ### Start the Application
-
 ```sh
-pnpm run dev
+pnpm dev
 ```
 
 ## Usage
-
 To start using the application, navigate to `http://localhost:3000` in your browser.
 
 ## Project Structure
-
 ```
-lms/
+YourLMS/
 ├── prisma/              # Prisma schema and migrations
 ├── public/              # Public assets
 ├── src/
 │   ├── components/      # Reusable components
-│   ├── app/             # pages 
+│   ├── app/             # Pages and API routes
 │   ├── utils/           # Utility functions
 │   └── ...              # Other directories and files
 └── README.md            # Project documentation
